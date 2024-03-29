@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: classpath*:db/changelog/changes/0000000000000-initial-database.xml
+  - include:
+      file: classpath*:db/changelog/changes/0000000000000-initial-master-data.xml

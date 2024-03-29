@@ -1,0 +1,48 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+  <property name="schemaPrefix" value="" />
+
+  <changeSet author="user" id="0000000000000-1">
+    <insert tableName="room_type_inventory">
+      <column name="id" value="c1a97f69-7fa0-4301-b498-128d78860828"/>
+      <column name="version" valueNumeric="0"/>
+      <column name="hotel_id" value="a1a97f69-7fa0-4301-b498-128d78860828"/>
+      <column name="room_type_id" valueNumeric="1"/>
+      <column name="inventory_date" valueDate="2024-01-30"/>
+      <column name="total_inventory" valueNumeric="10"/>
+      <column name="total_reserved" valueNumeric="1"/>
+    </insert>
+    <insert tableName="room_type_inventory">
+      <column name="id" value="c2a97f69-7fa0-4301-b498-128d78860828"/>
+      <column name="version" valueNumeric="0"/>
+      <column name="hotel_id" value="a2a97f69-7fa0-4301-b498-128d78860828"/>
+      <column name="inventory_date" valueDate="2024-01-30"/>
+      <column name="room_type_id" valueNumeric="1"/>
+      <column name="total_inventory" valueNumeric="5"/>
+      <column name="total_reserved" valueNumeric="1"/>
+    </insert>
+  </changeSet>
+
+  <changeSet author="user" id="0000000000000-2">
+    <insert tableName="reservation">
+      <column name="id" value="d1a97f69-7fa0-4301-b498-128d78860828"/>
+      <column name="version" valueNumeric="0"/>
+      <column name="hotel_id" value="a1a97f69-7fa0-4301-b498-128d78860828"/>
+      <column name="room_type_id" valueNumeric="2"/>
+      <column name="start_date" valueDate="2024-04-31"/>
+      <column name="end_date" valueDate="2024-04-31"/>
+      <column name="status" value="ON"/>
+      <column name="guest_id" value="f1a97f69-7fa0-4301-b498-128d78860828"/>
+    </insert>
+    <insert tableName="reservation">
+      <column name="id" value="d2a97f69-7fa0-4301-b498-128d78860828"/>
+      <column name="version" valueNumeric="0"/>
+      <column name="hotel_id" value="a2a97f69-7fa0-4301-b498-128d78860828"/>
+      <column name="room_type_id" valueNumeric="1"/>
+      <column name="start_date" valueDate="2024-05-11"/>
+      <column name="end_date" valueDate="2024-05-12"/>
+      <column name="status" value="ON"/>
+      <column name="guest_id" value="f2a97f69-7fa0-4301-b498-128d78860828"/>
+    </insert>    
+  </changeSet>
+</databaseChangeLog>

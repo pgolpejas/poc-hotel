@@ -1,0 +1,38 @@
+package com.reservation.utils;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
+
+@Testcontainers
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public abstract class BaseTestContainer {
+
+    private static final String POSTGRES_USERNAME = "admin";
+    private static final String POSTGRES_PASSWORD = "admin";
+    private static final String POSTGRES_DATABASE = "reservation-db";
+
+    static PostgreSQLContainer<?> postgresDBContainer = new PostgreSQLContainer<>(DockerImageName.parse("postgres:16.2"))
+            .withExposedPorts(5432)
+            .withDatabaseName(POSTGRES_DATABASE)
+            .withUsername(POSTGRES_USERNAME)
+            .withPassword(POSTGRES_PASSWORD);
+
+    static {
+        postgresDBContainer.start();
+    }
+
+    @DynamicPropertySource
+    static void postgresProperties(DynamicPropertyRegistry registry) {
+        // postgresql
+        registry.add("spring.datasource.url", postgresDBContainer::getJdbcUrl);
+        registry.add("spring.datasource.jdbcUrl", postgresDBContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgresDBContainer::getUsername);
+        registry.add("spring.datasource.password", postgresDBContainer::getPassword);
+        registry.add("spring.datasource.driverClassName", postgresDBContainer::getDriverClassName);
+    }
+
+}
