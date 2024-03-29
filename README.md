@@ -78,11 +78,6 @@ Run coverage with maven (docker-compose does not need to be running)
 mvn clean verify
 ```
 
-Run sonar
-```
-mvn sonar:sonar -Dsonar.login={{SONAR_TOKEN}}
-```
-
 Open target/site/jacoco-ut/index.html on every module and check coverage
 
 ## Observability ## 
