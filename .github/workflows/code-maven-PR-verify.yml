@@ -45,18 +45,27 @@ jobs:
       - name: Integration Tests
         run: ./mvnw -B clean verify
 
-      - name: Generate JaCoCo Badge
+      - name: Generate JaCoCo Badges for BC-Hotel
+        id: jacocoBCHotel
         uses: cicirello/jacoco-badge-generator@v2
         with:
           generate-branches-badge: true
-          jacoco-csv-file: >
-            bc-hotel/target/site/jacoco/jacoco.csv
-            bc-reservation/target/site/jacoco/jacoco.csv
+          jacoco-csv-file: bc-hotel/target/site/jacoco/jacoco.csv
+          coverage-badge-filename: jacocoBCHotel.svg
+          branches-badge-filename: branchesBCHotel.svg
+          coverage-label: coverage (BC-Hotel)
+          branches-label: branches (BC-Hotel)
 
-      - name: Log coverage percentage
-        run: |
-          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
-          echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"   
+      - name: Generate JaCoCo Badges for BC-Reservation
+        id: jacocoBCReservation
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
+          jacoco-csv-file: bc-reservation/target/site/jacoco/jacoco.csv
+          coverage-badge-filename: jacocoBCReservation.svg
+          branches-badge-filename: branchesBCReservation.svg
+          coverage-label: coverage (BC-Reservation)
+          branches-label: branches (BC-Reservation)
 
       - name: Commit and push the badge (if it changed)
         uses: EndBug/add-and-commit@v9
@@ -65,11 +74,17 @@ jobs:
           message: 'commit badge'
           add: '*.svg'
 
-      - name: Upload JaCoCo coverage report
+      - name: Upload JaCoCo coverage report for BC-Hotel
         uses: actions/upload-artifact@v4
         with:
-          name: jacoco-report
-          path: target/site/jacoco/
+          name: jacoco-report-bc-hotel
+          path: bc-hotel/target/site/jacoco/
+          
+      - name: Upload JaCoCo coverage report for BC-Reservation
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report-bc-reservation
+          path: bc-reservation/target/site/jacoco/
 
       - name: Sonar
         run: ./mvnw -B sonar:sonar -Dsonar.login=${{secrets.SONAR_TOKEN}}
