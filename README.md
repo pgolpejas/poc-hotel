@@ -1,12 +1,22 @@
-![coverage](.github/badges/jacoco.svg)
-![branches](.github/badges/branches.svg)
+# README #
 
+## Metrics ##
+
+### BC-Hotel ###
+![coverage](.github/badges/jacocoBCHotel.svg)
+![branches](.github/badges/branchesBCHotel.svg)
+
+### BC-Reservation ###
+![coverage](.github/badges/jacocoBCReservation.svg)
+![branches](.github/badges/branchesBCReservation.svg)
+
+### Sonar ###
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-black.svg)](https://sonarcloud.io/dashboard?id=poc-hotel)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=poc-hotel&metric=bugs)](https://sonarcloud.io/dashboard?id=poc-hotel)
+([![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=poc-hotel&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=poc-hotel)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=poc-hotel&metric=coverage)](https://sonarcloud.io/dashboard?id=poc-hotel)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=poc-hotel&metric=ncloc)](https://sonarcloud.io/dashboard?id=poc-hotel)
-
-# README #
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=poc-hotel&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=poc-hotel)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=poc-hotel&metric=bugs)](https://sonarcloud.io/dashboard?id=poc-hotel)
 
 ## What is this service for? ##
 
