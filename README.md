@@ -84,6 +84,10 @@ Open target/site/jacoco-ut/index.html on every module and check coverage
 
 Open grafana in http://localhost:3000. You can view logs with Loki, metrics and traces with tempo
 
+Loki query
+
+TODO
+
 ## Performance test with k6 ## 
 
 TODO
