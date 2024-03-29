@@ -1,0 +1,59 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="user" id="0000000000000-01">
+        <createTable tableName="room_type_inventory">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="room_type_inventory_pkey"/>
+            </column>
+            <column name="version" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="room_type_id" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hotel_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="inventory_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_inventory" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_reserved" type="INT">
+                <constraints nullable="false"/>
+            </column>            
+        </createTable>
+    </changeSet>
+
+    <changeSet author="user" id="0000000000000-02">
+        <createTable tableName="reservation">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="reservation_pkey"/>
+            </column>
+            <column name="version" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>            
+            <column name="room_type_id" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hotel_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="guest_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>            
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>            
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

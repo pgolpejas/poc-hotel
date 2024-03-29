@@ -12,17 +12,22 @@ spring:
   jpa:
     properties:
       hibernate:
+        format_sql: true        
         dialect: org.hibernate.dialect.PostgreSQLDialect
         hbm2ddl:
-          auto: create
+          auto: none
+        query:
+          fail_on_pagination_over_collection_fetch: true          
         jdbc:
           time_zone: Europe/Paris
+        default_schema: public
+        use_sql_comments: true          
     open-in-view: false
 
   ######## Database Configuration  #########
   datasource:
-    jdbcUrl: jdbc:postgresql://localhost:5532/poc-db-postgresql
-    url: jdbc:postgresql://localhost:5532/poc-db-postgresql
+    jdbcUrl: jdbc:postgresql://localhost:5533/reservation-db
+    url: jdbc:postgresql://localhost:5533/reservation-db
     driverClassName: org.postgresql.Driver
     username: admin
     password: admin
@@ -30,6 +35,15 @@ spring:
     maxLifetime: 1200000
     maximumPoolSize: 1000000000
     minimumIdle: 1
+    
+  ######## Liquibase Configuration  #########
+  liquibase:
+    contexts: none
+    enabled: true
+    default-schema: ${spring.jpa.properties.hibernate.default_schema}
+    liquibase-schema: ${spring.jpa.properties.hibernate.default_schema}
+    parameters:
+      schemaPrefix: ${spring.jpa.properties.hibernate.default_schema}.    
 
   ######## Errors Configuration  #########
   mvc:
@@ -91,7 +105,11 @@ logging:
               BasicBinder: TRACE
     root: INFO
     org.springframework.web: INFO
-    com.pochotel.reservation: INFO
+    com.reservation: INFO
     org.hibernate.orm.jdbc.bind: TRACE
 #    org.springframework.jdbc.core: TRACE
   config: ./src/main/resources/logback-des.xml
+
+######## Port Configuration  #########
+server:
+  port: 8081

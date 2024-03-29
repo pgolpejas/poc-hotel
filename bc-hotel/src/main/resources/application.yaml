@@ -1,6 +1,9 @@
+
+
 spring:
   application:
     name: bc-hotel
+  
   ######## Jackson Configuration  #########
   jackson:
     serialization:
@@ -21,8 +24,8 @@ spring:
 
   ######## Database Configuration  #########
   datasource:
-    jdbcUrl: jdbc:postgresql://localhost:5532/poc-db-postgresql
-    url: jdbc:postgresql://localhost:5532/poc-db-postgresql
+    jdbcUrl: jdbc:postgresql://localhost:5532/hotel-db
+    url: jdbc:postgresql://localhost:5532/hotel-db
     driverClassName: org.postgresql.Driver
     username: admin
     password: admin
@@ -108,3 +111,7 @@ logging:
     org.hibernate.orm.jdbc.bind: TRACE
 #    org.springframework.jdbc.core: TRACE
   config: ./src/main/resources/logback-des.xml
+  
+######## Port Configuration  #########
+server:
+  port: 8080

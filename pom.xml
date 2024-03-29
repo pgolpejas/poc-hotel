@@ -47,6 +47,7 @@
             **/*Dto**.java,
             **/*Entity**.java,
             **/generated/**,
+            **/domain/core/**.java,
             **/*Test**.java,
             **/*IT**.java
         </sonar.coverage.exclusions>
@@ -180,6 +181,7 @@
                         <exclude>com/**/*Constants*.*</exclude>
                         <exclude>com/**/*Dto*.*</exclude>
                         <exclude>com/**/*Entity*.*</exclude>
+                        <exclude>com/**/domain/core/*.*</exclude>
                         <exclude>**/generated/**</exclude>
                     </excludes>
                 </configuration>
