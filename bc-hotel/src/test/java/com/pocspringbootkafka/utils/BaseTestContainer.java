@@ -34,7 +34,7 @@ public abstract class BaseTestContainer {
 
     private static final String POSTGRES_USERNAME = "admin";
     private static final String POSTGRES_PASSWORD = "admin";
-    private static final String POSTGRES_DATABASE = "poc-db-postgresql";
+    private static final String POSTGRES_DATABASE = "hotel-db";
 
     static PostgreSQLContainer<?> postgresDBContainer = new PostgreSQLContainer<>(DockerImageName.parse("postgres:15.3"))
         .withExposedPorts(5432)

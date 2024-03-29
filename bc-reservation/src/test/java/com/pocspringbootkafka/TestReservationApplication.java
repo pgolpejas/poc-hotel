@@ -1,6 +1,6 @@
 package com.pocspringbootkafka;
 
-import com.pochotel.ReservationApplication;
+import com.reservation.ReservationApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;

@@ -1,19 +1,33 @@
 version: "3.9"
 
 services:
-  poc-db:
+  hotel-db:
     image: postgres:16.2
-    hostname: poc-db-postgresql
-    container_name: poc-db-postgresql
+    hostname: hotel-db
+    container_name: hotel-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: poc-db-postgresql
+      POSTGRES_DB: hotel-db
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
     ports:
       - 5532:5432
     networks:
       - local-des
+      
+  reservation-db:
+    image: postgres:16.2
+    hostname: reservation-db
+    container_name: reservation-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: reservation-db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - 5533:5432
+    networks:
+      - local-des        
 
   zoo1:
     image: confluentinc/cp-zookeeper:7.6.0
