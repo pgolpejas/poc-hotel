@@ -12,7 +12,8 @@
 
 ### Sonar ###
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-black.svg)](https://sonarcloud.io/dashboard?id=poc-hotel)
-([![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=poc-hotel&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=poc-hotel)
+
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=poc-hotel&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=poc-hotel)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=poc-hotel&metric=coverage)](https://sonarcloud.io/dashboard?id=poc-hotel)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=poc-hotel&metric=ncloc)](https://sonarcloud.io/dashboard?id=poc-hotel)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=poc-hotel&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=poc-hotel)
