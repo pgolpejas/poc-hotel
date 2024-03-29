@@ -1,0 +1,101 @@
+name: deploy
+on:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Timezone
+        uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: "Europe/Madrid"
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for mvnw
+        run: chmod +x mvnw
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Unit Tests
+        run: ./mvnw -B clean package
+
+      - name: Integration Tests
+        run: ./mvnw -B clean verify
+
+      - name: Generate JaCoCo Badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
+
+      - name: Log coverage percentage
+        run: |
+          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+          echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"   
+
+      - name: Commit and push the badge (if it changed)
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: 'commit badge'
+          add: '*.svg'
+
+      - name: Upload JaCoCo coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
+
+      - name: Sonar
+        run: ./mvnw -B sonar:sonar -Dsonar.login=${{secrets.SONAR_TOKEN}}
+
+      - name: Rename the artifact
+        run: cp target/poc-hotel-0.0.1.jar poc-hotel-0.0.1.jar
+
+      - name: Save the artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: poc-hotel
+          path: poc-hotel-0.0.1.jar
+
+  upload-dockerhub:
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get the artifact
+        uses: actions/download-artifact@master
+        with:
+          name: poc-hotel
+
+      - name: List files
+        run: ls
+
+      - name: docker login
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USER}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: |
+          docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
+
+      - name: Build the Docker image
+        run:  docker build -t ${{secrets.DOCKER_USER}}/poc-hotel --build-arg VERSION=0.0.1 .
+
+      - name: Docker Push
+        run: docker push ${{secrets.DOCKER_USER}}/poc-hotel

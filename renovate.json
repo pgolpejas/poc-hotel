@@ -1,0 +1,29 @@
+{
+  "extends": [
+    "config:recommended"
+  ],
+  "repositories": ["pgolpejas/poc-hotel"],
+  "prHourlyLimit": 10,
+  "prConcurrentLimit": 20,
+  "branchPrefix": "renovate/",
+  "packageRules": [
+    {
+      "matchManagers": [
+        "docker-compose", 
+        "dockerfile",
+        "maven",
+        "maven-wrapper",
+        "helmfile",
+        "helm-values",
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
+    }
+  ]
+}

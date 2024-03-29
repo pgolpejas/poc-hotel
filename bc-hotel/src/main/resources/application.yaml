@@ -1,0 +1,110 @@
+spring:
+  application:
+    name: bc-hotel
+  ######## Jackson Configuration  #########
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+      fail-on-empty-beans: false
+    time-zone: Europe/Madrid
+
+  ######## JPA Configuration  #########
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        hbm2ddl:
+          auto: create
+        jdbc:
+          time_zone: Europe/Paris
+    open-in-view: false
+
+  ######## Database Configuration  #########
+  datasource:
+    jdbcUrl: jdbc:postgresql://localhost:5532/poc-db-postgresql
+    url: jdbc:postgresql://localhost:5532/poc-db-postgresql
+    driverClassName: org.postgresql.Driver
+    username: admin
+    password: admin
+    poolName: postgresPool
+    maxLifetime: 1200000
+    maximumPoolSize: 1000000000
+    minimumIdle: 1
+
+  ######## Errors Configuration  #########
+  mvc:
+    problemdetails:
+      enabled: true
+  
+  ######## Kafka Configuration  #########
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: group-id
+      auto-offset-reset: earliest
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  
+######## Observability Configuration  #########      
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    metrics:
+      enabled
+    shutdown:
+      enabled: true
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+endpoints:
+  shutdown:
+    enabled: true
+
+
+######## OpenApi Configuration  #########
+springdoc:
+  swagger-ui:
+    path: /
+    disable-swagger-default-url: 'true'
+info:
+  title: '@project.name@'
+  version: '@project.version@'
+  description: '@project.description@'
+
+######## Logger Configuration  #########
+logging:
+  pattern:
+    level: "%green(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow([%X{traceId:-}] [%X{TraceID:-}] [%X{trace_id:-}]) %logger - %msg%n%throwable"
+  level:
+    org:
+      hibernate:
+        SQL: TRACE
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+    root: INFO
+    org.springframework.web: INFO
+    com.pocspringbootkafka.hotelavailability: INFO
+    org.hibernate.orm.jdbc.bind: TRACE
+#    org.springframework.jdbc.core: TRACE
+  config: ./src/main/resources/logback-des.xml

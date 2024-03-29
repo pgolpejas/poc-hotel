@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.4</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    
+    <groupId>com</groupId>
+    <artifactId>poc-hotel</artifactId>
+    <version>0.0.1</version>
+    <name>poc-hotel</name>
+    <description>This API exposes endpoints to hotel availability</description>
+
+    <modules>
+        <module>bc-hotel</module>
+        <module>bc-reservation</module>
+    </modules>
+    <packaging>pom</packaging>
+    
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <spring-boot.version>3.2.4</spring-boot.version>
+
+        <!-- encode-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- Test execution modifiers -->
+        <skipTests>false</skipTests>
+        <skipUnitTests>${skipTests}</skipUnitTests>
+        <skipIntegrationTests>${skipTests}</skipIntegrationTests>
+
+        <!-- sonar properties-->
+        <sonar.projectKey>poc-hotel</sonar.projectKey>
+        <sonar.organization>psanchez78</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.coverage.exclusions>
+            **/*Application**.java,
+            **/*Mapper**.java,
+            **/*Constants**.java,
+            **/*Dto**.java,
+            **/*Entity**.java,
+            **/generated/**,
+            **/*Test**.java,
+            **/*IT**.java
+        </sonar.coverage.exclusions>
+        <sonar.exclusions>
+            **/*Test**.java,
+            **/*IT**.java
+        </sonar.exclusions>
+        <sonar.coverage.jacoco.xmlReportPaths>
+            **/target/site/jacoco/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.surefire.reportsPath>${project.build.directory}/surefire-reports</sonar.surefire.reportsPath>
+        <sonar.binaries>${project.build.directory}/classes</sonar.binaries>
+        <sonar.buildbreaker.skip>false</sonar.buildbreaker.skip>
+        <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+
+        <!-- plugins version-->
+        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <sonar-maven-plugin.version>3.11.0.3922</sonar-maven-plugin.version>
+
+        <!-- dependencies version-->
+        <springdoc-openapi.version>2.4.0</springdoc-openapi.version>
+        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+        <lombok.version>1.18.30</lombok.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <liquibase.version>4.26.0</liquibase.version>
+        
+        <!-- observability-->
+        <otel.version>2.2.0</otel.version>
+        <loki-logback-appender.version>1.5.1</loki-logback-appender.version>
+        
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                    <configuration>
+                        <mainClass>${start-class}</mainClass>
+                        <executable>true</executable>
+                        <excludes>
+                            <exclude>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                            </exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <release>${java.version}</release>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <compilerArgs>
+                            <arg>-Xlint:all</arg>
+                            <!-- Silence warning "No processor claimed any of these annotations".  -->
+                            <arg>-Xlint:-processing</arg>
+                            <!-- Silence warning "[path] bad path element".  -->
+                            <arg>-Xlint:-path</arg>
+                        </compilerArgs>
+                        <showWarnings>false</showWarnings>
+                        <showDeprecation>true</showDeprecation>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                        <annotationProcessorPaths>
+                            <!-- Lombok Code Generator -->
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok.version}</version>
+                            </path>
+                            <!-- Mapstruct Code Generator -->
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>${org.mapstruct.version}</version>
+                            </path>
+                            <!-- Mapstruct and Lombok Code Generator -->
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok-mapstruct-binding</artifactId>
+                                <version>${lombok-mapstruct-binding.version}</version>
+                            </path>
+                            <!-- Spring Configuration Metadata Generator -->
+                            <path>
+                                <groupId>org.springframework.boot</groupId>
+                                <artifactId>spring-boot-configuration-processor</artifactId>
+                                <version>${spring-boot.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <skipTests>${skipUnitTests}</skipTests>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <!--
+               JaCoCo Maven Plugin - Code coverage report for JVM languages.
+               http://www.eclemma.org/jacoco/
+             -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <!-- Exclude the JPA meta model classes from the report -->
+                        <exclude>**/*_.class</exclude>
+                        <exclude>com/**/*Application*.*</exclude>
+                        <exclude>com/**/*Mapper*.*</exclude>
+                        <exclude>com/**/*Constants*.*</exclude>
+                        <exclude>com/**/*Dto*.*</exclude>
+                        <exclude>com/**/*Entity*.*</exclude>
+                        <exclude>**/generated/**</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <!-- Unit test analysis config -->
+                        <id>ut-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Sets the path to the file where the execution data will be generated -->
+                            <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- Integration test analisys config -->
+                        <id>it-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Sets the path to the file where the execution data will be generated -->
+                            <destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- Unit test report generation config -->
+                        <id>ut-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Sets the path to the file which contains the execution data -->
+                            <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+                            <!-- Sets the output directory for the unit tests code coverage report -->
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- Integration test report generation config -->
+                        <id>it-report</id>
+                        <!-- Could be integration-test but then maven-failsafe-plugin should be defined before as is associated to same integration-test phase -->
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Sets the path to the file which contains the execution data -->
+                            <dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
+                            <!-- Sets the output directory for the integration tests code coverage report -->
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- Merge unit an integration tests execution data -->
+                        <id>merge-results</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>merge</goal>
+                        </goals>
+                        <configuration>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${project.build.directory}/coverage-reports</directory>
+                                    <include>*.exec</include>
+                                </fileSet>
+                            </fileSets>
+                            <destFile>${project.build.directory}/coverage-reports/aggregate.exec</destFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- Unit and integration test merged report generation config -->
+                        <id>merge-report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Sets the path to the file which contains the execution data -->
+                            <dataFile>${project.build.directory}/coverage-reports/aggregate.exec</dataFile>
+                            <!-- Sets the output directory for the code coverage report -->
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Used for unit tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <!-- Used for integration tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <skipTests>${skipIntegrationTests}</skipTests>
+                </configuration>
+                <executions>
+                    <!-- Ensures that both integration-test and verify goals of the Failsafe Maven plugin are executed. -->
+                    <execution>
+                        <id>integration-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>sonar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

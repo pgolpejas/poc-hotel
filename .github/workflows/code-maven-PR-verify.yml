@@ -1,0 +1,72 @@
+name: code-maven-PR-verify
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    name: Code / Verify
+    permissions:
+      contents: write
+      checks: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.RENOVATE_TOKEN }}
+
+      - name: Setup Timezone
+        uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: "Europe/Madrid"
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'adopt'
+
+      - name: Grant execute permission for mvnw
+        run: chmod +x mvnw
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Unit Tests
+        run: ./mvnw -B clean package
+
+      - name: Integration Tests
+        run: ./mvnw -B clean verify
+
+      - name: Generate JaCoCo Badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
+
+      - name: Log coverage percentage
+        run: |
+          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+          echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"   
+
+      - name: Commit and push the badge (if it changed)
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: 'commit badge'
+          add: '*.svg'
+
+      - name: Upload JaCoCo coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
+
+      - name: Sonar
+        run: ./mvnw -B sonar:sonar -Dsonar.login=${{secrets.SONAR_TOKEN}}

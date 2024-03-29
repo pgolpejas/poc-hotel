@@ -1,0 +1,36 @@
+<configuration>
+  <springProperty name="name" source="spring.application.name" />
+  
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <immediateFlush>false</immediateFlush>
+    <encoder>
+      <pattern>%green(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow([%X{trace_id:-}] [%X{span_id:-}]) %logger - %msg%n%throwable</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+    <http>
+      <url>http://localhost:3100/loki/api/v1/push</url>
+    </http>
+    <format>
+      <label>
+        <pattern>app=${name},host=${HOSTNAME},level=%level</pattern>
+        <readMarkers>true</readMarkers>
+      </label>
+      <message>
+        <pattern>{"level":"%level", "class":"%logger{36}", "thread":"%thread", "message":"%message", "requestId":"%X{X-Request-ID}", "traceId":"%X{trace_id}", "spanId":"%X{span_id}"}</pattern>
+      </message>
+      
+      <sortByTime>true</sortByTime>
+    </format>
+  </appender>
+
+  <logger name="com.pocspringbootkafka.hotelavailability" level="INFO" />
+  
+  <root level="info">
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="LOKI" />
+  </root>
+
+</configuration>
+
