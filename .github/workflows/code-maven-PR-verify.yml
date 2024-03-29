@@ -55,6 +55,7 @@ jobs:
           branches-badge-filename: branchesBCHotel.svg
           coverage-label: coverage (BC-Hotel)
           branches-label: branches (BC-Hotel)
+          workflow-summary-heading: JaCoCo Test Coverage Summary BC-Hotel
 
       - name: Generate JaCoCo Badges for BC-Reservation
         id: jacocoBCReservation
@@ -66,6 +67,7 @@ jobs:
           branches-badge-filename: branchesBCReservation.svg
           coverage-label: coverage (BC-Reservation)
           branches-label: branches (BC-Reservation)
+          workflow-summary-heading: JaCoCo Test Coverage Summary BC-Reservation
 
       - name: Commit and push the badge (if it changed)
         uses: EndBug/add-and-commit@v9
