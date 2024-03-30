@@ -49,6 +49,7 @@
             **/*Dto**.java,
             **/*Entity**.java,
             **/generated/**,
+            **/hotel/core/**,
             **/*Test**.java,
             **/*IT**.java
         </sonar.coverage.exclusions>
@@ -232,6 +233,7 @@
                         <exclude>com/**/*Dto*.*</exclude>
                         <exclude>com/**/*Entity*.*</exclude>
                         <exclude>**/generated/**</exclude>
+                        <exclude>**/hotel/core/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>
