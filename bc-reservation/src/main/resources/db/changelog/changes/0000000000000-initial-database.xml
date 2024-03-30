@@ -44,9 +44,7 @@
             <column name="guest_id" type="UUID">
                 <constraints nullable="false"/>
             </column>            
-            <column name="status" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="status" type="VARCHAR(20)"/>
             <column name="start_date" type="DATE">
                 <constraints nullable="false"/>
             </column>

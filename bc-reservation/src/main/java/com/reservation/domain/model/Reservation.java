@@ -53,7 +53,6 @@ public class Reservation extends AggregateRoot implements Serializable {
         // Common validations for all actions on the aggregate
         ValidationUtils.notNull(start, "start can not be null");
         ValidationUtils.notNull(end, "end can not be null");
-        ValidationUtils.notNull(status, "status can not be null");
 
         this.id = new ReservationId(id);
         this.version = version;

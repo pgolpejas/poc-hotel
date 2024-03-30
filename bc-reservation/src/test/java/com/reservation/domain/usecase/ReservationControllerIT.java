@@ -1,7 +1,10 @@
 package com.reservation.domain.usecase;
 
 import com.reservation.application.controller.ReservationController;
+import com.reservation.application.dto.CriteriaDto;
 import com.reservation.application.dto.ReservationDto;
+import com.reservation.domain.model.Reservations;
+import com.reservation.domain.utils.Criteria;
 import com.reservation.utils.BaseTestContainer;
 import com.reservation.utils.RequestUtils;
 import org.assertj.core.api.Assertions;
@@ -37,6 +40,79 @@ class ReservationControllerIT extends BaseTestContainer {
         ReservationDto answer = response.getBody();
         Assertions.assertThat(answer).as("reservation")
                 .isNotNull();
+    }
+
+    @Test
+    void when_reservations_exists_filter_and_should_return_it() throws Exception {
+        final String filter = "id:'d1a97f69-7fa0-4301-b498-128d78860828'";
+        final CriteriaDto criteria = CriteriaDto.builder()
+                .filters(filter)
+                .page(0)
+                .size(10)
+                .build();
+
+        final ResponseEntity<Reservations> response =
+                restTemplate.exchange(ReservationController.MAPPING + ReservationController.SEARCH_PATH,
+                        HttpMethod.POST,
+                        RequestUtils.buildRequest(null, criteria),
+                        Reservations.class,
+                        criteria);
+
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        Reservations answer = response.getBody();
+        Assertions.assertThat(answer).as("reservations").isNotNull();
+    }
+
+    @Test
+    void when_reservations_exists_filter_with_sort_and_should_return_it() throws Exception {
+        final String filter = "id:'d1a97f69-7fa0-4301-b498-128d78860828'";
+        final CriteriaDto criteria = CriteriaDto.builder()
+                .filters(filter)
+                .page(0)
+                .size(10)
+                .sortBy("id")
+                .sortDirection("ASC")
+                .build();
+
+        final ResponseEntity<Reservations> response =
+                restTemplate.exchange(ReservationController.MAPPING + ReservationController.SEARCH_PATH,
+                        HttpMethod.POST,
+                        RequestUtils.buildRequest(null, criteria),
+                        Reservations.class,
+                        criteria);
+
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        Reservations answer = response.getBody();
+        Assertions.assertThat(answer).as("reservations").isNotNull();
+        Assertions.assertThat(answer.reservations()).as("reservations").hasSize(1);
+
+    }
+
+    @Test
+    void when_reservations_not_exists_filter_with_sort_and_should_return_not_found() throws Exception {
+        final String filter = "id:'11a97f69-7fa0-4301-b498-128d78860828'";
+        final CriteriaDto criteria = CriteriaDto.builder()
+                .filters(filter)
+                .page(0)
+                .size(10)
+                .sortBy("id")
+                .sortDirection("ASC")
+                .build();
+
+        final ResponseEntity<Reservations> response =
+                restTemplate.exchange(ReservationController.MAPPING + ReservationController.SEARCH_PATH,
+                        HttpMethod.POST,
+                        RequestUtils.buildRequest(null, criteria),
+                        Reservations.class,
+                        criteria);
+
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        Reservations answer = response.getBody();
+        Assertions.assertThat(answer).as("reservations").isNotNull();
+        Assertions.assertThat(answer.reservations()).as("reservations").isEmpty();
     }
 
     @Test
