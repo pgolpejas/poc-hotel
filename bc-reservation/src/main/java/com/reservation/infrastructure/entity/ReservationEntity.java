@@ -50,9 +50,16 @@ public class ReservationEntity implements Serializable {
   @Column(name = "end_date")
   private LocalDate end;
 
-  @NotBlank
   @Column(name = "status")
   private String status;
 
-
+  public ReservationEntity(UUID id, int version, Integer roomTypeId, UUID hotelId, UUID guestId, LocalDate start, LocalDate end) {
+    this.id = id;
+    this.version = version;
+    this.roomTypeId = roomTypeId;
+    this.hotelId = hotelId;
+    this.guestId = guestId;
+    this.start = start;
+    this.end = end;
+  }
 }

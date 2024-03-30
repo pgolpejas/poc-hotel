@@ -4,5 +4,5 @@ import com.reservation.domain.model.Reservation;
 
 public interface CreateReservationUseCase {
 
-    void createReservation(final Reservation reservation);
+    void createReservation(Reservation reservation);
 }

@@ -45,7 +45,6 @@ public record ReservationDto(
                 example = "02/07/2024")
         LocalDate end,
 
-        @NotEmpty 
         @Size(max = 20) 
         @Schema(example = "ON")
         String status) {

@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface GetReservationUseCase {
 
-    Reservation getReservation(final UUID id);
+    Reservation getReservation(UUID id);
 }
