@@ -1,6 +1,5 @@
 package com.pocspringbootkafka.hotelavailability.domain;
 
-import com.pocspringbootkafka.hotelavailability.adapters.api.HotelAvailabilityController;
 import com.pocspringbootkafka.hotelavailability.domain.model.HotelAvailabilityDbSearch;
 import com.pocspringbootkafka.hotelavailability.domain.model.HotelAvailabilitySearch;
 import com.pocspringbootkafka.hotelavailability.ports.HotelAvailabilityMessagingProducerService;

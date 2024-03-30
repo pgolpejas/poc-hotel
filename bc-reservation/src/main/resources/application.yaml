@@ -49,7 +49,31 @@ spring:
   mvc:
     problemdetails:
       enabled: true
-  
+    
+    
+######## Javers Configuration  #########         
+javers:
+  sqlSchemaManagementEnabled: false
+  sqlGlobalIdCacheDisabled: false
+  objectAccessHook: org.javers.hibernate.integration.HibernateUnproxyObjectAccessHook
+  sqlGlobalIdTableName: jv_global_id
+  sqlCommitTableName: jv_commit
+  sqlSnapshotTableName: jv_snapshot
+  sqlCommitPropertyTableName: jv_commit_property
+  mappingStyle: FIELD
+  algorithm: SIMPLE
+  commitIdGenerator: synchronized_sequence
+  prettyPrint: true
+  typeSafeValues: false
+  newObjectSnapshot: true
+  auditableAspectEnabled: true
+  springDataAuditableRepositoryAspectEnabled: true
+  prettyPrintDateFormats:
+    localDateTime: dd MMM yyyy, HH:mm:ss
+    zonedDateTime: dd MMM yyyy, HH:mm:ssZ
+    localDate: dd MMM yyyy
+    localTime: HH:mm:ss
+        
 ######## Observability Configuration  #########      
 management:
   endpoints:

@@ -1,5 +1,7 @@
 package com.reservation.domain.exception;
 
+import com.hotel.core.domain.exception.NotFoundException;
+
 import java.io.Serial;
 
 public class ReservationNotFoundException extends NotFoundException {

@@ -1,10 +1,10 @@
 package com.reservation.domain.usecase;
 
+import com.hotel.core.infrastructure.database.audit.AuditFilters;
 import com.reservation.application.controller.ReservationController;
-import com.reservation.application.dto.CriteriaDto;
+import com.hotel.core.application.dto.CriteriaDto;
 import com.reservation.application.dto.ReservationDto;
-import com.reservation.domain.model.Reservations;
-import com.reservation.domain.utils.Criteria;
+import com.hotel.core.domain.dto.PaginationResponse;
 import com.reservation.utils.BaseTestContainer;
 import com.reservation.utils.RequestUtils;
 import org.assertj.core.api.Assertions;
@@ -48,19 +48,19 @@ class ReservationControllerIT extends BaseTestContainer {
         final CriteriaDto criteria = CriteriaDto.builder()
                 .filters(filter)
                 .page(0)
-                .size(10)
+                .limit(10)
                 .build();
 
-        final ResponseEntity<Reservations> response =
+        final ResponseEntity<PaginationResponse> response =
                 restTemplate.exchange(ReservationController.MAPPING + ReservationController.SEARCH_PATH,
                         HttpMethod.POST,
                         RequestUtils.buildRequest(null, criteria),
-                        Reservations.class,
+                        PaginationResponse.class,
                         criteria);
 
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        Reservations answer = response.getBody();
+        PaginationResponse<?> answer = response.getBody();
         Assertions.assertThat(answer).as("reservations").isNotNull();
     }
 
@@ -70,23 +70,23 @@ class ReservationControllerIT extends BaseTestContainer {
         final CriteriaDto criteria = CriteriaDto.builder()
                 .filters(filter)
                 .page(0)
-                .size(10)
+                .limit(10)
                 .sortBy("id")
                 .sortDirection("ASC")
                 .build();
 
-        final ResponseEntity<Reservations> response =
+        final ResponseEntity<PaginationResponse> response =
                 restTemplate.exchange(ReservationController.MAPPING + ReservationController.SEARCH_PATH,
                         HttpMethod.POST,
                         RequestUtils.buildRequest(null, criteria),
-                        Reservations.class,
+                        PaginationResponse.class,
                         criteria);
 
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        Reservations answer = response.getBody();
+        var answer = response.getBody();
         Assertions.assertThat(answer).as("reservations").isNotNull();
-        Assertions.assertThat(answer.reservations()).as("reservations").hasSize(1);
+        Assertions.assertThat(answer.data()).as("reservations").hasSize(1);
 
     }
 
@@ -96,23 +96,23 @@ class ReservationControllerIT extends BaseTestContainer {
         final CriteriaDto criteria = CriteriaDto.builder()
                 .filters(filter)
                 .page(0)
-                .size(10)
+                .limit(10)
                 .sortBy("id")
                 .sortDirection("ASC")
                 .build();
 
-        final ResponseEntity<Reservations> response =
+        final ResponseEntity<PaginationResponse> response =
                 restTemplate.exchange(ReservationController.MAPPING + ReservationController.SEARCH_PATH,
                         HttpMethod.POST,
                         RequestUtils.buildRequest(null, criteria),
-                        Reservations.class,
+                        PaginationResponse.class,
                         criteria);
 
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        Reservations answer = response.getBody();
+        var answer = response.getBody();
         Assertions.assertThat(answer).as("reservations").isNotNull();
-        Assertions.assertThat(answer.reservations()).as("reservations").isEmpty();
+        Assertions.assertThat(answer.data()).as("reservations").isEmpty();
     }
 
     @Test
@@ -177,8 +177,27 @@ class ReservationControllerIT extends BaseTestContainer {
 
         ProblemDetail answer = response.getBody();
         Assertions.assertThat(answer).as("problemDetail").isNotNull();
-        Assertions.assertThat(answer.getProperties()).as("properties").isNull();
+        Assertions.assertThat(answer.getProperties()).as("properties").isNotNull();
         Assertions.assertThat(answer.getDetail()).as("detail").isNotNull();
+    }
+
+    @Test
+    void when_reservation_has_audit_return_it() throws Exception {
+        UUID reservationId = UUID.randomUUID();
+        final AuditFilters filters = AuditFilters.builder()
+                .id(reservationId)
+                .build();
+
+        int limit = 10;
+        final ResponseEntity<ReservationDto[]> response = restTemplate.exchange(ReservationController.MAPPING + ReservationController.SEARCH_AUDIT_PATH,
+                HttpMethod.POST,
+                RequestUtils.buildRequest(null, filters),
+                ReservationDto[].class, limit);
+
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        ReservationDto[] answer = response.getBody();
+        Assertions.assertThat(answer).as("problemDetail").isNotNull();
     }
 
 }

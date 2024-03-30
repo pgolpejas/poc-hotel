@@ -1,7 +1,6 @@
 package com.reservation.infrastructure.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -21,45 +20,45 @@ import java.util.UUID;
 @SuppressWarnings("squid:S1170")
 public class ReservationEntity implements Serializable {
 
-  @Serial
-  private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-  @Id
-  private UUID id;
+    @Id
+    private UUID id;
 
-  @Version
-  private int version;
+    @Version
+    private int version;
 
-  @NotNull
-  @Column(name = "room_type_id")
-  private Integer roomTypeId;
+    @NotNull
+    @Column(name = "room_type_id")
+    private Integer roomTypeId;
 
-  @NotNull
-  @Column(name = "hotel_id")
-  private UUID hotelId;
+    @NotNull
+    @Column(name = "hotel_id")
+    private UUID hotelId;
 
-  @NotNull
-  @Column(name = "guest_id")
-  private UUID guestId;
+    @NotNull
+    @Column(name = "guest_id")
+    private UUID guestId;
 
-  @NotNull
-  @Column(name = "start_date")
-  private LocalDate start;
+    @NotNull
+    @Column(name = "start_date")
+    private LocalDate start;
 
-  @NotNull
-  @Column(name = "end_date")
-  private LocalDate end;
+    @NotNull
+    @Column(name = "end_date")
+    private LocalDate end;
 
-  @Column(name = "status")
-  private String status;
+    @Column(name = "status")
+    private String status;
 
-  public ReservationEntity(UUID id, int version, Integer roomTypeId, UUID hotelId, UUID guestId, LocalDate start, LocalDate end) {
-    this.id = id;
-    this.version = version;
-    this.roomTypeId = roomTypeId;
-    this.hotelId = hotelId;
-    this.guestId = guestId;
-    this.start = start;
-    this.end = end;
-  }
+    public ReservationEntity(UUID id, int version, Integer roomTypeId, UUID hotelId, UUID guestId, LocalDate start, LocalDate end) {
+        this.id = id;
+        this.version = version;
+        this.roomTypeId = roomTypeId;
+        this.hotelId = hotelId;
+        this.guestId = guestId;
+        this.start = start;
+        this.end = end;
+    }
 }

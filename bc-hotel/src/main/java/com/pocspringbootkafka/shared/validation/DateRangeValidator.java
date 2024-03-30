@@ -12,7 +12,7 @@ class DateRangeValidator implements ConstraintValidator<ValidDateRange, HotelAva
     @Override
     public boolean isValid(HotelAvailabilitySearchDto value, ConstraintValidatorContext context) {
         if (Objects.nonNull(value.checkIn()) && Objects.nonNull(value.checkOut())) {
-            return value.checkIn().compareTo(value.checkOut()) <= 0;
+            return !value.checkIn().isAfter(value.checkOut());
         } else {
             return true;
         }

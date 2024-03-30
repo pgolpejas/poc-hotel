@@ -1,12 +1,15 @@
 package com.reservation.application.controller;
 
-import com.reservation.application.dto.CriteriaDto;
+import com.hotel.core.infrastructure.database.audit.AuditFilters;
+import com.hotel.core.application.dto.CriteriaDto;
+import com.hotel.core.application.mapper.CriteriaMapper;
 import com.reservation.application.dto.ReservationDto;
-import com.reservation.application.mapper.CriteriaMapper;
 import com.reservation.application.mapper.ReservationMapper;
-import com.reservation.domain.model.Reservations;
+import com.hotel.core.domain.dto.PaginationResponse;
+import com.reservation.domain.model.Reservation;
 import com.reservation.domain.usecase.CreateReservationUseCase;
 import com.reservation.domain.usecase.GetReservationUseCase;
+import com.reservation.domain.usecase.GetReservationsAuditUseCase;
 import com.reservation.domain.usecase.GetReservationsUseCase;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -15,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -27,16 +31,29 @@ public class ReservationController {
     public static final String MAPPING = DELIMITER_PATH + "v1/hotel-reservation";
     public static final String FIND_BY_ID_PATH = DELIMITER_PATH + "{id}";
     public static final String SEARCH_PATH = DELIMITER_PATH + "search";
+    public static final String SEARCH_AUDIT_PATH = DELIMITER_PATH + "search-audit/{limit}";
 
     private final CreateReservationUseCase createReservationUseCase;
     private final GetReservationUseCase getReservationUseCase;
     private final GetReservationsUseCase getReservationsUseCase;
+    private final GetReservationsAuditUseCase getReservationsAuditUseCase;
     private final ReservationMapper reservationMapper;
     private final CriteriaMapper criteriaMapper;
 
     @PostMapping(value = SEARCH_PATH)
-    public ResponseEntity<Reservations> search(@Valid @RequestBody CriteriaDto searchDto) {
-        Reservations search = getReservationsUseCase.getReservations(this.criteriaMapper.mapToAggregate(searchDto));
+    public ResponseEntity<PaginationResponse<ReservationDto>> search(@Valid @RequestBody CriteriaDto searchDto) {
+        PaginationResponse<Reservation> search = getReservationsUseCase.getReservations(this.criteriaMapper.mapToAggregate(searchDto));
+
+        return ResponseEntity.ok(PaginationResponse.<ReservationDto>builder()
+                .pagination(search.pagination())
+                .data(search.data().stream().map(this.reservationMapper::mapToDTO).toList())
+                .build());
+    }
+
+    @PostMapping(value = SEARCH_AUDIT_PATH)
+    public ResponseEntity<List<ReservationDto>> searchAudit(@Valid @RequestBody AuditFilters filters, @PathVariable("limit") int limit) {
+        List<ReservationDto> search = getReservationsAuditUseCase.getReservationsAudit(filters, limit).stream()
+                .map(this.reservationMapper::mapToDTO).toList();
         return ResponseEntity.ok(search);
     }
 
