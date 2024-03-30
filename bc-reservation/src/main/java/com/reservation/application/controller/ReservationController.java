@@ -1,16 +1,13 @@
 package com.reservation.application.controller;
 
-import com.hotel.core.infrastructure.database.audit.AuditFilters;
 import com.hotel.core.application.dto.CriteriaDto;
 import com.hotel.core.application.mapper.CriteriaMapper;
+import com.hotel.core.domain.dto.PaginationResponse;
+import com.hotel.core.infrastructure.database.audit.AuditFilters;
 import com.reservation.application.dto.ReservationDto;
 import com.reservation.application.mapper.ReservationMapper;
-import com.hotel.core.domain.dto.PaginationResponse;
 import com.reservation.domain.model.Reservation;
-import com.reservation.domain.usecase.CreateReservationUseCase;
-import com.reservation.domain.usecase.GetReservationUseCase;
-import com.reservation.domain.usecase.GetReservationsAuditUseCase;
-import com.reservation.domain.usecase.GetReservationsUseCase;
+import com.reservation.domain.usecase.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +27,12 @@ public class ReservationController {
     public static final String DELIMITER_PATH = "/";
     public static final String MAPPING = DELIMITER_PATH + "v1/hotel-reservation";
     public static final String FIND_BY_ID_PATH = DELIMITER_PATH + "{id}";
+    public static final String DELETE_PATH = DELIMITER_PATH + "{id}";
     public static final String SEARCH_PATH = DELIMITER_PATH + "search";
     public static final String SEARCH_AUDIT_PATH = DELIMITER_PATH + "search-audit/{limit}";
 
     private final CreateReservationUseCase createReservationUseCase;
+    private final DeleteReservationUseCase deleteReservationUseCase;
     private final GetReservationUseCase getReservationUseCase;
     private final GetReservationsUseCase getReservationsUseCase;
     private final GetReservationsAuditUseCase getReservationsAuditUseCase;
@@ -69,4 +68,9 @@ public class ReservationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(reservationDTO);
     }
 
+    @DeleteMapping(value = DELETE_PATH)
+    public ResponseEntity<Void> deleteReservation(@PathVariable("id") UUID id) {
+        this.deleteReservationUseCase.deleteReservation(id);
+        return ResponseEntity.noContent().build();
+    }
 }

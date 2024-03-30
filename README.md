@@ -28,6 +28,7 @@
   * Kafka 
   * Hexagonal Architecture
   * DDD
+  * Audit with javers
   * TestContainers
   * K6
 

@@ -1,10 +1,10 @@
 package com.reservation.domain.usecase;
 
+import com.hotel.core.application.dto.CriteriaDto;
+import com.hotel.core.domain.dto.PaginationResponse;
 import com.hotel.core.infrastructure.database.audit.AuditFilters;
 import com.reservation.application.controller.ReservationController;
-import com.hotel.core.application.dto.CriteriaDto;
 import com.reservation.application.dto.ReservationDto;
-import com.hotel.core.domain.dto.PaginationResponse;
 import com.reservation.utils.BaseTestContainer;
 import com.reservation.utils.RequestUtils;
 import org.assertj.core.api.Assertions;
@@ -124,6 +124,34 @@ class ReservationControllerIT extends BaseTestContainer {
                         HttpMethod.GET,
                         RequestUtils.buildRequest(null, null),
                         ReservationDto.class,
+                        reservationId);
+
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    void when_reservation_exists_should_delete_it() throws Exception {
+        final String reservationId = "d1a97f69-7fa0-4301-b498-128d78860828";
+
+        final ResponseEntity<Void> response =
+                restTemplate.exchange(ReservationController.MAPPING + ReservationController.DELETE_PATH,
+                        HttpMethod.DELETE,
+                        RequestUtils.buildRequest(null, null),
+                        Void.class,
+                        reservationId);
+
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    @Test
+    void when_reservation_not_exists_and_delete_should_return_not_found() throws Exception {
+        final String reservationId = UUID.randomUUID().toString();
+
+        final ResponseEntity<Void> response =
+                restTemplate.exchange(ReservationController.MAPPING + ReservationController.DELETE_PATH,
+                        HttpMethod.DELETE,
+                        RequestUtils.buildRequest(null, null),
+                        Void.class,
                         reservationId);
 
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);

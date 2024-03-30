@@ -83,6 +83,10 @@ public class Reservation extends AggregateRoot implements Serializable {
 
         return reservation;
     }
+    
+    public void delete(){
+        // Add DomainEvent if is mandatory
+    }
 
 
     private static void validateDatesToCreate(final Reservation reservation) {
