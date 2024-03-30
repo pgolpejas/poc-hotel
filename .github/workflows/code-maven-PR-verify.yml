@@ -69,6 +69,18 @@ jobs:
           branches-label: branches (BC-Reservation)
           workflow-summary-heading: JaCoCo Test Coverage Summary BC-Reservation
 
+      - name: Generate JaCoCo Badges for hotel-core
+        id: jacocoHotelCore
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
+          jacoco-csv-file: hotel-core/target/site/jacoco/jacoco.csv
+          coverage-badge-filename: jacocoHotelCore.svg
+          branches-badge-filename: branchesHotelCore.svg
+          coverage-label: coverage (hotel-core)
+          branches-label: branches (hotel-core)
+          workflow-summary-heading: JaCoCo Test Coverage Summary hotel-core
+
       - name: Commit and push the badge (if it changed)
         uses: EndBug/add-and-commit@v9
         with:
@@ -87,6 +99,12 @@ jobs:
         with:
           name: jacoco-report-bc-reservation
           path: bc-reservation/target/site/jacoco/
+
+      - name: Upload JaCoCo coverage report for hotel-core
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report-hotel-core
+          path: hotel-core/target/site/jacoco/
 
       - name: Sonar
         run: ./mvnw -B sonar:sonar -Dsonar.login=${{secrets.SONAR_TOKEN}}
