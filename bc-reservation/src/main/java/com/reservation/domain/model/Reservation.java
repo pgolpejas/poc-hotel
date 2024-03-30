@@ -1,18 +1,20 @@
 package com.reservation.domain.model;
 
-import com.reservation.domain.core.AggregateRoot;
-import com.reservation.domain.core.DomainError;
-import com.reservation.domain.utils.ValidationUtils;
+import com.hotel.core.domain.ddd.AggregateRoot;
+import com.hotel.core.domain.ddd.DomainError;
+import com.hotel.core.domain.utils.ValidationUtils;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.UUID;
 
 @Getter
+@EqualsAndHashCode(callSuper = false)
+@SuppressWarnings({"java:S107"})
 public class Reservation extends AggregateRoot implements Serializable {
 
     @Serial
@@ -68,7 +70,7 @@ public class Reservation extends AggregateRoot implements Serializable {
 
         // Common domain validations to this action (include db validations)
         validateDatesToCreate(reservation);
-        
+
         Reservation.builder()
                 .id(reservation.id())
                 .hotelId(reservation.hotelId())
@@ -96,7 +98,7 @@ public class Reservation extends AggregateRoot implements Serializable {
 
     @Override
     public String getAggregateId() {
-        return Objects.isNull(this.id) ? "" : this.id.value().toString();
+        return this.id.value().toString();
     }
 
     public Integer roomTypeId() {

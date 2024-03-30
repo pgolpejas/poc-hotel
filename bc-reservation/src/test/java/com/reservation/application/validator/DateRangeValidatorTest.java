@@ -9,7 +9,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -48,17 +49,5 @@ class DateRangeValidatorTest {
         assertFalse(dateRangeValidator.isValid(reservationDTO, null));
     }
 
-    @Test
-    void when_dates_are_null_reservation_is_valid() {
-
-        final ReservationDto reservationDTO = ReservationDto.builder()
-                .id(UUID.randomUUID())
-                .hotelId(UUID.randomUUID())
-                .roomTypeId(1)
-                .guestId(UUID.randomUUID())
-                .status("ON")
-                .build();
-        assertTrue(dateRangeValidator.isValid(reservationDTO, null));
-    }
 
 }

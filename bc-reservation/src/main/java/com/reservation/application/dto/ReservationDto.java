@@ -3,7 +3,6 @@ package com.reservation.application.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.reservation.application.validator.ValidDateRange;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -23,6 +22,7 @@ public record ReservationDto(
 
         @NotNull
         @Positive
+        @Schema(type = "string",                example = "1")
         Integer roomTypeId,
 
         @NotNull
@@ -45,7 +45,7 @@ public record ReservationDto(
                 example = "02/07/2024")
         LocalDate end,
 
-        @Size(max = 20) 
+        @Size(max = 20)
         @Schema(example = "ON")
         String status) {
 }

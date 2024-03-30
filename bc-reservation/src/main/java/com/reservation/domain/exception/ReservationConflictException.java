@@ -1,5 +1,7 @@
 package com.reservation.domain.exception;
 
+import com.hotel.core.domain.exception.ConflictException;
+
 import java.io.Serial;
 
 public class ReservationConflictException extends ConflictException {

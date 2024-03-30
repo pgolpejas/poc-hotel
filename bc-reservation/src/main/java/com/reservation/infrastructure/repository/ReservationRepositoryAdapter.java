@@ -1,14 +1,17 @@
 package com.reservation.infrastructure.repository;
 
+import com.hotel.core.infrastructure.database.audit.AuditFilters;
+import com.hotel.core.infrastructure.database.audit.JaversUtil;
+import com.hotel.core.domain.dto.Criteria;
+import com.hotel.core.domain.dto.Pagination;
+import com.hotel.core.domain.dto.PaginationResponse;
 import com.reservation.domain.model.Reservation;
 import com.reservation.domain.repository.ReservationRepository;
-import com.reservation.domain.utils.Criteria;
-import com.reservation.domain.utils.PageResponse;
+import com.hotel.core.infrastructure.database.springfilter.CriteriaBuilderUtil;
 import com.reservation.infrastructure.entity.ReservationEntity;
 import com.reservation.infrastructure.entity.ReservationEntity_;
 import com.reservation.infrastructure.repository.jpa.ReservationJpaRepository;
 import com.reservation.infrastructure.repository.mapper.ReservationRepositoryMapper;
-import com.reservation.infrastructure.util.CriteriaBuilderUtil;
 import com.turkraft.springfilter.converter.FilterSpecification;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -21,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,6 +39,7 @@ public class ReservationRepositoryAdapter implements ReservationRepository {
     private final ReservationJpaRepository reservationJpaRepository;
     private final ReservationRepositoryMapper reservationRepositoryMapper;
     private final CriteriaBuilderUtil criteriaBuilderUtil;
+    private final JaversUtil javersUtil;
     @PersistenceContext
     private final EntityManager em;
 
@@ -61,7 +66,7 @@ public class ReservationRepositoryAdapter implements ReservationRepository {
     }
 
     @Override
-    public PageResponse<Reservation> search(final Criteria criteria) {
+    public PaginationResponse<Reservation> search(final Criteria criteria) {
 
         final Pageable pageable = criteriaBuilderUtil.pageableFromCriteria(criteria);
 
@@ -70,14 +75,11 @@ public class ReservationRepositoryAdapter implements ReservationRepository {
         final Page<ReservationEntity> page =
                 this.criteriaBuilderUtil.findPaginated(this.em, pageable, ReservationEntity.class, spec);
 
-        final long totalItems = page.getTotalElements();
-        final List<Reservation> reservations = page.stream()
-                .map(this.reservationRepositoryMapper::mapToAggregate).toList();
-        return new PageResponse<>(totalItems, reservations);
+        return mapToPaginationResponse(criteria, page);
     }
 
     @Override
-    public PageResponse<Reservation> searchBySelection(final Criteria criteria) {
+    public PaginationResponse<Reservation> searchBySelection(final Criteria criteria) {
 
         final FilterSpecification<ReservationEntity> spec = criteriaBuilderUtil
                 .springFilterToSpecification(criteria.filters());
@@ -90,9 +92,30 @@ public class ReservationRepositoryAdapter implements ReservationRepository {
         final Page<ReservationEntity> page = criteriaBuilderUtil.findPaginatedSelection(em, pageable,
                 ReservationEntity.class, spec, selectionId);
 
+        return mapToPaginationResponse(criteria, page);
+    }
+
+    private PaginationResponse<Reservation> mapToPaginationResponse(Criteria criteria, Page<ReservationEntity> page) {
         final long totalItems = page.getTotalElements();
         final List<Reservation> reservations = page.stream()
                 .map(this.reservationRepositoryMapper::mapToAggregate).toList();
-        return new PageResponse<>(totalItems, reservations);
+
+        return PaginationResponse.<Reservation>builder()
+                .pagination(Pagination.builder()
+                        .limit(criteria.limit())
+                        .page(criteria.page())
+                        .total(totalItems)
+                        .build())
+                .data(reservations)
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public List<Reservation> findAuditByFilters(AuditFilters filters, int limit) {
+        return this.reservationJpaRepository.findById(filters.getId())
+                .map(entity -> javersUtil.findAuditByInstanceId(entity, filters, limit).stream()
+                        .map(this.reservationRepositoryMapper::mapToAggregate).toList())
+                .orElse(Collections.emptyList());
     }
 }

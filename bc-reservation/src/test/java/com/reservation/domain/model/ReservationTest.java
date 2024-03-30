@@ -1,12 +1,11 @@
 package com.reservation.domain.model;
 
-import com.reservation.domain.core.DomainError;
+import com.hotel.core.domain.ddd.DomainError;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ReservationTest {
@@ -25,8 +24,6 @@ class ReservationTest {
                 .end(LocalDate.now().minusDays(1))
                 .status("ON")
                 .build();
-        assertThrows(DomainError.class, () -> {
-            Reservation.create(reservation);
-        });
+        assertThrows(DomainError.class, () -> Reservation.create(reservation));
     }
 }

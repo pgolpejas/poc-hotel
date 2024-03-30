@@ -1,9 +1,10 @@
 package com.reservation.domain.usecase;
 
-import com.reservation.domain.model.Reservations;
-import com.reservation.domain.utils.Criteria;
+import com.hotel.core.domain.dto.PaginationResponse;
+import com.reservation.domain.model.Reservation;
+import com.hotel.core.domain.dto.Criteria;
 
 public interface GetReservationsUseCase {
 
-    Reservations getReservations(Criteria searchDto);
+    PaginationResponse<Reservation> getReservations(Criteria searchDto);
 }

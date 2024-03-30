@@ -1,7 +1,7 @@
 package com.reservation.domain.model;
 
-import com.reservation.domain.core.ValueObject;
-import com.reservation.domain.utils.ValidationUtils;
+import com.hotel.core.domain.ddd.ValueObject;
+import com.hotel.core.domain.utils.ValidationUtils;
 
 import java.io.Serializable;
 import java.util.UUID;

@@ -54,4 +54,86 @@
         </createTable>
     </changeSet>
 
+    <!--javers-->
+    <changeSet author="user" id="0000000000000-05">
+        <createTable tableName="jv_global_id">
+            <column name="global_id_pk" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jv_global_id_pk"/>
+            </column>
+            <column name="local_id" type="VARCHAR(191)"/>
+            <column name="fragment" type="VARCHAR(200)"/>
+            <column name="type_name" type="VARCHAR(200)"/>
+            <column name="owner_id_fk" type="BIGINT"/>
+        </createTable>
+        <createTable tableName="jv_commit">
+            <column name="commit_pk" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jv_commit_pk"/>
+            </column>
+            <column name="author" type="VARCHAR(200)"/>
+            <column name="commit_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="commit_date_instant" type="VARCHAR(30)"/>
+            <column name="commit_id" type="numeric(22, 2)"/>
+        </createTable>
+        <createTable tableName="jv_commit_property">
+            <column name="property_name" type="VARCHAR(191)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="property_value" type="VARCHAR(600)"/>
+            <column name="commit_fk" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="jv_snapshot">
+            <column name="snapshot_pk" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jv_snapshot_pk"/>
+            </column>
+            <column name="type" type="VARCHAR(200)"/>
+            <column name="version" type="BIGINT"/>
+            <column name="state" type="TEXT"/>
+            <column name="changed_properties" type="TEXT"/>
+            <column name="managed_type" type="VARCHAR(200)"/>
+            <column name="global_id_fk" type="BIGINT"/>
+            <column name="commit_fk" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    
+    <changeSet author="user" id="0000000000000-06">
+        <createIndex indexName="jv_global_id_local_id_idx" tableName="jv_global_id">
+            <column name="local_id"/>
+        </createIndex>
+        <createIndex indexName="jv_global_id_owner_id_fk_idx" tableName="jv_global_id">
+            <column name="owner_id_fk"/>
+        </createIndex>
+        <createIndex indexName="jv_commit_commit_id_idx" tableName="jv_commit">
+            <column name="commit_id"/>
+        </createIndex>
+        <createIndex indexName="jv_commit_property_commit_fk_idx" tableName="jv_commit_property">
+            <column name="commit_fk"/>
+        </createIndex>
+        <createIndex indexName="jv_commit_property_property_name_property_value_idx" tableName="jv_commit_property">
+            <column name="property_name"/>
+            <column name="property_value"/>
+        </createIndex>
+        <createIndex indexName="jv_snapshot_global_id_fk_idx" tableName="jv_snapshot">
+            <column name="global_id_fk"/>
+        </createIndex>
+        <createIndex indexName="jv_snapshot_commit_fk_idx" tableName="jv_snapshot">
+            <column name="commit_fk"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="user" id="0000000000000-07">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="jv_commit_pk_seq" startValue="1"/>
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="jv_global_id_pk_seq" startValue="1"/>
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="jv_snapshot_pk_seq" startValue="1"/>
+    </changeSet>
+
+    <changeSet author="user" id="0000000000000-08">
+        <addPrimaryKey columnNames="commit_fk, property_name" constraintName="jv_commit_property_pk" tableName="jv_commit_property"/>
+        <addForeignKeyConstraint baseColumnNames="commit_fk" baseTableName="jv_commit_property" constraintName="jv_commit_property_commit_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="commit_pk" referencedTableName="jv_commit" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="owner_id_fk" baseTableName="jv_global_id" constraintName="jv_global_id_owner_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="global_id_pk" referencedTableName="jv_global_id" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="commit_fk" baseTableName="jv_snapshot" constraintName="jv_snapshot_commit_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="commit_pk" referencedTableName="jv_commit" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="global_id_fk" baseTableName="jv_snapshot" constraintName="jv_snapshot_global_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="global_id_pk" referencedTableName="jv_global_id" validate="true"/>
+    </changeSet>
+
 </databaseChangeLog>

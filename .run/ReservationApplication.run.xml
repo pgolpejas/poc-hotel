@@ -5,6 +5,7 @@
       <option name="environmentVariables" />
     </selectedOptions>
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.reservation.ReservationApplication" />
+    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/bc-reservation" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="com.reservation.*" />
