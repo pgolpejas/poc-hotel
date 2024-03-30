@@ -1,4 +1,4 @@
-package com.reservation.configuration;
+package com.hotel.core.configuration;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.context.annotation.Bean;
