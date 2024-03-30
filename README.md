@@ -71,6 +71,10 @@ TODO add opentelemetry configuration on each DockerFile configuration
 
 Once started, the service can be reached at <http://localhost:8081>.
 
+### Hotel-core ###
+
+Library with core utilities
+
 ## Coverage ## 
 
 Run coverage with maven (docker-compose does not need to be running)
