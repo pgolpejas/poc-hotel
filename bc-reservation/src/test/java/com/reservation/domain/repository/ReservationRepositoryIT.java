@@ -1,8 +1,8 @@
 package com.reservation.domain.repository;
 
-import com.hotel.core.infrastructure.database.audit.AuditFilters;
 import com.hotel.core.domain.dto.Criteria;
 import com.hotel.core.domain.dto.PaginationResponse;
+import com.hotel.core.infrastructure.database.audit.AuditFilters;
 import com.reservation.domain.model.Reservation;
 import com.reservation.utils.BaseTestContainer;
 import org.assertj.core.api.Assertions;
@@ -29,15 +29,7 @@ class ReservationRepositoryIT extends BaseTestContainer {
         UUID hotelId = UUID.randomUUID();
         Integer roomTypeId = 1;
         UUID guestId = UUID.randomUUID();
-        final Reservation reservation = Reservation.builder()
-                .id(UUID.randomUUID())
-                .hotelId(hotelId)
-                .roomTypeId(roomTypeId)
-                .guestId(guestId)
-                .start(LocalDate.now())
-                .end(LocalDate.now())
-                .status("ON")
-                .build();
+        final Reservation reservation = Reservation.builder().id(UUID.randomUUID()).hotelId(hotelId).roomTypeId(roomTypeId).guestId(guestId).start(LocalDate.now()).end(LocalDate.now()).status("ON").build();
         reservationRepository.save(reservation);
 
         Optional<Reservation> optSearch = reservationRepository.findById(reservation.getId().value());
@@ -55,13 +47,7 @@ class ReservationRepositoryIT extends BaseTestContainer {
     void when_reservation_filter_with_selection_should_return_it() {
         final String reservationId = "d1a97f69-7fa0-4301-b498-128d78860828";
         final String filter = String.format("id:'%s'", reservationId);
-        final Criteria criteria = Criteria.builder()
-                .filters(filter)
-                .page(0)
-                .limit(10)
-                .sortBy("id")
-                .sortDirection("ASC")
-                .build();
+        final Criteria criteria = Criteria.builder().filters(filter).page(0).limit(10).sortBy("id").sortDirection("ASC").build();
 
         final PaginationResponse<Reservation> pageResponse = reservationRepository.searchBySelection(criteria);
 
@@ -72,19 +58,12 @@ class ReservationRepositoryIT extends BaseTestContainer {
         Assertions.assertThat(pageResponse.data().getFirst().status()).as("status").isBlank();
     */
     }
-         */
 
     @Test
     void when_reservation_filter_should_return_it() {
         final String reservationId = "d1a97f69-7fa0-4301-b498-128d78860828";
         final String filter = String.format("id:'%s'", reservationId);
-        final Criteria criteria = Criteria.builder()
-                .filters(filter)
-                .page(0)
-                .limit(10)
-                .sortBy("id")
-                .sortDirection("ASC")
-                .build();
+        final Criteria criteria = Criteria.builder().filters(filter).page(0).limit(10).sortBy("id").sortDirection("ASC").build();
 
         final PaginationResponse<Reservation> pageResponse = reservationRepository.search(criteria);
 
@@ -101,22 +80,10 @@ class ReservationRepositoryIT extends BaseTestContainer {
         UUID hotelId = UUID.randomUUID();
         Integer roomTypeId = 1;
         UUID guestId = UUID.randomUUID();
-        final Reservation reservation = Reservation.builder()
-                .id(id)
-                .hotelId(hotelId)
-                .roomTypeId(roomTypeId)
-                .guestId(guestId)
-                .start(LocalDate.now())
-                .end(LocalDate.now())
-                .status("ON")
-                .build();
+        final Reservation reservation = Reservation.builder().id(id).hotelId(hotelId).roomTypeId(roomTypeId).guestId(guestId).start(LocalDate.now()).end(LocalDate.now()).status("ON").build();
         reservationRepository.save(reservation);
 
-        final AuditFilters filters = AuditFilters.builder()
-                .id(id)
-                .from(LocalDateTime.now().minusYears(1))
-                .to(LocalDateTime.now())
-                .build();
+        final AuditFilters filters = AuditFilters.builder().id(id).from(LocalDateTime.now().minusYears(1)).to(LocalDateTime.now()).build();
         final List<Reservation> plannedProductList = this.reservationRepository.findAuditByFilters(filters, 10);
 
         assertThat(plannedProductList).hasSize(1);
