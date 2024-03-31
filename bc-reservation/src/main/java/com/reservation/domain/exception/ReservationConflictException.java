@@ -12,4 +12,8 @@ public class ReservationConflictException extends ConflictException {
   public ReservationConflictException(final String detail) {
     super(detail);
   }
+
+  public ReservationConflictException(final String detailToFormat, Object ...arguments) {
+    super(detailToFormat, arguments);
+  }
 }

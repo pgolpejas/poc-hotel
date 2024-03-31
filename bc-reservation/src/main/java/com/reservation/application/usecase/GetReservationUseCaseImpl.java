@@ -18,6 +18,6 @@ public class GetReservationUseCaseImpl implements GetReservationUseCase {
     @Override
     public Reservation getReservation(final UUID id) {
         return this.reservationRepository.findById(id)
-                .orElseThrow(() -> new ReservationNotFoundException(String.format("Reservation with id %s not found", id)));
+                .orElseThrow(() -> new ReservationNotFoundException("Reservation with id %s not found", id));
     }
 }

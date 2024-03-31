@@ -17,4 +17,9 @@ public abstract class ConflictException extends RuntimeException {
         this.detail = detail;
     }
 
+    protected ConflictException(final String detail, Object ...arguments) {
+        super(String.format(detail, arguments));
+        this.detail = super.getMessage();
+    }
+
 }

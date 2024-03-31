@@ -10,4 +10,8 @@ public class DomainError extends RuntimeException {
   public DomainError(final String message) {
     super(message);
   }
+
+  public DomainError(final String message, Object ...arguments) {
+    super(String.format(message, arguments));
+  }
 }

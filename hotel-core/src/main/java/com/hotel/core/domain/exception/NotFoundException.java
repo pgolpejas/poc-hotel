@@ -17,4 +17,8 @@ public class NotFoundException extends RuntimeException {
         this.detail = detail;
     }
 
+    protected NotFoundException(final String detail, Object ...arguments) {
+        super(String.format(detail, arguments));
+        this.detail = super.getMessage();
+    }
 }

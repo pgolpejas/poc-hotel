@@ -6,10 +6,7 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record PaginationResponse<T>(
-        @Schema(description = "pagination properties")
-        Pagination pagination,
-
+public record ListResponse<T>(
         @Schema(description = "items")
         List<T> data) {
 
