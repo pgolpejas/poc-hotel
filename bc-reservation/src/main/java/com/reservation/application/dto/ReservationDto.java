@@ -22,7 +22,7 @@ public record ReservationDto(
 
         @NotNull
         @Positive
-        @Schema(type = "string",                example = "1")
+        @Schema(type = "integer", example = "1")
         Integer roomTypeId,
 
         @NotNull

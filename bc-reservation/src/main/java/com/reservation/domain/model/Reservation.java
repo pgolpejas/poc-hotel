@@ -88,11 +88,20 @@ public class Reservation extends AggregateRoot implements Serializable {
         // Add DomainEvent if is mandatory
     }
 
+    public void update(final Reservation reservation){
+        this.hotelId = new HotelId(reservation.hotelId());
+        this.guestId = new GuestId(reservation.guestId());
+        this.roomTypeId = reservation.roomTypeId();
+        this.start = reservation.start();
+        this.end = reservation.end();
+        this.status = reservation.status();
+                
+        // Add DomainEvent if is mandatory
+    }
 
     private static void validateDatesToCreate(final Reservation reservation) {
         if (reservation.start().isAfter(reservation.end())) {
-            throw new DomainError(
-                    String.format("Start date: %s cannot be later than end date: %s", reservation.start(), reservation.end()));
+            throw new DomainError("Start date: %s cannot be later than end date: %s", reservation.start(), reservation.end());
         }
     }
 

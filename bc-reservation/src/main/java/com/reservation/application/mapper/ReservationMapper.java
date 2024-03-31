@@ -16,5 +16,4 @@ public interface ReservationMapper {
     ReservationDto mapToDTO(Reservation aggregate);
 
     Reservation mapToAggregate(ReservationDto entity);
-
 }

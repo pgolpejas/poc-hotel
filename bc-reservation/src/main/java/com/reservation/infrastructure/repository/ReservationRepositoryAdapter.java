@@ -35,90 +35,98 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class ReservationRepositoryAdapter implements ReservationRepository {
 
-    private final ReservationJpaRepository reservationJpaRepository;
-    private final ReservationRepositoryMapper reservationRepositoryMapper;
-    private final CriteriaBuilderUtil criteriaBuilderUtil;
-    private final JaversUtil javersUtil;
-    @PersistenceContext
-    private final EntityManager em;
+  private final ReservationJpaRepository reservationJpaRepository;
+  private final ReservationRepositoryMapper reservationRepositoryMapper;
+  private final CriteriaBuilderUtil criteriaBuilderUtil;
+  private final JaversUtil javersUtil;
+  @PersistenceContext
+  private final EntityManager em;
 
-    private static final String[] selectionFields = new String[]{
-            ReservationEntity_.ID,
-            ReservationEntity_.VERSION,
-            ReservationEntity_.ROOM_TYPE_ID,
-            ReservationEntity_.HOTEL_ID,
-            ReservationEntity_.GUEST_ID,
-            ReservationEntity_.START,
-            ReservationEntity_.END
-    };
+  private static final String[] selectionFields = new String[]{
+      ReservationEntity_.ID,
+      ReservationEntity_.VERSION,
+      ReservationEntity_.ROOM_TYPE_ID,
+      ReservationEntity_.HOTEL_ID,
+      ReservationEntity_.GUEST_ID,
+      ReservationEntity_.START,
+      ReservationEntity_.END
+  };
 
-    @Override
-    public void save(final Reservation reservation) {
-        this.reservationJpaRepository.save(this.reservationRepositoryMapper.mapToEntity(reservation));
-    }
+  @Transactional
+  @Override
+  public void save(final Reservation reservation) {
+    this.reservationJpaRepository.save(this.reservationRepositoryMapper.mapToEntity(reservation));
+  }
 
-    @Override
-    public void delete(final Reservation reservation) {
-        this.reservationJpaRepository.deleteById(reservation.id());
-    }
+  @Transactional
+  @Override
+  public void delete(final Reservation reservation) {
+    this.reservationJpaRepository.deleteByPK(reservation.id());
+  }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Optional<Reservation> findById(final UUID id) {
-        return this.reservationJpaRepository.findById(id)
-                .map(this.reservationRepositoryMapper::mapToAggregate);
-    }
+  @Transactional
+  @Override
+  public Optional<Reservation> findById(final UUID id) {
+    return this.reservationJpaRepository.findAggregateById(id);
+  }
 
-    @Override
-    public PaginationResponse<Reservation> search(final Criteria criteria) {
+  @Transactional
+  @Override
+  public boolean existsById(final UUID id) {
+    return this.reservationJpaRepository.existsByPK(id);
+  }
 
-        final Pageable pageable = criteriaBuilderUtil.pageableFromCriteria(criteria);
+  @Override
+  public PaginationResponse<Reservation> search(final Criteria criteria) {
 
-        final FilterSpecification<ReservationEntity> spec = this.criteriaBuilderUtil
-                .springFilterToSpecification(criteria.filters());
-        final Page<ReservationEntity> page =
-                this.criteriaBuilderUtil.findPaginated(this.em, pageable, ReservationEntity.class, spec);
+    final Pageable pageable = criteriaBuilderUtil.pageableFromCriteria(criteria);
 
-        return mapToPaginationResponse(criteria, page);
-    }
+    final FilterSpecification<ReservationEntity> spec = this.criteriaBuilderUtil
+        .springFilterToSpecification(criteria.filters());
+    final Page<ReservationEntity> page =
+        this.criteriaBuilderUtil.findPaginated(this.em, pageable, ReservationEntity.class, spec);
 
-    @Override
-    public PaginationResponse<Reservation> searchBySelection(final Criteria criteria) {
+    return mapToPaginationResponse(criteria, page);
+  }
 
-        final FilterSpecification<ReservationEntity> spec = criteriaBuilderUtil
-                .springFilterToSpecification(criteria.filters());
+  @Override
+  public PaginationResponse<Reservation> searchBySelection(final Criteria criteria) {
 
-        final Function<Root<?>, Selection<?>[]> selectionId =
-                root -> Stream.of(selectionFields).map(root::get).toArray(Selection[]::new);
+    final FilterSpecification<ReservationEntity> spec = criteriaBuilderUtil
+        .springFilterToSpecification(criteria.filters());
 
-        final Pageable pageable = criteriaBuilderUtil.pageableFromCriteria(criteria);
+    final Function<Root<?>, Selection<?>[]> selectionId =
+        root -> Stream.of(selectionFields).map(root::get).toArray(Selection[]::new);
 
-        final Page<ReservationEntity> page = criteriaBuilderUtil.findPaginatedSelection(em, pageable,
-                ReservationEntity.class, spec, selectionId);
+    final Pageable pageable = criteriaBuilderUtil.pageableFromCriteria(criteria);
 
-        return mapToPaginationResponse(criteria, page);
-    }
+    final Page<ReservationEntity> page = criteriaBuilderUtil.findPaginatedSelection(em, pageable,
+        ReservationEntity.class, spec, selectionId);
 
-    private PaginationResponse<Reservation> mapToPaginationResponse(Criteria criteria, Page<ReservationEntity> page) {
-        final long totalItems = page.getTotalElements();
-        final List<Reservation> reservations = page.stream()
-                .map(this.reservationRepositoryMapper::mapToAggregate).toList();
+    return mapToPaginationResponse(criteria, page);
+  }
 
-        return PaginationResponse.<Reservation>builder()
-                .pagination(Pagination.builder()
-                        .limit(criteria.limit())
-                        .page(criteria.page())
-                        .total(totalItems)
-                        .build())
-                .data(reservations)
-                .build();
-    }
+  private PaginationResponse<Reservation> mapToPaginationResponse(Criteria criteria, Page<ReservationEntity> page) {
+    final long totalItems = page.getTotalElements();
+    final List<Reservation> reservations = page.stream()
+        .map(this.reservationRepositoryMapper::mapToAggregate).toList();
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<Reservation> findAuditByFilters(AuditFilters filters, int limit) {
-        ReservationEntity entity = ReservationEntity.builder().id(filters.getId()).build();
-        return javersUtil.findAuditByInstanceId(entity, filters, limit).stream()
-                .map(this.reservationRepositoryMapper::mapToAggregate).toList();
-    }
+    return PaginationResponse.<Reservation>builder()
+        .pagination(Pagination.builder()
+            .limit(criteria.limit())
+            .page(criteria.page())
+            .total(totalItems)
+            .build())
+        .data(reservations)
+        .build();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<Reservation> findAuditByFilters(AuditFilters filters, int limit) {
+    ReservationEntity entity = ReservationEntity.builder().id(filters.getId()).build();
+    return javersUtil.findAuditByInstanceId(entity, filters, limit).stream()
+        .filter(shadow -> shadow.getId() != null)
+        .map(this.reservationRepositoryMapper::mapToAggregate).toList();
+  }
 }

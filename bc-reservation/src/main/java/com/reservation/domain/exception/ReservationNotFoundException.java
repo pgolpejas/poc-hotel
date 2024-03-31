@@ -12,4 +12,8 @@ public class ReservationNotFoundException extends NotFoundException {
     public ReservationNotFoundException(final String detail) {
         super(detail);
     }
+
+    public ReservationNotFoundException(final String detailToFormat, Object ...arguments) {
+        super(detailToFormat, arguments);
+    }
 }
