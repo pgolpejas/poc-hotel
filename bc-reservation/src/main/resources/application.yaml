@@ -51,35 +51,35 @@ spring:
       enabled: true
     
   ######## Cloud stream Configuration  #########
-  cloud:
-    stream:
-      default:
-        producer:
-          useNativeEncoding: true
-      #        consumer:
-      #          useNativeEncoding: true
-      kafka:
-        binder:
-          defaultBrokerPort: 19092
-          producer-properties:
-            key.serializer: org.apache.kafka.common.serialization.StringSerializer
-            value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-            schema.registry.url: http://localhost:8081
-      #          consumer-properties:
-      #            key.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-      #            value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-      #            schema.registry.url: http://localhost:8081
-      #            specific.avro.reader: true
-      bindings:
-        reservation-out-0:
-          destination: sensor-topic
-          contentType: application/*+avro
-          group: group-reservation
-      schema-registry-client:
-        endpoint: http://localhost:8081
-      schema:
-        avro:
-          schema-locations: classpath:avro/sensor.avsc
+#  cloud:
+#    stream:
+#      default:
+#        producer:
+#          useNativeEncoding: true
+#      #        consumer:
+#      #          useNativeEncoding: true
+#      kafka:
+#        binder:
+#          defaultBrokerPort: 19092
+#          producer-properties:
+#            key.serializer: org.apache.kafka.common.serialization.StringSerializer
+#            value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+#            schema.registry.url: http://localhost:8081
+#      #          consumer-properties:
+#      #            key.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+#      #            value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+#      #            schema.registry.url: http://localhost:8081
+#      #            specific.avro.reader: true
+#      bindings:
+#        reservation-out-0:
+#          destination: sensor-topic
+#          contentType: application/*+avro
+#          group: group-reservation
+#      schema-registry-client:
+#        endpoint: http://localhost:8081
+#      schema:
+#        avro:
+#          schema-locations: classpath:avro/sensor.avsc
     
 ######## Javers Configuration  #########         
 javers:
