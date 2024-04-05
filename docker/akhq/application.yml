@@ -1,0 +1,7 @@
+akhq:
+  connections:
+    local:
+      properties:
+        bootstrap.servers: "kafka-broker-1:9092"
+      schema-registry:
+        url: "http://schema-registry:8081"
