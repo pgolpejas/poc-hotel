@@ -1,5 +1,6 @@
 package com.reservation.application.controller;
 
+import com.example.SensorEventDto;
 import com.hotel.core.application.dto.CriteriaDto;
 import com.hotel.core.application.mapper.CriteriaMapper;
 import com.hotel.core.domain.dto.ListResponse;
@@ -13,16 +14,22 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @RestController
@@ -46,6 +53,32 @@ public class ReservationController {
     private final GetReservationsAuditUseCase getReservationsAuditUseCase;
     private final ReservationMapper reservationMapper;
     private final CriteriaMapper criteriaMapper;
+
+    private final StreamBridge streamBridge;
+    
+    @PostMapping(value = "/randomMessage")
+    public String sendRandomMessage() {
+        SensorEventDto sensor = randomSensor();
+
+        Message<SensorEventDto> message = MessageBuilder
+                .withPayload(sensor)
+                .setHeader(KafkaHeaders.KEY, "sensor-" + UUID.randomUUID())
+                .build();
+
+        streamBridge.send("reservation-out-0", message);
+        return "ok, have fun with v1 payload!";
+    }
+
+    private SensorEventDto randomSensor() {
+        Random random = new Random();
+        SensorEventDto sensor = new SensorEventDto();
+        sensor.setId(UUID.randomUUID() + "-v1");
+        sensor.setAcceleration(random.nextFloat() * 10);
+        sensor.setVelocity(random.nextFloat() * 100);
+        sensor.setTemperature(random.nextFloat() * 50);
+        return sensor;
+    }
+
 
     @Operation(summary = "Search by filters")
     @ApiResponses(value = {
@@ -92,12 +125,12 @@ public class ReservationController {
 
     @Operation(summary = "Create item")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201",
-            description = "Created item",
-            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ReservationDto.class))}),
-        @ApiResponse(responseCode = "400", description = "Invalid data", content = @Content(mediaType = "application/problem+json")),
-        @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = "application/problem+json")),
-        @ApiResponse(responseCode = "409", description = "Conflict", content = @Content(mediaType = "application/problem+json"))}
+            @ApiResponse(responseCode = "201",
+                    description = "Created item",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ReservationDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid data", content = @Content(mediaType = "application/problem+json")),
+            @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = "application/problem+json")),
+            @ApiResponse(responseCode = "409", description = "Conflict", content = @Content(mediaType = "application/problem+json"))}
     )
     @PostMapping
     public ResponseEntity<ReservationDto> createReservation(@Valid @RequestBody final ReservationDto reservationDTO) {
@@ -107,11 +140,11 @@ public class ReservationController {
 
     @Operation(summary = "Update item")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200",
-            description = "Updated item",
-            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ReservationDto.class))}),
-        @ApiResponse(responseCode = "400", description = "Invalid data", content = @Content(mediaType = "application/problem+json")),
-        @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = "application/problem+json"))}
+            @ApiResponse(responseCode = "200",
+                    description = "Updated item",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ReservationDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid data", content = @Content(mediaType = "application/problem+json")),
+            @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = "application/problem+json"))}
     )
     @PutMapping
     public ResponseEntity<ReservationDto> updateReservation(@Valid @RequestBody final ReservationDto reservationDTO) {
@@ -123,15 +156,16 @@ public class ReservationController {
     @Operation(summary = "Delete item")
     @Parameter(description = "item id", required = true, name = "id", example = "d1a97f69-7fa0-4301-b498-128d78860828")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200",
-            description = "Deleted item",
-            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ReservationDto.class))}),
-        @ApiResponse(responseCode = "400", description = "Invalid data", content = @Content(mediaType = "application/problem+json")),
-        @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = "application/problem+json"))}
+            @ApiResponse(responseCode = "200",
+                    description = "Deleted item",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ReservationDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid data", content = @Content(mediaType = "application/problem+json")),
+            @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = "application/problem+json"))}
     )
     @DeleteMapping(value = DELETE_PATH)
     public ResponseEntity<Void> deleteReservation(@PathVariable("id") UUID id) {
         this.deleteReservationUseCase.deleteReservation(id);
         return ResponseEntity.noContent().build();
     }
+
 }

@@ -17,7 +17,7 @@
     <description>This module contains core utilities</description>
 
     <properties>
-        <sonar.moduleKey>${artifactId}</sonar.moduleKey>
+        <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
     </properties>
 
     <dependencies>
@@ -40,7 +40,7 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         
-        <!--openapi-->
+        <!--openapi -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -83,8 +83,14 @@
             <artifactId>javers-spring-boot-starter-sql</artifactId>
             <version>${javers.version}</version>
         </dependency>
+        
+        <!-- spring cloud/kafka -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-schema-registry-client</artifactId>
+        </dependency>
 
-
+        <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
