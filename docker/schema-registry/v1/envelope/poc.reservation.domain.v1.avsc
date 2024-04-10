@@ -1,0 +1,5 @@
+[
+  "com.reservation.domain.avro.v1.ReservationCreated",
+  "com.reservation.domain.avro.v1.ReservationUpdated",
+  "com.reservation.domain.avro.v1.ReservationDeleted"
+]

@@ -22,7 +22,6 @@ public interface ReservationJpaRepository extends JpaRepository<ReservationEntit
             from ReservationEntity i
             where i.id =:id
             """)
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
     boolean existsByPK(UUID id);
 
     @Query("""

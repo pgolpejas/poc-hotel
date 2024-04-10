@@ -92,6 +92,10 @@ Open target/site/jacoco-ut/index.html on every module and check coverage
 
 ## Observability ## 
 
+We use the grafana stack to monitor the application: loki, tempo, grafana.
+
+We deploy the stack using docker compose.
+
 Open grafana in http://localhost:3000. You can view logs with Loki, metrics and traces with tempo
 
 ## Performance test with k6 ## 

@@ -91,8 +91,9 @@
         <avro.version>1.11.3</avro.version>
         <spring-cloud.version>2023.0.1</spring-cloud.version>
         <spring-cloud-stream.version>4.1.1</spring-cloud-stream.version>
-        <kafka-avro-serializer.version>7.6.0</kafka-avro-serializer.version>
-        
+        <kafka-avro-serializer.version>7.6.1</kafka-avro-serializer.version>
+        <confluent.version>7.6.0</confluent.version>
+
         <!-- observability-->
         <otel.version>2.2.0</otel.version>
         <loki-logback-appender.version>1.5.1</loki-logback-appender.version>
@@ -212,8 +213,9 @@
                                 <goal>schema</goal>
                             </goals>
                             <configuration>
-                                <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
+                                <sourceDirectory>${project.basedir}/src/main/resources/asyncapi</sourceDirectory>
                                 <outputDirectory>${project.build.directory}/generated-sources/event</outputDirectory>
+                                <excludes>**/envelope/*.avsc</excludes>
                             </configuration>
                         </execution>
                     </executions>
@@ -383,5 +385,12 @@
             <url>https://packages.confluent.io/maven/</url>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>

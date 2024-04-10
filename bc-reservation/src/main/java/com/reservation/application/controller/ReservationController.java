@@ -1,6 +1,5 @@
 package com.reservation.application.controller;
 
-import com.example.SensorEventDto;
 import com.hotel.core.application.dto.CriteriaDto;
 import com.hotel.core.application.mapper.CriteriaMapper;
 import com.hotel.core.domain.dto.ListResponse;
@@ -14,27 +13,23 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cloud.stream.function.StreamBridge;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 @RestController
 @Tag(name = "Hotel Reservation controller", description = "Hotel reservation API")
 @RequestMapping(value = ReservationController.MAPPING)
+@Slf4j
 @RequiredArgsConstructor
 public class ReservationController {
 
@@ -53,32 +48,6 @@ public class ReservationController {
     private final GetReservationsAuditUseCase getReservationsAuditUseCase;
     private final ReservationMapper reservationMapper;
     private final CriteriaMapper criteriaMapper;
-
-    private final StreamBridge streamBridge;
-    
-    @PostMapping(value = "/randomMessage")
-    public String sendRandomMessage() {
-        SensorEventDto sensor = randomSensor();
-
-        Message<SensorEventDto> message = MessageBuilder
-                .withPayload(sensor)
-                .setHeader(KafkaHeaders.KEY, "sensor-" + UUID.randomUUID())
-                .build();
-
-        streamBridge.send("reservation-out-0", message);
-        return "ok, have fun with v1 payload!";
-    }
-
-    private SensorEventDto randomSensor() {
-        Random random = new Random();
-        SensorEventDto sensor = new SensorEventDto();
-        sensor.setId(UUID.randomUUID() + "-v1");
-        sensor.setAcceleration(random.nextFloat() * 10);
-        sensor.setVelocity(random.nextFloat() * 100);
-        sensor.setTemperature(random.nextFloat() * 50);
-        return sensor;
-    }
-
 
     @Operation(summary = "Search by filters")
     @ApiResponses(value = {
