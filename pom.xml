@@ -212,8 +212,9 @@
                                 <goal>schema</goal>
                             </goals>
                             <configuration>
-                                <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
+                                <sourceDirectory>${project.basedir}/src/main/resources/asyncapi</sourceDirectory>
                                 <outputDirectory>${project.build.directory}/generated-sources/event</outputDirectory>
+                                <excludes>**/envelope/*.avsc</excludes>
                             </configuration>
                         </execution>
                     </executions>
@@ -383,5 +384,12 @@
             <url>https://packages.confluent.io/maven/</url>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>

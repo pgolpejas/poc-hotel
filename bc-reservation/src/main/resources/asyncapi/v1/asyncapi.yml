@@ -1,0 +1,96 @@
+asyncapi: 2.5.0
+info:
+  title: "BC Reservation Api Event"
+  version: '0.1.0'
+  description: |
+    This API allows listen events from Hotel Reservation.
+  contact:
+    name: pgolpejas
+    email: email@company.com
+    url: https://github.com/pgolpejas/poc-hotel
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0'
+
+tags:
+  - name: Reservation
+    description: Hotel Reservation Avro events
+
+servers:
+  local:
+    url: localhost:{port}
+    protocol: kafka
+    variables:
+      port:
+        default: '9092'
+        enum:
+          - '9092'
+          - '19902'
+
+defaultContentType: application/*+avro
+
+channels:
+  poc.reservation.data.v1:
+    publish:
+      summary: Hotel Reservations Data Event.
+      description: Hotel Reservations Data Event.
+      operationId: reservationsDataEvent
+      tags:
+        - name: Reservation
+      bindings:
+        kafka:
+          bindingVersion: 'latest'
+          groupId: reservation-snapshot
+      message:
+        oneOf:
+          - $ref: '#/components/messages/ReservationSnapshot'
+  poc.reservation.domain.v1:
+    publish:
+      summary: Hotel Reservations Domain Event.
+      description: Hotel Reservations Domain Event.
+      operationId: reservationsDomainEvent
+      tags:
+        - name: Reservation
+      bindings:
+        kafka:
+          bindingVersion: 'latest'
+          groupId: reservation-domain
+      message:
+        oneOf:
+          - $ref: '#/components/messages/ReservationCreated'
+          - $ref: '#/components/messages/ReservationUpdated'
+          - $ref: '#/components/messages/ReservationDeleted'
+components:
+  messages:
+    ReservationSnapshot:
+      name: ReservationSnapshot
+      title: ReservationSnapshot event
+      summary:  ReservationSnapshot event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/reservation_snapshot.avsc'
+    ReservationCreated:
+      name: ReservationCreated
+      title: ReservationCreated domain event
+      summary: ReservationCreated domain event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/reservation_updated.avsc'    
+    ReservationUpdated:
+      name: ReservationUpdated
+      title: ReservationUpdated domain event
+      summary: ReservationUpdated domain event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/reservation_created.avsc'
+    ReservationDeleted:
+      name: ReservationDeleted
+      title: ReservationDeleted domain event
+      summary: ReservationDeleted domain event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/reservation_deleted.avsc'

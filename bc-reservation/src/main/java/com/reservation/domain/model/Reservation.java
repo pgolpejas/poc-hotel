@@ -3,6 +3,9 @@ package com.reservation.domain.model;
 import com.hotel.core.domain.ddd.AggregateRoot;
 import com.hotel.core.domain.ddd.DomainError;
 import com.hotel.core.domain.utils.ValidationUtils;
+import com.reservation.domain.event.ReservationCreatedEvent;
+import com.reservation.domain.event.ReservationDeletedEvent;
+import com.reservation.domain.event.ReservationUpdatedEvent;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -71,7 +74,7 @@ public class Reservation extends AggregateRoot implements Serializable {
         // Common domain validations to this action (include db validations)
         validateDatesToCreate(reservation);
 
-        Reservation.builder()
+        final Reservation newAggregate = Reservation.builder()
                 .id(reservation.id())
                 .hotelId(reservation.hotelId())
                 .roomTypeId(reservation.roomTypeId())
@@ -81,22 +84,46 @@ public class Reservation extends AggregateRoot implements Serializable {
                 .status(reservation.status())
                 .build();
 
-        return reservation;
-    }
-    
-    public void delete(){
-        // Add DomainEvent if is mandatory
+        newAggregate.registerEvent(
+                ReservationCreatedEvent.builder()
+                        .id(newAggregate.id())
+                        .roomTypeId(newAggregate.getRoomTypeId())
+                        .hotelId(newAggregate.hotelId())
+                        .guestId(newAggregate.guestId())
+                        .roomTypeId(newAggregate.getRoomTypeId())
+                        .start(newAggregate.start())
+                        .end(newAggregate.end())
+                        .status(newAggregate.getStatus())
+                        .build());
+
+        return newAggregate;
     }
 
-    public void update(final Reservation reservation){
+    public void delete() {
+        this.registerEvent(ReservationDeletedEvent.builder()
+                .id(this.id())
+                .build());
+    }
+
+    public void update(final Reservation reservation) {
         this.hotelId = new HotelId(reservation.hotelId());
         this.guestId = new GuestId(reservation.guestId());
         this.roomTypeId = reservation.roomTypeId();
         this.start = reservation.start();
         this.end = reservation.end();
         this.status = reservation.status();
-                
-        // Add DomainEvent if is mandatory
+
+        this.registerEvent(
+                ReservationUpdatedEvent.builder()
+                        .id(this.id())
+                        .roomTypeId(this.getRoomTypeId())
+                        .hotelId(this.hotelId())
+                        .guestId(this.guestId())
+                        .roomTypeId(this.getRoomTypeId())
+                        .start(this.start())
+                        .end(this.end())
+                        .status(this.getStatus())
+                        .build());
     }
 
     private static void validateDatesToCreate(final Reservation reservation) {

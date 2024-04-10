@@ -1,7 +1,8 @@
 {
-  "namespace" : "com.reservation.domain.avro",
+  "namespace" : "com.reservation.domain.avro.v1",
   "type": "record",
-  "name": "ReservationEventDto",
+  "name": "ReservationUpdated",
+  "doc": "Reservation updated domain event",
   "fields": [
     {
       "name": "id",
@@ -13,11 +14,11 @@
     },
     {
       "name": "version",
-      "type": "long"
+      "type": "int"
     },
     {
       "name": "roomTypeId",
-      "type": "long",
+      "type": "int",
       "doc": "roomTypeId, example: '1'"
     },
     {

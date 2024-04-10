@@ -186,6 +186,47 @@
                 <artifactId>avro-maven-plugin</artifactId>
             </plugin>
             <plugin>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-schema-registry-maven-plugin</artifactId>
+                <version>${confluent.version}</version>
+                <configuration>
+                    <schemaRegistryUrls>
+                        <param>http://127.0.0.1:8081</param>
+                    </schemaRegistryUrls>
+                    <subjects>
+                        <poc.reservation.domain.v1-value>${project.basedir}/src/main/resources/asyncapi/v1/envelope/poc.reservation.domain.v1.avsc</poc.reservation.domain.v1-value>
+                        <com.reservation.domain.avro.v1.ReservationCreated>${project.basedir}/src/main/resources/asyncapi/v1/imports/reservation_created.avsc</com.reservation.domain.avro.v1.ReservationCreated>
+                        <com.reservation.domain.avro.v1.ReservationUpdated>${project.basedir}/src/main/resources/asyncapi/v1/imports/reservation_updated.avsc</com.reservation.domain.avro.v1.ReservationUpdated>
+                        <com.reservation.domain.avro.v1.ReservationDeleted>${project.basedir}/src/main/resources/asyncapi/v1/imports/reservation_deleted.avsc</com.reservation.domain.avro.v1.ReservationDeleted>
+                    </subjects>
+                    <schemaTypes>
+                        <poc.reservation.domain.v1-value>AVRO</poc.reservation.domain.v1-value>
+                        <com.reservation.domain.avro.v1.ReservationCreated>AVRO</com.reservation.domain.avro.v1.ReservationCreated>
+                        <com.reservation.domain.avro.v1.ReservationUpdated>AVRO</com.reservation.domain.avro.v1.ReservationUpdated>
+                        <com.reservation.domain.avro.v1.ReservationDeleted>AVRO</com.reservation.domain.avro.v1.ReservationDeleted>
+                    </schemaTypes>
+                    <references>
+                        <poc.reservation.domain.v1-value>
+                            <reference>
+                                <name>com.reservation.domain.avro.v1.ReservationCreated</name>
+                                <subject>com.reservation.domain.avro.v1.ReservationCreated</subject>
+                            </reference>
+                            <reference>
+                                <name>com.reservation.domain.avro.v1.ReservationUpdated</name>
+                                <subject>com.reservation.domain.avro.v1.ReservationUpdated</subject>
+                            </reference>
+                            <reference>
+                                <name>com.reservation.domain.avro.v1.ReservationDeleted</name>
+                                <subject>com.reservation.domain.avro.v1.ReservationDeleted</subject>
+                            </reference>
+                        </poc.reservation.domain.v1-value>
+                    </references>
+                </configuration>
+                <goals>
+                    <goal>register</goal>
+                </goals>
+            </plugin>            
+            <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>${sonar-maven-plugin.version}</version>

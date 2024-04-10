@@ -51,36 +51,70 @@ spring:
       enabled: true
     
   ######## Cloud stream Configuration  #########
-#  cloud:
-#    stream:
-#      default:
-#        producer:
-#          useNativeEncoding: true
-#      #        consumer:
-#      #          useNativeEncoding: true
-#      kafka:
-#        binder:
-#          defaultBrokerPort: 19092
-#          producer-properties:
-#            key.serializer: org.apache.kafka.common.serialization.StringSerializer
-#            value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-#            schema.registry.url: http://localhost:8081
-#      #          consumer-properties:
-#      #            key.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-#      #            value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-#      #            schema.registry.url: http://localhost:8081
-#      #            specific.avro.reader: true
-#      bindings:
-#        reservation-out-0:
-#          destination: sensor-topic
-#          contentType: application/*+avro
-#          group: group-reservation
-#      schema-registry-client:
-#        endpoint: http://localhost:8081
+  cloud:
+    stream:
+      
+      default:
+        producer:
+          useNativeEncoding: true
+      #        consumer:
+      #          useNativeEncoding: true
+      kafka:
+        binder:
+          defaultBrokerPort: 19092
+          
+          # Disabled because schemas are registered from maven plugin
+          auto-create-topics: false # Disabling this seem to override the server settings and will auto create
+          auto-add-partitions: false # I wonder if its cause this is set
+          
+          producer-properties:
+            schema.registry.url: http://localhost:8081
+            
+            #This will use a string based key - aka not in the registry - don't need a name strategy with string serializer
+            key.serializer: org.apache.kafka.common.serialization.StringSerializer
+
+            # This will control the Serializer Setup
+            value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+            value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+
+            # https://www.confluent.io/es-es/blog/multiple-event-types-in-the-same-kafka-topic/ 
+            # Disable for auto schema registration
+            auto.register.schemas: false
+
+            # Use only the latest schema version
+            use.latest.version: true
+
+            # This will use reflection to generate schemas from classes - used to validate current data set
+            # against the schema registry for valid production
+            schema.reflection: true
+          
+          consumer-properties:
+            key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+            schema.registry.url: http://localhost:8081
+            specific.avro.reader: true
+      schema-registry-client:
+        endpoint: http://localhost:8081
+        
+      # Disabled because schemas are registered from maven plugin
 #      schema:
 #        avro:
-#          schema-locations: classpath:avro/sensor.avsc
-    
+#          schema-locations: classpath:asyncapi/v1/imports/*.avsc
+      bindings:
+        reservation-data-out-0:
+          destination: poc.reservation.data.v1
+          contentType: application/*+avro
+          group: group-reservation-data
+        reservation-domain-out-0:
+          destination: poc.reservation.domain.v1
+          contentType: application/*+avro
+          group: group-reservation-domain
+        reservation-domain-in-0:
+          destination: poc.reservation.domain.v1
+          content-type: application/*+avro
+          group: group-reservation-domain
+          
+
 ######## Javers Configuration  #########         
 javers:
   sqlSchemaManagementEnabled: false
@@ -161,6 +195,7 @@ logging:
     org.springframework.web: INFO
     com.reservation: INFO
     org.hibernate.orm.jdbc.bind: TRACE
+    io.confluent.kafka: DEBUG
 #    org.springframework.jdbc.core: TRACE
   config: ./src/main/resources/logback-des.xml
 
