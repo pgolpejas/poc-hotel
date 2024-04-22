@@ -1,0 +1,59 @@
+{
+  "namespace" : "com.reservation.domain.avro.v1",
+  "type": "record",
+  "name": "ReservationSnapshot",
+  "doc": "Reservation snapshot event",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      },
+      "doc": "id, example: '1fa85f64-5717-4562-b3fc-2c963f66afa6'"
+    },
+    {
+      "name": "version",
+      "type": "int"
+    },
+    {
+      "name": "roomTypeId",
+      "type": "int",
+      "doc": "roomTypeId, example: '1'"
+    },
+    {
+      "name": "hotelId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      },
+      "doc": "hotelId, example: '3fa85f64-5717-4562-b3fc-2c963f66afa6'"
+    },
+    {
+      "name": "guestId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      },
+      "doc": "guestId, example: '4fa85f64-5717-4562-b3fc-2c963f66afa6'"
+    },
+    {
+      "name": "start",
+      "type": "string",
+      "doc": "start date, example: '2024-05-26'"
+    },
+    {
+      "name": "end",
+      "type": "string",
+      "doc": "end date, example: '2024-05-26'"
+    },
+    {
+      "name": "status",
+      "type": [
+        "null",
+        "string"
+      ],
+      "doc": "status, example: 'ON'"
+    }
+  ]
+}

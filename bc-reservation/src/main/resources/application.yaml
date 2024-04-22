@@ -1,6 +1,6 @@
 spring:
   application:
-    name: bc-reservation  
+    name: bc-reservation
   ######## Jackson Configuration  #########
   jackson:
     serialization:
@@ -12,16 +12,16 @@ spring:
   jpa:
     properties:
       hibernate:
-        format_sql: true        
+        format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
         hbm2ddl:
           auto: none
         query:
-          fail_on_pagination_over_collection_fetch: true          
+          fail_on_pagination_over_collection_fetch: true
         jdbc:
           time_zone: Europe/Paris
         default_schema: public
-        use_sql_comments: true          
+        use_sql_comments: true
     open-in-view: false
 
   ######## Database Configuration  #########
@@ -35,7 +35,7 @@ spring:
     maxLifetime: 1200000
     maximumPoolSize: 1000000000
     minimumIdle: 1
-    
+  
   ######## Liquibase Configuration  #########
   liquibase:
     contexts: none
@@ -43,13 +43,13 @@ spring:
     default-schema: ${spring.jpa.properties.hibernate.default_schema}
     liquibase-schema: ${spring.jpa.properties.hibernate.default_schema}
     parameters:
-      schemaPrefix: ${spring.jpa.properties.hibernate.default_schema}.    
-
+      schemaPrefix: ${spring.jpa.properties.hibernate.default_schema}.
+  
   ######## Errors Configuration  #########
   mvc:
     problemdetails:
       enabled: true
-    
+  
   ######## Cloud stream Configuration  #########
   cloud:
     stream:
@@ -93,13 +93,24 @@ spring:
             value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
             schema.registry.url: http://localhost:8081
             specific.avro.reader: true
+            
+            # This will control the Serializer Setup
+            value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+            
+            # Use only the latest schema version
+            use.latest.version: true
+
+            # This will use reflection to generate schemas from classes - used to validate current data set
+            # against the schema registry for valid production
+            schema.reflection: true
+      
       schema-registry-client:
         endpoint: http://localhost:8081
-        
+      
       # Disabled because schemas are registered from maven plugin
-#      schema:
-#        avro:
-#          schema-locations: classpath:asyncapi/v1/imports/*.avsc
+      #      schema:
+      #        avro:
+      #          schema-locations: classpath:asyncapi/v1/imports/*.avsc
       bindings:
         reservation-data-out-0:
           destination: poc.reservation.data.v1
@@ -113,7 +124,7 @@ spring:
           destination: poc.reservation.domain.v1
           content-type: application/*+avro
           group: group-reservation-domain
-          
+
 
 ######## Javers Configuration  #########         
 javers:
@@ -137,7 +148,23 @@ javers:
     zonedDateTime: dd MMM yyyy, HH:mm:ssZ
     localDate: dd MMM yyyy
     localTime: HH:mm:ss
-        
+
+######## Outbox Configuration  #########        
+outbox:
+  enableOutboxSend: true
+  enableSnapshotSend: true
+  enableSchedule: true
+  eventBinding:
+    "[com.reservation.domain.avro.v1.ReservationCreated]":
+      bindingName: reservation-domain-out-0
+    "[com.reservation.domain.avro.v1.ReservationUpdated]":
+      bindingName: reservation-domain-out-0
+    "[com.reservation.domain.avro.v1.ReservationDeleted]":
+      bindingName: reservation-domain-out-0
+    "[com.reservation.domain.avro.v1.ReservationSnapshot]":
+      bindingName: reservation-data-out-0
+
+
 ######## Observability Configuration  #########      
 management:
   endpoints:
@@ -195,8 +222,8 @@ logging:
     org.springframework.web: INFO
     com.reservation: INFO
     org.hibernate.orm.jdbc.bind: TRACE
-    io.confluent.kafka: DEBUG
-#    org.springframework.jdbc.core: TRACE
+    io.confluent.kafka: INFO
+  #    org.springframework.jdbc.core: TRACE
   config: ./src/main/resources/logback-des.xml
 
 ######## Port Configuration  #########

@@ -1,4 +1,4 @@
-package com.reservation.domain.usecase;
+package com.reservation.application;
 
 import com.hotel.core.application.dto.CriteriaDto;
 import com.hotel.core.domain.dto.ListResponse;
@@ -6,7 +6,7 @@ import com.hotel.core.domain.dto.PaginationResponse;
 import com.hotel.core.infrastructure.database.audit.AuditFilters;
 import com.reservation.application.controller.ReservationController;
 import com.reservation.application.dto.ReservationDto;
-import com.reservation.utils.BaseTestContainer;
+import com.reservation.utils.BaseTestContainerFromDockerCompose;
 import com.reservation.utils.RequestUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
@@ -20,7 +20,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.UUID;
 
-class ReservationControllerIT extends BaseTestContainer {
+class ReservationControllerIT extends BaseTestContainerFromDockerCompose {
 
     @Autowired
     protected TestRestTemplate restTemplate;

@@ -1,0 +1,2 @@
+com.outbox.configuration.OutboxAutoConfiguration
+com.outbox.configuration.JDBCTransactionalOutboxAutoConfiguration

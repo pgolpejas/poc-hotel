@@ -98,6 +98,40 @@ We deploy the stack using docker compose.
 
 Open grafana in http://localhost:3000. You can view logs with Loki, metrics and traces with tempo
 
+## Liquibase ## 
+
+Generate changeLog from current database from parent project. Change the configuration of objective database in pom.xml
+
+```
+<plugin>
+    <groupId>org.liquibase</groupId>
+    <artifactId>liquibase-maven-plugin</artifactId>
+    <version>${liquibase.version}</version>
+    <configuration>
+        <driver>org.postgresql.Driver</driver>
+        <url>jdbc:postgresql://localhost:5533/reservation-db</url>
+        <username>admin</username>
+        <password>admin</password>
+        <outputChangeLogFile>bc-reservation/src/main/resources/liquibase-outputChangeLog.xml</outputChangeLogFile>
+    </configuration>
+    <dependencies>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgres.version}</version>
+        </dependency>
+    </dependencies>
+</plugin>
+```
+
+Run
+
+```
+mvn liquibase:generateChangeLog
+```
+
+NOTE: It doesn't work from the bc-reservation project because it can't find the driver.
+
 ## Performance test with k6 ## 
 
 TODO

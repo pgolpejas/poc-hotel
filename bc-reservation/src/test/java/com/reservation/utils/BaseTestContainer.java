@@ -12,7 +12,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {"outbox.enableSnapshotSend=false", "outbox.enableOutboxSend=false", "outbox.enableSchedule=false"})
 @SqlMergeMode(MergeMode.MERGE)
 @Sql(scripts = "/sql/truncate.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 public abstract class BaseTestContainer {

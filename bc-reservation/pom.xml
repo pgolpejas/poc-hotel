@@ -23,6 +23,10 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>hotel-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>outbox-pattern-library</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -50,6 +54,11 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc-openapi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>2.2.16</version>
         </dependency>
 
         <!-- Map struct -->
@@ -96,25 +105,6 @@
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.turkraft.springfilter</groupId>
-            <artifactId>jpa</artifactId>
-            <version>${turkraft.springfilter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-            <version>${hibernate-jpamodelgen.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.javers</groupId>
-            <artifactId>javers-spring-boot-starter-sql</artifactId>
-            <version>${javers.version}</version>
-        </dependency>
 
         <!-- spring cloud / kafka -->
         <dependency>
@@ -124,11 +114,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-stream-schema-registry-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.confluent</groupId>
-            <artifactId>kafka-avro-serializer</artifactId>
-            <version>${kafka-avro-serializer.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.avro</groupId>
@@ -237,18 +222,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <version>${liquibase.version}</version>
-                <configuration>
-                    <driver>org.postgresql.Driver</driver>
-                    <url>jdbc:postgresql://localhost:5533/reservation-db</url>
-                    <username>admin</username>
-                    <password>admin</password>
-                    <outputChangeLogFile>src/main/resources/liquibase-outputChangeLog.xml</outputChangeLogFile>
-                </configuration>
             </plugin>
         </plugins>
     </build>
