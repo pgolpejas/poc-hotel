@@ -1,0 +1,230 @@
+spring:
+  application:
+    name: bc-reservation
+  ######## Jackson Configuration  #########
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+      fail-on-empty-beans: false
+    time-zone: Europe/Madrid
+
+  ######## JPA Configuration  #########
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        hbm2ddl:
+          auto: none
+        query:
+          fail_on_pagination_over_collection_fetch: true
+        jdbc:
+          time_zone: Europe/Paris
+        default_schema: public
+        use_sql_comments: true
+    open-in-view: false
+
+  ######## Database Configuration  #########
+  datasource:
+    jdbcUrl: jdbc:postgresql://localhost:5533/reservation-db
+    url: jdbc:postgresql://localhost:5533/reservation-db
+    driverClassName: org.postgresql.Driver
+    username: admin
+    password: admin
+    poolName: postgresPool
+    maxLifetime: 1200000
+    maximumPoolSize: 1000000000
+    minimumIdle: 1
+  
+  ######## Liquibase Configuration  #########
+  liquibase:
+    contexts: none
+    enabled: true
+    default-schema: ${spring.jpa.properties.hibernate.default_schema}
+    liquibase-schema: ${spring.jpa.properties.hibernate.default_schema}
+    parameters:
+      schemaPrefix: ${spring.jpa.properties.hibernate.default_schema}.
+  
+  ######## Errors Configuration  #########
+  mvc:
+    problemdetails:
+      enabled: true
+  
+  ######## Cloud stream Configuration  #########
+  cloud:
+    stream:
+      
+      default:
+        producer:
+          useNativeEncoding: true
+      #        consumer:
+      #          useNativeEncoding: true
+      kafka:
+        binder:
+          defaultBrokerPort: 19092
+          
+          # Disabled because schemas are registered from maven plugin
+          auto-create-topics: false # Disabling this seem to override the server settings and will auto create
+          auto-add-partitions: false # I wonder if its cause this is set
+          
+          producer-properties:
+            schema.registry.url: http://localhost:8081
+            
+            #This will use a string based key - aka not in the registry - don't need a name strategy with string serializer
+            key.serializer: org.apache.kafka.common.serialization.StringSerializer
+
+            # This will control the Serializer Setup
+            value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+            value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+
+            # https://www.confluent.io/es-es/blog/multiple-event-types-in-the-same-kafka-topic/ 
+            # Disable for auto schema registration
+            auto.register.schemas: false
+
+            # Use only the latest schema version
+            use.latest.version: true
+
+            # This will use reflection to generate schemas from classes - used to validate current data set
+            # against the schema registry for valid production
+            schema.reflection: true
+          
+          consumer-properties:
+            key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+            schema.registry.url: http://localhost:8081
+            specific.avro.reader: true
+            
+            # This will control the Serializer Setup
+            value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+            
+            # Use only the latest schema version
+            use.latest.version: true
+
+            # This will use reflection to generate schemas from classes - used to validate current data set
+            # against the schema registry for valid production
+            schema.reflection: true
+      
+      schema-registry-client:
+        endpoint: http://localhost:8081
+      
+      # Disabled because schemas are registered from maven plugin
+      #      schema:
+      #        avro:
+      #          schema-locations: classpath:asyncapi/v1/imports/*.avsc
+      bindings:
+        reservation-data-out-0:
+          destination: poc.reservation.data.v1
+          contentType: application/*+avro
+          group: group-reservation-data
+        reservation-domain-out-0:
+          destination: poc.reservation.domain.v1
+          contentType: application/*+avro
+          group: group-reservation-domain
+        reservation-domain-in-0:
+          destination: poc.reservation.domain.v1
+          content-type: application/*+avro
+          group: group-reservation-domain
+
+
+######## Javers Configuration  #########         
+javers:
+  sqlSchemaManagementEnabled: false
+  sqlGlobalIdCacheDisabled: false
+  objectAccessHook: org.javers.hibernate.integration.HibernateUnproxyObjectAccessHook
+  sqlGlobalIdTableName: jv_global_id
+  sqlCommitTableName: jv_commit
+  sqlSnapshotTableName: jv_snapshot
+  sqlCommitPropertyTableName: jv_commit_property
+  mappingStyle: FIELD
+  algorithm: SIMPLE
+  commitIdGenerator: synchronized_sequence
+  prettyPrint: true
+  typeSafeValues: false
+  newObjectSnapshot: true
+  auditableAspectEnabled: true
+  springDataAuditableRepositoryAspectEnabled: true
+  prettyPrintDateFormats:
+    localDateTime: dd MMM yyyy, HH:mm:ss
+    zonedDateTime: dd MMM yyyy, HH:mm:ssZ
+    localDate: dd MMM yyyy
+    localTime: HH:mm:ss
+
+######## Outbox Configuration  #########        
+outbox:
+  enableOutboxSend: true
+  enableSnapshotSend: true
+  enableSchedule: true
+  eventBinding:
+    "[com.reservation.domain.avro.v1.ReservationCreated]":
+      bindingName: reservation-domain-out-0
+    "[com.reservation.domain.avro.v1.ReservationUpdated]":
+      bindingName: reservation-domain-out-0
+    "[com.reservation.domain.avro.v1.ReservationDeleted]":
+      bindingName: reservation-domain-out-0
+    "[com.reservation.domain.avro.v1.ReservationSnapshot]":
+      bindingName: reservation-data-out-0
+
+
+######## Observability Configuration  #########      
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    metrics:
+      enabled
+    shutdown:
+      enabled: true
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+endpoints:
+  shutdown:
+    enabled: true
+
+
+######## OpenApi Configuration  #########
+springdoc:
+  swagger-ui:
+    path: /
+    disable-swagger-default-url: 'true'
+info:
+  title: '@project.name@'
+  version: '@project.version@'
+  description: '@project.description@'
+
+######## Logger Configuration  #########
+logging:
+  pattern:
+    level: "%green(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow([%X{traceId:-}] [%X{TraceID:-}] [%X{trace_id:-}]) %logger - %msg%n%throwable"
+  level:
+    org:
+      hibernate:
+        SQL: TRACE
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+    root: INFO
+    org.springframework.web: INFO
+    com.reservation: INFO
+    org.hibernate.orm.jdbc.bind: TRACE
+    io.confluent.kafka: INFO
+  #    org.springframework.jdbc.core: TRACE
+
+######## Port Configuration  #########
+server:
+  port: 9081

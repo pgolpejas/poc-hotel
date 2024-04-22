@@ -20,6 +20,7 @@
         <module>bc-hotel</module>
         <module>bc-reservation</module>
         <module>hotel-core</module>
+        <module>outbox-pattern-library</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -82,6 +83,7 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 
         <!-- database -->
+        <postgres.version>42.7.3</postgres.version>
         <liquibase.version>4.27.0</liquibase.version>
         <turkraft.springfilter.version>3.1.7</turkraft.springfilter.version>
         <hibernate-jpamodelgen.version>6.4.4.Final</hibernate-jpamodelgen.version>
@@ -109,6 +111,11 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>outbox-pattern-library</artifactId>
+                <version>${project.version}</version>
+            </dependency>            
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>bc-hotel</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -125,6 +132,18 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- db  -->
+            <dependency>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-core</artifactId>
+                <version>${liquibase.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgres.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -232,6 +251,25 @@
                     <configuration>
                         <skipTests>${skipUnitTests}</skipTests>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.liquibase</groupId>
+                    <artifactId>liquibase-maven-plugin</artifactId>
+                    <version>${liquibase.version}</version>
+                    <configuration>
+                        <driver>org.postgresql.Driver</driver>
+                        <url>jdbc:postgresql://localhost:5533/reservation-db</url>
+                        <username>admin</username>
+                        <password>admin</password>
+                        <outputChangeLogFile>bc-reservation/src/main/resources/liquibase-outputChangeLog.xml</outputChangeLogFile>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.postgresql</groupId>
+                            <artifactId>postgresql</artifactId>
+                            <version>${postgres.version}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
             </plugins>
         </pluginManagement>

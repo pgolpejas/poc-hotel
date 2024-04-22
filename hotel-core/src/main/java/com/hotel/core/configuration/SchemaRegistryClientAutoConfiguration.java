@@ -6,8 +6,11 @@ import org.springframework.cloud.stream.schema.registry.client.SchemaRegistryCli
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * This class is mandatory to change spring schema registry server by confluent schema registry client
+ */
 @Configuration
-public class SchemaRegistryConfig {
+public class SchemaRegistryClientAutoConfiguration {
 
     @Bean
     public SchemaRegistryClient schemaRegistryClient(@Value("${spring.cloud.stream.schema-registry-client.endpoint:http://localhost:8081}") String endpoint) {
@@ -15,5 +18,6 @@ public class SchemaRegistryConfig {
         client.setEndpoint(endpoint);
         return client;
     }
+
 
 }
