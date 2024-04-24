@@ -292,6 +292,7 @@
                         <exclude>com/**/*Dto*.*</exclude>
                         <exclude>com/**/*Entity*.*</exclude>
                         <exclude>**/generated/**</exclude>
+                        <exclude>**/openapi/**</exclude>
                         <exclude>**/hotel/core/**</exclude>
                     </excludes>
                 </configuration>

@@ -10,10 +10,6 @@ import java.util.UUID;
         componentModel = "spring")
 public interface ReservationIdMapper {
 
-  default ReservationId mapReservationId(final UUID id) {
-    return null != id ? new ReservationId(id) : null;
-  }
-
   default UUID mapReservationIdValue(final ReservationId id) {
     return null != id ? id.value() : null;
   }

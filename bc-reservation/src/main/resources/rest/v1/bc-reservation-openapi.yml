@@ -1,0 +1,387 @@
+openapi: 3.0.3
+info:
+  title: bc-reservation
+  description: This API exposes endpoints to hotel reservation
+  contact:
+    name: Hotel reservation API
+    email: bc-reservation@poc-hotel.com
+  version: 0.0.1
+servers:
+  - url: http://localhost:9081
+    description: LOCAL
+tags:
+  - name: reservation
+    description: Hotel reservation API
+paths:
+  /v1/hotel-reservation:
+    put:
+      tags:
+        - reservation
+      summary: Update item
+      description: Update item
+      operationId: updateReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationDto'
+        required: true
+      responses:
+        '200':
+          description: Updated item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+    post:
+      tags:
+        - reservation
+      summary: Create item
+      description: Create item
+      operationId: createReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationDto'
+        required: true
+      responses:
+        '201':
+          description: Created item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '409':
+          $ref: '#/components/responses/409Conflict'
+  /v1/hotel-reservation/search:
+    post:
+      tags:
+        - reservation
+      summary: Search by filters
+      description: Search by filters
+      operationId: search
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CriteriaRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Found results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationPaginationResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+  /v1/hotel-reservation/search-audit/{limit}:
+    post:
+      tags:
+        - reservation
+      summary: Search audit by filters
+      description: Search audit by filters
+      operationId: searchAudit
+      parameters:
+        - name: limit
+          in: path
+          description: number of items to return
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 10
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditFiltersRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Found audit results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationListResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+  /v1/hotel-reservation/{id}:
+    get:
+      tags:
+        - reservation
+      summary: Search item by id
+      description: Search item by id
+      operationId: getReservation
+      parameters:
+        - name: id
+          in: path
+          description: item id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: d1a97f69-7fa0-4301-b498-128d78860828
+      responses:
+        '200':
+          description: Found item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+    delete:
+      tags:
+        - reservation
+      summary: Delete item
+      description: Delete item
+      operationId: deleteReservation
+      parameters:
+        - name: id
+          in: path
+          description: item id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: d1a97f69-7fa0-4301-b498-128d78860828
+      responses:
+        '200':
+          description: Deleted item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+components:
+  schemas:
+    ReservationDto:
+      required:
+        - end
+        - guestId
+        - hotelId
+        - id
+        - roomTypeId
+        - start
+      type: object
+      properties:
+        id:
+          description: Identifier
+          type: string
+          format: uuid
+          example: 'd1a97f69-7fa0-4301-b498-128d78860828'
+        version:
+          type: integer
+          format: int32
+          description: Version of the aggregate
+          example: 0
+          minimum: -2147483647
+          maximum: 2147483647
+        roomTypeId:
+          description: RoomType identifier
+          type: integer
+          format: int32
+          example: 1
+        hotelId:
+          description: hotel identifier
+          type: string
+          format: uuid
+          example: 'e1a97f69-7fa0-4301-b498-128d78860828'
+        guestId:
+          description: guest identifier
+          type: string
+          format: uuid
+          example: 'f1a97f69-7fa0-4301-b498-128d78860828'
+        start:
+          description: reservation start date in format yyyy-MM-dd
+          type: string
+          format: date
+          example: 2024-01-11
+        end:
+          description: reservation end date in format yyyy-MM-dd
+          type: string
+          format: date
+          example: 2024-11-30
+        status:
+          description: reservation status
+          maxLength: 20
+          minLength: 0
+          type: string
+          example: 'ON'
+    CriteriaRequestDto:
+      required:
+        - filters
+      type: object
+      properties:
+        filters:
+          type: string
+          description: spring filter
+          example: id:'d1a97f69-7fa0-4301-b498-128d78860828'
+        limit:
+          $ref: '#/components/schemas/Limit'
+        page:
+          $ref: '#/components/schemas/Page'
+        sortDirection:
+          description: ASC/DESC
+          type: string
+          example: ASC
+          default: ASC
+        sortBy:
+          description: sort by field
+          type: string
+          example: id
+          default: id
+    Pagination:
+      type: object
+      description: pagination properties
+      additionalProperties: false
+      properties:
+        limit:
+          $ref: '#/components/schemas/Limit'
+        page:
+          $ref: '#/components/schemas/Page'
+        total:
+          $ref: '#/components/schemas/TotalItems'
+    ReservationPaginationResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        data:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/ReservationDto'
+    AuditFiltersRequestDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: entity id
+          format: uuid
+          example: 'd1a97f69-7fa0-4301-b498-128d78860828'
+        from:
+          type: string
+          format: date-time
+          description: date in format dd/MM/yyyy HH:mm:ss
+          example: 2024-01-01T00:00:00Z
+        to:
+          type: string
+          format: date-time
+          description: date in format dd/MM/yyyy HH:mm:ss
+          example: 2050-12-31T23:59:59Z
+    ReservationListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/ReservationDto'
+    Limit:
+      description: Model of limit of records of pagination
+      type: integer
+      format: int32
+      default: 20
+      minimum: 1
+      maximum: 500
+      example: 20
+    Page:
+      description: Model of page of pagination
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+      maximum: 2147483647
+      example: 0
+    TotalItems:
+      description: Total search items
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 9223372036854776000
+      example: 100
+    ErrorObjectDto:
+      title: ErrorObjectDto
+      type: object
+      additionalProperties: false
+      description: Error details
+      properties:
+        type:
+          type: string
+          description: Error type
+          example: 'about:blank'
+          maxLength: 255
+        status:
+          type: integer
+          format: int32
+          description: Error status
+          maximum: 999
+          minimum: 100
+          example: 400
+        title:
+          type: string
+          description: Error title
+          example: Bad Request
+          maxLength: 1000
+        detail:
+          type: string
+          description: Error detail
+          example: 'Invalid Request. Please, check the data in the request (QueryString Parameters and/or Body).'
+          maxLength: 5000
+        instance:
+          type: string
+          description: Error instance
+          example: /v1/hotel-reservation
+          maxLength: 2000
+  responses:
+    400BadRequest:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorObjectDto'
+          examples:
+            example-1:
+              value:
+                type: 'about:blank'
+                status: 400
+                title: Bad Request
+                detail: 'Invalid Request. Please, check the data in the request (QueryString Parameters and/or Body).'
+                instance: /v1/hotel-reservation
+    404NotFound:
+      description: NotFound
+    409Conflict:
+      description: Conflict
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorObjectDto'
+          examples:
+            example-1:
+              value:
+                type: 'about:blank'
+                status: 409
+                title: Conflict
+                detail: Conflict with another resource
+                instance: /v1/hotel-reservation
