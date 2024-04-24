@@ -1,7 +1,7 @@
 package com.reservation.application.mapper;
 
-import com.reservation.application.dto.ReservationDto;
 import com.reservation.domain.model.Reservation;
+import com.reservation.openapi.model.ReservationDto;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 

@@ -1,7 +1,7 @@
-package com.hotel.core.application.mapper;
+package com.reservation.application.mapper;
 
-import com.hotel.core.application.dto.CriteriaDto;
 import com.hotel.core.domain.dto.Criteria;
+import com.reservation.openapi.model.CriteriaRequestDto;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 
@@ -9,8 +9,7 @@ import org.mapstruct.Mapper;
         componentModel = "spring")
 public interface CriteriaMapper {
 
-    CriteriaDto mapToDTO(Criteria aggregate);
 
-    Criteria mapToAggregate(CriteriaDto entity);
+    Criteria mapToAggregate(CriteriaRequestDto entity);
 
 }

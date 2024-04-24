@@ -10,12 +10,8 @@ import java.util.UUID;
         componentModel = "spring")
 public interface GuestIdMapper {
 
-  default GuestId mapGuestId(final UUID id) {
-    return null != id ? new GuestId(id) : null;
-  }
-
-  default UUID mapGuestIdValue(final GuestId id) {
-    return null != id ? id.value() : null;
-  }
+    default UUID mapGuestIdValue(final GuestId id) {
+        return null != id ? id.value() : null;
+    }
 
 }

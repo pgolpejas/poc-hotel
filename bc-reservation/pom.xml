@@ -15,6 +15,13 @@
 
     <properties>
         <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+
+        <openapi-generator.version>7.5.0</openapi-generator.version>
+        <openapi.package.api>com.reservation.openapi.api</openapi.package.api>
+        <openapi.package.model>com.reservation.openapi.model</openapi.package.model>
+
+        <swagger.annotations.version>2.2.21</swagger.annotations.version>
+        <jackson-nullable.version>0.2.6</jackson-nullable.version>
     </properties>
 
     <dependencies>
@@ -131,6 +138,39 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- openapi generator -->
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>${jackson-nullable.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger.annotations.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc-openapi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>
+
         <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -167,6 +207,57 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-api-code</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>
+                                ${project.basedir}/src/main/resources/rest/v1/bc-reservation-openapi.yml
+                            </inputSpec>
+                            <generateSupportingFiles>true</generateSupportingFiles>
+                            <generatorName>spring</generatorName>
+                            <strictSpec>true</strictSpec>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <configOptions>
+                                <useJakartaEe>true</useJakartaEe>
+                                <controllerThrowsExceptions>
+                                    java.io.IOException,com.hotel.core.domain.exception.NotFoundException
+                                </controllerThrowsExceptions>
+                                <interfaceOnly>true</interfaceOnly>
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                                <useBeanValidation>true</useBeanValidation>
+                                <useClassLevelBeanValidation>false</useClassLevelBeanValidation>
+                                <useTags>true</useTags>
+                                <java8>true</java8>
+                                <useOptional>false</useOptional>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                                <dateLibrary>java8</dateLibrary>
+                                <bigDecimalAsString>true</bigDecimalAsString>
+                                <useBeanValidation>true</useBeanValidation>
+                                <apiPackage>com.reservation.openapi.api</apiPackage>
+                                <modelPackage>com.reservation.openapi.model</modelPackage>
+                                <configOptions>
+                                    <additionalModelTypeAnnotations>@lombok.Data @lombok.NoArgsConstructor @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
+                                </configOptions>
+                            </configOptions>
+                            <typeMappings>
+                                <typeMapping>OffsetDateTime=LocalDateTime</typeMapping>
+                            </typeMappings>
+                            <importMappings>
+                                <importMapping>java.time.OffsetDateTime=java.time.LocalDateTime</importMapping>
+                            </importMappings>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro-maven-plugin</artifactId>
             </plugin>
@@ -179,16 +270,27 @@
                         <param>http://127.0.0.1:8081</param>
                     </schemaRegistryUrls>
                     <subjects>
-                        <poc.reservation.domain.v1-value>${project.basedir}/src/main/resources/asyncapi/v1/envelope/poc.reservation.domain.v1.avsc</poc.reservation.domain.v1-value>
-                        <com.reservation.domain.avro.v1.ReservationCreated>${project.basedir}/src/main/resources/asyncapi/v1/imports/reservation_created.avsc</com.reservation.domain.avro.v1.ReservationCreated>
-                        <com.reservation.domain.avro.v1.ReservationUpdated>${project.basedir}/src/main/resources/asyncapi/v1/imports/reservation_updated.avsc</com.reservation.domain.avro.v1.ReservationUpdated>
-                        <com.reservation.domain.avro.v1.ReservationDeleted>${project.basedir}/src/main/resources/asyncapi/v1/imports/reservation_deleted.avsc</com.reservation.domain.avro.v1.ReservationDeleted>
+                        <poc.reservation.domain.v1-value>
+                            ${project.basedir}/src/main/resources/asyncapi/v1/envelope/poc.reservation.domain.v1.avsc
+                        </poc.reservation.domain.v1-value>
+                        <com.reservation.domain.avro.v1.ReservationCreated>
+                            ${project.basedir}/src/main/resources/asyncapi/v1/imports/reservation_created.avsc
+                        </com.reservation.domain.avro.v1.ReservationCreated>
+                        <com.reservation.domain.avro.v1.ReservationUpdated>
+                            ${project.basedir}/src/main/resources/asyncapi/v1/imports/reservation_updated.avsc
+                        </com.reservation.domain.avro.v1.ReservationUpdated>
+                        <com.reservation.domain.avro.v1.ReservationDeleted>
+                            ${project.basedir}/src/main/resources/asyncapi/v1/imports/reservation_deleted.avsc
+                        </com.reservation.domain.avro.v1.ReservationDeleted>
                     </subjects>
                     <schemaTypes>
                         <poc.reservation.domain.v1-value>AVRO</poc.reservation.domain.v1-value>
-                        <com.reservation.domain.avro.v1.ReservationCreated>AVRO</com.reservation.domain.avro.v1.ReservationCreated>
-                        <com.reservation.domain.avro.v1.ReservationUpdated>AVRO</com.reservation.domain.avro.v1.ReservationUpdated>
-                        <com.reservation.domain.avro.v1.ReservationDeleted>AVRO</com.reservation.domain.avro.v1.ReservationDeleted>
+                        <com.reservation.domain.avro.v1.ReservationCreated>AVRO
+                        </com.reservation.domain.avro.v1.ReservationCreated>
+                        <com.reservation.domain.avro.v1.ReservationUpdated>AVRO
+                        </com.reservation.domain.avro.v1.ReservationUpdated>
+                        <com.reservation.domain.avro.v1.ReservationDeleted>AVRO
+                        </com.reservation.domain.avro.v1.ReservationDeleted>
                     </schemaTypes>
                     <references>
                         <poc.reservation.domain.v1-value>
@@ -210,7 +312,7 @@
                 <goals>
                     <goal>register</goal>
                 </goals>
-            </plugin>            
+            </plugin>
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>

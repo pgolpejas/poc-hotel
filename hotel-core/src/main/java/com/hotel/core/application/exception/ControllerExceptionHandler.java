@@ -5,6 +5,7 @@ import com.hotel.core.domain.ddd.DomainError;
 import com.hotel.core.domain.exception.ConflictException;
 import com.hotel.core.domain.exception.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.*;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 @ControllerAdvice
@@ -29,7 +31,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PROBLEM_JSON_VALUE)
                 .body(this.build(status, exception.getDetail(), request.getContextPath() + request.getServletPath()));
     }
-    
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ProblemDetail> handleNotFoundException(final HttpServletRequest request, final NotFoundException exception) {
         final HttpStatus status = HttpStatus.NOT_FOUND;
@@ -49,7 +51,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ProblemDetail> handleConversionFailedException(final HttpServletRequest request,
-                                                                          final MethodArgumentTypeMismatchException exception) {
+                                                                         final MethodArgumentTypeMismatchException exception) {
         final HttpStatus status = HttpStatus.BAD_REQUEST;
         final Exception cause = (Exception) this.getRootCause(exception);
         final String detailMessage = exception.getPropertyName() + ": " + cause.getMessage();
@@ -60,25 +62,38 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatusCode status,
-                                                                  WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex,
+                                                                  final HttpHeaders headers,
+                                                                  final HttpStatusCode status,
+                                                                  final WebRequest request) {
         ResponseEntity<Object> response = super.handleMethodArgumentNotValid(ex, headers, status, request);
 
         if (null != response && response.getBody() instanceof ProblemDetail problemDetailBody) {
-            problemDetailBody.setProperty("message", ex.getMessage());
-            BindingResult result = ex.getBindingResult();
-            problemDetailBody.setProperty("message",
-                    "Validation failed for object='" + result.getObjectName() + "'. " + "Error count: " + result.getErrorCount());
-            problemDetailBody.setProperty("errors", result.getAllErrors());
+            final BindingResult bindingResult = ex.getBindingResult();
+            final String errorDetails =
+                    bindingResult.getFieldErrors().stream().map(fieldError -> fieldError.getField() + " " + fieldError.getDefaultMessage())
+                            .collect(Collectors.joining(", "));
+
+            final String details = String.format("Validation failed for %s. Errors [%d]: %s",
+                    bindingResult.getObjectName(), bindingResult.getErrorCount(), errorDetails);
+
+            problemDetailBody.setDetail(details);
         }
         return response;
     }
 
     @ExceptionHandler(InvalidFormatException.class)
     public ResponseEntity<ProblemDetail> handleInvalidFormatException(final HttpServletRequest request,
-                                                                       final InvalidFormatException exception) {
+                                                                      final InvalidFormatException exception) {
+        final HttpStatus status = HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+                .body(this.build(status, exception.getMessage(), request.getContextPath() + request.getServletPath()));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ProblemDetail> handleConstraintViolationException(final HttpServletRequest request,
+                                                                            final ConstraintViolationException exception) {
         final HttpStatus status = HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PROBLEM_JSON_VALUE)
@@ -89,7 +104,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     private Throwable getRootCause(final Exception exception) {
         return Optional.ofNullable(ExceptionUtils.getRootCause(exception)).orElse(exception);
     }
-    
+
     private ProblemDetail build(final HttpStatus httpStatus, final String detail, final String instance) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, detail);
         problemDetail.setInstance(URI.create(instance));
