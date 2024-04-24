@@ -10,12 +10,8 @@ import java.util.UUID;
         componentModel = "spring")
 public interface HotelIdMapper {
 
-  default HotelId mapHotelId(final UUID id) {
-    return null != id ? new HotelId(id) : null;
-  }
-
-  default UUID mapHotelIdValue(final HotelId id) {
-    return null != id ? id.value() : null;
-  }
+    default UUID mapHotelIdValue(final HotelId id) {
+        return null != id ? id.value() : null;
+    }
 
 }
