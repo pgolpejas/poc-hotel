@@ -25,6 +25,7 @@
   * Java 21
   * Spring boot 3
   * PostgreSQL 16
+  * Api first
   * Kafka 
   * Hexagonal Architecture
   * DDD
