@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 @Slf4j
 public abstract class JdbcOutboxRepository<E extends BaseEventEntity> implements OutboxRepository<E> {
 
+    protected static final String STREAM_OLDER_THAN = "streamOlderThan with query:{}";
     protected static final String TABLE_NAME = "$table_name";
 
     protected final JdbcTemplate jdbcTemplate;
@@ -35,7 +36,7 @@ public abstract class JdbcOutboxRepository<E extends BaseEventEntity> implements
     protected BaseTableDescriptor baseTableDescriptor;
 
     protected JdbcOutboxRepository(JdbcTemplate jdbcTemplate, JDBCQueryConfiguration queryConfiguration,
-            BaseTableDescriptor e) {
+                                   BaseTableDescriptor e) {
         this.jdbcTemplate = jdbcTemplate;
         entityRowMapper = getMapper();
         this.queryConfiguration = queryConfiguration;
@@ -44,7 +45,7 @@ public abstract class JdbcOutboxRepository<E extends BaseEventEntity> implements
     }
 
     protected JdbcOutboxRepository(DataSource dataSource, JDBCQueryConfiguration queryConfiguration,
-            BaseTableDescriptor e) {
+                                   BaseTableDescriptor e) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         entityRowMapper = getMapper();
         this.queryConfiguration = queryConfiguration;
@@ -196,9 +197,9 @@ public abstract class JdbcOutboxRepository<E extends BaseEventEntity> implements
         final Instant to = Instant.now().minus(maxWait, ChronoUnit.DAYS);
         final Timestamp timestamp = Timestamp.from(to);
 
-        int[] argTypes = { Types.TIMESTAMP };
+        int[] argTypes = {Types.TIMESTAMP};
         List<Object[]> batchArgs = new ArrayList<>();
-        batchArgs.add(new Object[] { timestamp });
+        batchArgs.add(new Object[]{timestamp});
 
         String query = queryConfiguration.getRemoveOlderThan();
         query = query.replace(TABLE_NAME, baseTableDescriptor.getTableName());
@@ -220,9 +221,9 @@ public abstract class JdbcOutboxRepository<E extends BaseEventEntity> implements
 
         String query = queryConfiguration.getCountOlderThan();
         query = query.replace(TABLE_NAME, baseTableDescriptor.getTableName());
-        log.debug("streamOlderThan with query:{}", query);
+        log.debug(STREAM_OLDER_THAN, query);
 
-        return jdbcTemplate.queryForObject(query, new Object[] { timestamp }, Long.class);
+        return jdbcTemplate.queryForObject(query, Long.class, timestamp);
 
     }
 
@@ -233,7 +234,7 @@ public abstract class JdbcOutboxRepository<E extends BaseEventEntity> implements
 
         String query = queryConfiguration.getStreamOlderThan();
         query = query.replace(TABLE_NAME, baseTableDescriptor.getTableName());
-        log.debug("streamOlderThan with query:{}", query);
+        log.debug(STREAM_OLDER_THAN, query);
         return jdbcTemplate.queryForStream(query, entityRowMapper, timestamp);
 
     }
@@ -247,7 +248,7 @@ public abstract class JdbcOutboxRepository<E extends BaseEventEntity> implements
         query = query.replace(TABLE_NAME, baseTableDescriptor.getTableName());
         query = query.replace("$limit", limit + "");
 
-        log.debug("streamOlderThan with query:{}", query);
+        log.debug(STREAM_OLDER_THAN, query);
         return jdbcTemplate.query(query, entityRowMapper, timestamp);
 
     }
@@ -259,7 +260,7 @@ public abstract class JdbcOutboxRepository<E extends BaseEventEntity> implements
         query = query.replace(TABLE_NAME, baseTableDescriptor.getTableName());
         query = query.replace("$limit", limit + "");
         query = query.replace("$offset", offset + "");
-        log.debug("streamOlderThan with query:{}", query);
+        log.debug(STREAM_OLDER_THAN, query);
         return jdbcTemplate.query(query, entityRowMapper);
 
     }
@@ -269,7 +270,7 @@ public abstract class JdbcOutboxRepository<E extends BaseEventEntity> implements
 
         String query = queryConfiguration.getStreamAll();
         query = query.replace(TABLE_NAME, baseTableDescriptor.getTableName());
-        log.debug("streamOlderThan with query:{}", query);
+        log.debug(STREAM_OLDER_THAN, query);
         return jdbcTemplate.queryForStream(query, entityRowMapper);
 
     }
@@ -285,7 +286,7 @@ public abstract class JdbcOutboxRepository<E extends BaseEventEntity> implements
     }
 
     public List<E> findPendingByAggregateTypeOlderThan(String aggregateid, List<String> eventIds, String type,
-            Instant to) {
+                                                       Instant to) {
 
         final Timestamp timestamp = Timestamp.from(to);
 
@@ -396,7 +397,7 @@ public abstract class JdbcOutboxRepository<E extends BaseEventEntity> implements
     public void remove(E entity) {
         int[] argTypes = {};
         List<Object[]> batchArgs = new ArrayList<>();
-        batchArgs.add(new Object[] { entity.getId().toString() });
+        batchArgs.add(new Object[]{entity.getId().toString()});
         String query = queryConfiguration.getRemoveItem();
         query = query.replace(TABLE_NAME, baseTableDescriptor.getTableName());
         jdbcTemplate.batchUpdate(query, batchArgs, argTypes);

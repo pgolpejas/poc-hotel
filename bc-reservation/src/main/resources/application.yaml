@@ -52,8 +52,14 @@ spring:
   
   ######## Cloud stream Configuration  #########
   cloud:
+    # To consume domain events we need to use the function router
+    function:
+      definition: functionRouter
+      routing-expression: "'handle' + headers['event_type']"    
     stream:
-      
+      function:
+        routing:
+          enabled: true
       default:
         producer:
           useNativeEncoding: true
@@ -112,18 +118,18 @@ spring:
       #        avro:
       #          schema-locations: classpath:asyncapi/v1/imports/*.avsc
       bindings:
+        functionRouter-in-0:
+          destination: poc.reservation.domain.v1,poc.reservation.data.v1
+          contentType: application/*+avro
+          group: group-functionRouter-consumer
         reservation-data-out-0:
           destination: poc.reservation.data.v1
           contentType: application/*+avro
-          group: group-reservation-data
+          group: group-reservation-data-producer
         reservation-domain-out-0:
           destination: poc.reservation.domain.v1
           contentType: application/*+avro
-          group: group-reservation-domain
-        reservation-domain-in-0:
-          destination: poc.reservation.domain.v1
-          content-type: application/*+avro
-          group: group-reservation-domain
+          group: group-reservation-domain-producer
 
 
 ######## Javers Configuration  #########         
@@ -220,7 +226,10 @@ logging:
               BasicBinder: TRACE
     root: INFO
     org.springframework.web: INFO
+    org.apache.kafka.clients.consumer.internals.ConsumerCoordinator: WARN
+    org.apache.kafka.clients.Metadata: WARN
     com.reservation: INFO
+    com.outbox: OFF
     org.hibernate.orm.jdbc.bind: TRACE
     io.confluent.kafka: INFO
   #    org.springframework.jdbc.core: TRACE

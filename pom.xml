@@ -294,6 +294,7 @@
                         <exclude>**/generated/**</exclude>
                         <exclude>**/openapi/**</exclude>
                         <exclude>**/hotel/core/**</exclude>
+                        <exclude>**/outbox/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>

@@ -1,0 +1,45 @@
+package com.reservation.infrastructure.consumer;
+
+import java.util.function.Consumer;
+
+import com.reservation.domain.avro.v1.ReservationCreated;
+import com.reservation.domain.avro.v1.ReservationDeleted;
+import com.reservation.domain.avro.v1.ReservationUpdated;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.messaging.Message;
+import org.springframework.stereotype.Component;
+
+@Component
+@Slf4j
+@RequiredArgsConstructor
+public class ReservationDomainConsumer {
+
+  @Bean
+  public Consumer<Message<ReservationCreated>> handleReservationCreatedEvent() {
+    return message -> {
+      log.info("[DOMAIN-INPUT-HEADER-RECEIVED]: {}", message.getHeaders());
+
+      log.info("{}: {}", message.getClass().getSimpleName(), message.getPayload());
+    };
+  }
+
+  @Bean
+  public Consumer<Message<ReservationUpdated>> handleReservationUpdatedEvent() {
+    return message -> {
+      log.info("[DOMAIN-INPUT-HEADER-RECEIVED]: {}", message.getHeaders());
+
+      log.info("{}: {}", message.getClass().getSimpleName(), message.getPayload());
+    };
+  }
+
+  @Bean
+  public Consumer<Message<ReservationDeleted>> handleReservationDeletedEvent() {
+    return message -> {
+      log.info("[DOMAIN-INPUT-HEADER-RECEIVED]: {}", message.getHeaders());
+
+      log.info("{}: {}", message.getClass().getSimpleName(), message.getPayload());
+    };
+  }
+}

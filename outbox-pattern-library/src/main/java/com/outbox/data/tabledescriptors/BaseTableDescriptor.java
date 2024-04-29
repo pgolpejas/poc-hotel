@@ -208,8 +208,8 @@ public abstract class BaseTableDescriptor {
                 .build();
 
         destinationTopicCol = BaseEntityFieldDescriptor.builder()
-                .mongoColumnName("destination_topic")
-                .jdbcColumnName("destination_topic")
+                .mongoColumnName(DESTINATION_TOPIC)
+                .jdbcColumnName(DESTINATION_TOPIC)
                 .fieldName("destinationTopic")
                 .type(String.class)
                 .updatable(false)
