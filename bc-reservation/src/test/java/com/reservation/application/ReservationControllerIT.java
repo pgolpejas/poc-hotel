@@ -173,15 +173,16 @@ class ReservationControllerIT extends BaseTestContainerFromDockerCompose {
     class Create {
 
         @Test
+        @Sql({"/sql/roomTypeInventory/single.sql"})
         void when_reservation_should_create_it() throws Exception {
             UUID reservationId = UUID.randomUUID();
             final ReservationDto reservationDTO = new ReservationDto()
                     .id(reservationId)
-                    .hotelId(UUID.randomUUID())
+                    .hotelId(UUID.fromString("a1a97f69-7fa0-4301-b498-128d78860828"))
                     .roomTypeId(1)
                     .guestId(UUID.randomUUID())
-                    .start(LocalDate.now())
-                    .end(LocalDate.now())
+                    .start(LocalDate.of(2024,1,30))
+                    .end(LocalDate.of(2024,1,30))
                     .status("ON");
 
             final ResponseEntity<ReservationDto> response = restTemplate.exchange(MAPPING,
@@ -231,6 +232,34 @@ class ReservationControllerIT extends BaseTestContainerFromDockerCompose {
                     .guestId(UUID.randomUUID())
                     .start(LocalDate.now())
                     .end(LocalDate.now())
+                    .status("ON");
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_PROBLEM_JSON));
+
+            HttpEntity<?> request = new HttpEntity<>(reservationDTO, headers);
+
+            final ResponseEntity<ProblemDetail> response = restTemplate.exchange(MAPPING,
+                    HttpMethod.POST,
+                    request,
+                    ProblemDetail.class);
+
+            Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+
+        }
+
+        @Test
+        @Sql({"/sql/reservation/single.sql"})
+        void when_reservation_has_not_availability_should_return_conflict() {
+            UUID reservationId = UUID.fromString("d7b97f69-7fa0-4301-b498-128d78860828");
+            final ReservationDto reservationDTO = new ReservationDto()
+                    .id(reservationId)
+                    .hotelId(UUID.fromString("a1a97f69-7fa0-4301-b498-128d78860828"))
+                    .roomTypeId(1)
+                    .guestId(UUID.randomUUID())
+                    .start(LocalDate.of(2024,1,28))
+                    .end(LocalDate.of(2024,1,30))
                     .status("ON");
 
             HttpHeaders headers = new HttpHeaders();

@@ -88,6 +88,17 @@ public class RoomTypeInventoryRepositoryAdapter implements RoomTypeInventoryRepo
         return this.roomTypeInventoryJpaRepository.existsByUK(hotelId, roomTypeId, roomTypeInventoryDate);
     }
 
+    @Transactional
+    @Override
+    public Optional<RoomTypeInventory> findByUK(UUID hotelId, Integer roomTypeId, LocalDate roomTypeInventoryDate) {
+        return this.roomTypeInventoryJpaRepository.findByUK(hotelId, roomTypeId, roomTypeInventoryDate);
+    }
+
+    @Override
+    public List<RoomTypeInventory> findByReservationDates(UUID hotelId, Integer roomTypeId, LocalDate start, LocalDate end) {
+        return this.roomTypeInventoryJpaRepository.findByReservationDates(hotelId, roomTypeId, start, end);
+    }
+
     @Override
     public PaginationResponse<RoomTypeInventory> search(final Criteria criteria) {
 
