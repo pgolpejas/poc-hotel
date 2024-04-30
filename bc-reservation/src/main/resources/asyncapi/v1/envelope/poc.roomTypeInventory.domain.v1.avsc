@@ -1,0 +1,5 @@
+[
+  "com.roomTypeInventory.domain.avro.v1.RoomTypeInventoryCreated",
+  "com.roomTypeInventory.domain.avro.v1.RoomTypeInventoryUpdated",
+  "com.roomTypeInventory.domain.avro.v1.RoomTypeInventoryDeleted"
+]

@@ -48,7 +48,7 @@ public class ReservationController implements ReservationApi {
     }
 
     @Override
-    public ResponseEntity<ReservationPaginationResponse> search(final CriteriaRequestDto criteriaRequestDto) {
+    public ResponseEntity<ReservationPaginationResponse> searchReservation(final CriteriaRequestDto criteriaRequestDto) {
         PaginationResponse<Reservation> search = getReservationsUseCase.getReservations(this.criteriaMapper.mapToAggregate(criteriaRequestDto));
 
         return ResponseEntity.ok(new ReservationPaginationResponse()
@@ -62,7 +62,7 @@ public class ReservationController implements ReservationApi {
     }
 
     @Override
-    public ResponseEntity<ReservationListResponse> searchAudit(Integer limit, AuditFiltersRequestDto auditFilters) {
+    public ResponseEntity<ReservationListResponse> searchAuditReservation(Integer limit, AuditFiltersRequestDto auditFilters) {
         List<ReservationDto> search = getReservationsAuditUseCase.getReservationsAudit(AuditFilters.builder()
                         .id(auditFilters.getId())
                         .from(auditFilters.getFrom())

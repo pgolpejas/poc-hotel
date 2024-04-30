@@ -119,7 +119,7 @@ spring:
       #          schema-locations: classpath:asyncapi/v1/imports/*.avsc
       bindings:
         functionRouter-in-0:
-          destination: poc.reservation.domain.v1,poc.reservation.data.v1
+          destination: poc.reservation.domain.v1,poc.reservation.data.v1,poc.roomTypeInventory.data.v1,poc.roomTypeInventory.domain.v1
           contentType: application/*+avro
           group: group-functionRouter-consumer
         reservation-data-out-0:
@@ -130,7 +130,14 @@ spring:
           destination: poc.reservation.domain.v1
           contentType: application/*+avro
           group: group-reservation-domain-producer
-
+        roomTypeInventory-data-out-0:
+          destination: poc.roomTypeInventory.data.v1
+          contentType: application/*+avro
+          group: group-roomTypeInventory-data-producer
+        roomTypeInventory-domain-out-0:
+          destination: poc.roomTypeInventory.domain.v1
+          contentType: application/*+avro
+          group: group-roomTypeInventory-domain-producer
 
 ######## Javers Configuration  #########         
 javers:
@@ -169,6 +176,14 @@ outbox:
       bindingName: reservation-domain-out-0
     "[com.reservation.domain.avro.v1.ReservationSnapshot]":
       bindingName: reservation-data-out-0
+    "[com.roomTypeInventory.domain.avro.v1.RoomTypeInventoryCreated]":
+      bindingName: roomTypeInventory-domain-out-0
+    "[com.roomTypeInventory.domain.avro.v1.RoomTypeInventoryUpdated]":
+      bindingName: roomTypeInventory-domain-out-0
+    "[com.roomTypeInventory.domain.avro.v1.RoomTypeInventoryDeleted]":
+      bindingName: roomTypeInventory-domain-out-0
+    "[com.roomTypeInventory.domain.avro.v1.RoomTypeInventorySnapshot]":
+      bindingName: roomTypeInventory-data-out-0
 
 
 ######## Observability Configuration  #########      

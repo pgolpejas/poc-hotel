@@ -1,0 +1,48 @@
+{
+  "namespace" : "com.roomTypeInventory.domain.avro.v1",
+  "type": "record",
+  "name": "RoomTypeInventorySnapshot",
+  "doc": "RoomTypeInventory snapshot event",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      },
+      "doc": "id, example: '1fa85f64-5717-4562-b3fc-2c963f66afa6'"
+    },
+    {
+      "name": "version",
+      "type": "int"
+    },
+    {
+      "name": "roomTypeId",
+      "type": "int",
+      "doc": "roomTypeId, example: '1'"
+    },
+    {
+      "name": "hotelId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      },
+      "doc": "hotelId, example: '3fa85f64-5717-4562-b3fc-2c963f66afa6'"
+    },
+    {
+      "name": "roomTypeInventoryDate",
+      "type": "string",
+      "doc": "inventory date, example: '2024-05-26'"
+    },
+    {
+      "name": "totalInventory",
+      "type": "int",
+      "doc": "totalInventory"
+    },
+    {
+      "name": "totalReserved",
+      "type": "int",
+      "doc": "totalReserved"
+    }
+  ]
+}

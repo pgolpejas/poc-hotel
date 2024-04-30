@@ -15,6 +15,8 @@ info:
 tags:
   - name: Reservation
     description: Hotel Reservation Avro events
+  - name: RoomTypeInventory
+    description: Hotel RoomTypeInventory Avro events
 
 servers:
   local:
@@ -60,6 +62,36 @@ channels:
           - $ref: '#/components/messages/ReservationCreated'
           - $ref: '#/components/messages/ReservationUpdated'
           - $ref: '#/components/messages/ReservationDeleted'
+  poc.roomTypeInventory.domain.v1:
+    publish:
+      summary: Hotel RoomTypeInventory Domain Event.
+      description: Hotel RoomTypeInventory Domain Event.
+      operationId: roomTypeInventoriesDomainEvent
+      tags:
+        - name: RoomTypeInventory
+      bindings:
+        kafka:
+          bindingVersion: 'latest'
+          groupId: roomTypeInventory-domain
+      message:
+        oneOf:
+          - $ref: '#/components/messages/RoomTypeInventoryCreated'
+          - $ref: '#/components/messages/RoomTypeInventoryUpdated'
+          - $ref: '#/components/messages/RoomTypeInventoryDeleted'
+  poc.roomTypeInventory.data.v1:
+    publish:
+      summary: Hotel RoomTypeInventory Data Event.
+      description: Hotel RoomTypeInventory Data Event.
+      operationId: roomTypeInventoriesDataEvent
+      tags:
+        - name: RoomTypeInventory
+      bindings:
+        kafka:
+          bindingVersion: 'latest'
+          groupId: roomTypeInventory-snapshot
+      message:
+        oneOf:
+          - $ref: '#/components/messages/RoomTypeInventorySnapshot'
 components:
   messages:
     ReservationSnapshot:
@@ -94,3 +126,35 @@ components:
       schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
       payload:
         $ref: 'v1/imports/reservation_deleted.avsc'
+    RoomTypeInventorySnapshot:
+      name: RoomTypeInventorySnapshot
+      title: RoomTypeInventorySnapshot event
+      summary:  RoomTypeInventorySnapshot event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/roomTypeInventory_snapshot.avsc'
+    RoomTypeInventoryCreated:
+      name: RoomTypeInventoryCreated
+      title: RoomTypeInventoryCreated domain event
+      summary: RoomTypeInventoryCreated domain event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/roomTypeInventory_updated.avsc'
+    RoomTypeInventoryUpdated:
+      name: RoomTypeInventoryUpdated
+      title: RoomTypeInventoryUpdated domain event
+      summary: RoomTypeInventoryUpdated domain event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/roomTypeInventory_created.avsc'
+    RoomTypeInventoryDeleted:
+      name: RoomTypeInventoryDeleted
+      title: RoomTypeInventoryDeleted domain event
+      summary: RoomTypeInventoryDeleted domain event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/roomTypeInventory_deleted.avsc'
