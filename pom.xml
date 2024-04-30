@@ -51,6 +51,7 @@
             **/*Entity**.java,
             **/generated/**,
             **/hotel/core/**,
+            **/outbox/**,
             **/*Test**.java,
             **/*IT**.java
         </sonar.coverage.exclusions>

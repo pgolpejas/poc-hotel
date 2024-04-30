@@ -83,7 +83,9 @@ services:
       && sleep 15
       && echo Creating topics...
       && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.reservation.domain.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=delete
-      && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.reservation.data.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=compact)&)
+      && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.reservation.data.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=compact
+      && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.roomTypeInventory.domain.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=delete
+      && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.roomTypeInventory.data.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=compact)&)
       && /etc/confluent/docker/run "
     networks:
       - local-des

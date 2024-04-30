@@ -17,11 +17,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ReservationUpdatedOutboxMapper implements OutboxEntityMapper<ReservationUpdatedEvent> {
 
-    private final ReservationEventMapper reservationEventMapper;
+    private final ReservationEventMapper eventMapper;
 
     @Override
     public OutboxKafkaMessage map(final ReservationUpdatedEvent domainEvent) {
-        final ReservationUpdated outboxEvent = this.reservationEventMapper.mapReservationUpdated(domainEvent);
+        final ReservationUpdated outboxEvent = this.eventMapper.mapReservationUpdated(domainEvent);
 
         final Map<String, Object> headers = new HashMap<>();
         headers.put(EventHelper.EVENT_TYPE, domainEvent.getClass().getSimpleName());

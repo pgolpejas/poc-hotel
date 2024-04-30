@@ -19,7 +19,7 @@ import java.util.UUID;
 @SuppressWarnings("java:S6204")
 public interface ReservationEventMapper {
 
-    ReservationSnapshot mapReservation(Reservation reservation);
+    ReservationSnapshot mapReservation(Reservation aggregate);
 
     ReservationCreated mapReservationCreated(ReservationCreatedEvent event);
 

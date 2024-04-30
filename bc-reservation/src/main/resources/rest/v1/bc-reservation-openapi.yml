@@ -11,7 +11,9 @@ servers:
     description: LOCAL
 tags:
   - name: reservation
-    description: Hotel reservation API
+    description: Hotel Reservation API
+  - name: roomTypeInventory
+    description: Hotel RoomTypeInventory API
 paths:
   /v1/hotel-reservation:
     put:
@@ -68,7 +70,7 @@ paths:
         - reservation
       summary: Search by filters
       description: Search by filters
-      operationId: search
+      operationId: searchReservation
       requestBody:
         content:
           application/json:
@@ -92,7 +94,7 @@ paths:
         - reservation
       summary: Search audit by filters
       description: Search audit by filters
-      operationId: searchAudit
+      operationId: searchAuditReservation
       parameters:
         - name: limit
           in: path
@@ -172,6 +174,165 @@ paths:
           $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
+  /v1/hotel-room-type-inventory:
+    put:
+      tags:
+        - roomTypeInventory
+      summary: Update item
+      description: Update item
+      operationId: updateRoomTypeInventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomTypeInventoryDto'
+        required: true
+      responses:
+        '200':
+          description: Updated item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomTypeInventoryDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+    post:
+      tags:
+        - roomTypeInventory
+      summary: Create item
+      description: Create item
+      operationId: createRoomTypeInventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomTypeInventoryDto'
+        required: true
+      responses:
+        '201':
+          description: Created item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomTypeInventoryDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '409':
+          $ref: '#/components/responses/409Conflict'
+  /v1/hotel-room-type-inventory/search:
+    post:
+      tags:
+        - roomTypeInventory
+      summary: Search by filters
+      description: Search by filters
+      operationId: searchRoomTypeInventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CriteriaRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Found results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomTypeInventoryPaginationResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+  /v1/hotel-room-type-inventory/search-audit/{limit}:
+    post:
+      tags:
+        - roomTypeInventory
+      summary: Search audit by filters
+      description: Search audit by filters
+      operationId: searchAuditRoomTypeInventory
+      parameters:
+        - name: limit
+          in: path
+          description: number of items to return
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 10
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditFiltersRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Found audit results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomTypeInventoryListResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+  /v1/hotel-room-type-inventory/{id}:
+    get:
+      tags:
+        - roomTypeInventory
+      summary: Search item by id
+      description: Search item by id
+      operationId: getRoomTypeInventory
+      parameters:
+        - name: id
+          in: path
+          description: item id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: d1a97f69-7fa0-4301-b498-128d78860828
+      responses:
+        '200':
+          description: Found item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomTypeInventoryDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+    delete:
+      tags:
+        - roomTypeInventory
+      summary: Delete item
+      description: Delete item
+      operationId: deleteRoomTypeInventory
+      parameters:
+        - name: id
+          in: path
+          description: item id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: d1a97f69-7fa0-4301-b498-128d78860828
+      responses:
+        '200':
+          description: Deleted item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomTypeInventoryDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
 components:
   schemas:
     ReservationDto:
@@ -227,6 +388,95 @@ components:
           minLength: 0
           type: string
           example: 'ON'
+    ReservationPaginationResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        data:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/ReservationDto'
+    ReservationListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/ReservationDto'
+    
+    RoomTypeInventoryDto:
+      required:
+        - id
+        - hotelId
+        - roomTypeId
+        - roomTypeInventoryDate
+        - totalInventory
+        - totalReserved
+      type: object
+      properties:
+        id:
+          description: Identifier
+          type: string
+          format: uuid
+          example: 'd1a97f69-7fa0-4301-b498-128d78860828'
+        version:
+          type: integer
+          format: int32
+          description: Version of the aggregate
+          example: 0
+          minimum: -2147483647
+          maximum: 2147483647
+        roomTypeId:
+          description: RoomType identifier
+          type: integer
+          format: int32
+          example: 1
+        hotelId:
+          description: hotel identifier
+          type: string
+          format: uuid
+          example: 'e1a97f69-7fa0-4301-b498-128d78860828'
+        roomTypeInventoryDate:
+          description: inventory date in format yyyy-MM-dd
+          type: string
+          format: date
+          example: 2024-01-11
+        totalInventory:
+          description: totalInventory
+          type: integer
+          format: int32
+          minimum: 0
+          example: 100
+        totalReserved:
+          description: totalReserved
+          type: integer
+          format: int32
+          minimum: 0
+          example: 3
+    RoomTypeInventoryPaginationResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        data:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/RoomTypeInventoryDto'
+    RoomTypeInventoryListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/RoomTypeInventoryDto'
+    
     CriteriaRequestDto:
       required:
         - filters
@@ -261,17 +511,6 @@ components:
           $ref: '#/components/schemas/Page'
         total:
           $ref: '#/components/schemas/TotalItems'
-    ReservationPaginationResponse:
-      type: object
-      additionalProperties: false
-      properties:
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-        data:
-          type: array
-          description: items
-          items:
-            $ref: '#/components/schemas/ReservationDto'
     AuditFiltersRequestDto:
       type: object
       properties:
@@ -290,14 +529,6 @@ components:
           format: date-time
           description: date in format dd/MM/yyyy HH:mm:ss
           example: 2050-12-31T23:59:59Z
-    ReservationListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          description: items
-          items:
-            $ref: '#/components/schemas/ReservationDto'
     Limit:
       description: Model of limit of records of pagination
       type: integer

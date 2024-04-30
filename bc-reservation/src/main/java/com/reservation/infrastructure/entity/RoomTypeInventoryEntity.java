@@ -31,7 +31,7 @@ public class RoomTypeInventoryEntity implements Serializable {
 
   @NotNull
   @Column(name = "room_type_id")
-  private UUID roomTypeId;
+  private Integer roomTypeId;
 
   @NotNull
   @Column(name = "hotel_id")
@@ -39,7 +39,7 @@ public class RoomTypeInventoryEntity implements Serializable {
 
   @NotNull
   @Column(name = "inventory_date")
-  private LocalDate inventoryDate;
+  private LocalDate roomTypeInventoryDate;
 
   @NotNull
   @Column(name = "total_inventory")

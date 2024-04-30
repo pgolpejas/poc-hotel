@@ -3,8 +3,8 @@ package com.reservation.infrastructure.producer.mapper;
 import com.hotel.core.domain.utils.EventHelper;
 import com.outbox.data.OutboxKafkaMessage;
 import com.outbox.data.mapper.OutboxEntityMapper;
-import com.reservation.domain.avro.v1.ReservationDeleted;
-import com.reservation.domain.event.ReservationDeletedEvent;
+import com.reservation.domain.event.RoomTypeInventoryDeletedEvent;
+import com.roomTypeInventory.domain.avro.v1.RoomTypeInventoryDeleted;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,13 +15,13 @@ import java.util.Map;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ReservationDeletedOutboxMapper implements OutboxEntityMapper<ReservationDeletedEvent> {
+public class RoomTypeInventoryDeletedOutboxMapper implements OutboxEntityMapper<RoomTypeInventoryDeletedEvent> {
 
-    private final ReservationEventMapper eventMapper;
+    private final RoomTypeInventoryEventMapper eventMapper;
 
     @Override
-    public OutboxKafkaMessage map(final ReservationDeletedEvent domainEvent) {
-        final ReservationDeleted outboxEvent = this.eventMapper.mapReservationDeleted(domainEvent);
+    public OutboxKafkaMessage map(final RoomTypeInventoryDeletedEvent domainEvent) {
+        final RoomTypeInventoryDeleted outboxEvent = this.eventMapper.mapRoomTypeInventoryDeleted(domainEvent);
 
         final Map<String, Object> headers = new HashMap<>();
         headers.put(EventHelper.EVENT_TYPE, domainEvent.getClass().getSimpleName());

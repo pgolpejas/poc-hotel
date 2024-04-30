@@ -16,30 +16,33 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ReservationDomainConsumer {
 
+  public static final String DOMAIN_INPUT_HEADER_RECEIVED = "[DOMAIN-INPUT-HEADER-RECEIVED]: {}";
+  public static final String LOG_INFO_TEMPLATE = "{}: {}";
+
   @Bean
   public Consumer<Message<ReservationCreated>> handleReservationCreatedEvent() {
     return message -> {
-      log.info("[DOMAIN-INPUT-HEADER-RECEIVED]: {}", message.getHeaders());
+      log.info(DOMAIN_INPUT_HEADER_RECEIVED, message.getHeaders());
 
-      log.info("{}: {}", message.getClass().getSimpleName(), message.getPayload());
+      log.info(LOG_INFO_TEMPLATE, message.getHeaders().get("event_type"), message.getPayload());
     };
   }
 
   @Bean
   public Consumer<Message<ReservationUpdated>> handleReservationUpdatedEvent() {
     return message -> {
-      log.info("[DOMAIN-INPUT-HEADER-RECEIVED]: {}", message.getHeaders());
+      log.info(DOMAIN_INPUT_HEADER_RECEIVED, message.getHeaders());
 
-      log.info("{}: {}", message.getClass().getSimpleName(), message.getPayload());
+      log.info(LOG_INFO_TEMPLATE, message.getHeaders().get("event_type"), message.getPayload());
     };
   }
 
   @Bean
   public Consumer<Message<ReservationDeleted>> handleReservationDeletedEvent() {
     return message -> {
-      log.info("[DOMAIN-INPUT-HEADER-RECEIVED]: {}", message.getHeaders());
+      log.info(DOMAIN_INPUT_HEADER_RECEIVED, message.getHeaders());
 
-      log.info("{}: {}", message.getClass().getSimpleName(), message.getPayload());
+      log.info(LOG_INFO_TEMPLATE, message.getHeaders().get("event_type"), message.getPayload());
     };
   }
 }

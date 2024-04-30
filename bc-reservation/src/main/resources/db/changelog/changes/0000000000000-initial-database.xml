@@ -25,6 +25,12 @@
                 <constraints nullable="false"/>
             </column>            
         </createTable>
+        <addUniqueConstraint  
+            columnNames="room_type_id, hotel_id, inventory_date"
+            constraintName="room_type_inventory_uk"
+            deferrable="true"
+            tableName="room_type_inventory"
+            validate="true"/>
     </changeSet>
 
     <changeSet author="unknown" id="0000000000000-02">
