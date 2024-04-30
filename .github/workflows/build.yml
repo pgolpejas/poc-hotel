@@ -47,6 +47,9 @@ jobs:
           echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
           echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"   
 
+      - name: Sonar
+        run: ./mvnw -B sonar:sonar -Dsonar.login=${{secrets.SONAR_TOKEN}}
+        
       - name: Commit and push the badge (if it changed)
         uses: EndBug/add-and-commit@v9
         with:
@@ -59,9 +62,6 @@ jobs:
         with:
           name: jacoco-report
           path: target/site/jacoco/
-
-      - name: Sonar
-        run: ./mvnw -B sonar:sonar -Dsonar.login=${{secrets.SONAR_TOKEN}}
 
       - name: Rename the artifact
         run: cp target/poc-hotel-0.0.1.jar poc-hotel-0.0.1.jar

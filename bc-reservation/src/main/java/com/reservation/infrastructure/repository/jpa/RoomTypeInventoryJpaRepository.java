@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,4 +52,37 @@ public interface RoomTypeInventoryJpaRepository extends JpaRepository<RoomTypeIn
     @Modifying
     @Query("delete from RoomTypeInventoryEntity where id = :id")
     void deleteByPK(UUID id);
+
+    @Query("""
+            select new com.reservation.domain.model.RoomTypeInventory(r.id
+            , r.version
+            , r.roomTypeId
+            , r.hotelId
+            , r.roomTypeInventoryDate
+            , r.totalInventory
+            , r.totalReserved)
+            from RoomTypeInventoryEntity r
+            where r.hotelId = :hotelId
+              and r.roomTypeId = :roomTypeId
+              and r.roomTypeInventoryDate = :roomTypeInventoryDate
+            """)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<RoomTypeInventory> findByUK(UUID hotelId, Integer roomTypeId, LocalDate roomTypeInventoryDate);
+
+
+    @Query("""
+            select new com.reservation.domain.model.RoomTypeInventory(r.id
+            , r.version
+            , r.roomTypeId
+            , r.hotelId
+            , r.roomTypeInventoryDate
+            , r.totalInventory
+            , r.totalReserved)
+            from RoomTypeInventoryEntity r
+            where r.hotelId = :hotelId
+              and r.roomTypeId = :roomTypeId
+              and r.roomTypeInventoryDate between :start and :end
+            """)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    List<RoomTypeInventory> findByReservationDates(UUID hotelId, Integer roomTypeId, LocalDate start, LocalDate end);
 }
