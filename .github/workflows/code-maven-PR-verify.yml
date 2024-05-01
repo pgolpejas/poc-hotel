@@ -81,6 +81,9 @@ jobs:
           name: jacoco-report-bc-reservation
           path: bc-reservation/target/site/jacoco/
 
+      - name: Package
+        run: ./mvnw -B clean package -DskipTests
+
       - name: Sonar
         run: ./mvnw -B sonar:sonar \
             -Dsonar.login=${{secrets.SONAR_TOKEN}} \
