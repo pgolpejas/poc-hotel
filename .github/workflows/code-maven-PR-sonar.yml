@@ -47,8 +47,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./mvnw -B sonar:sonar \
           -Dsonar.login=${{secrets.SONAR_TOKEN}} \
-          -Dsonar.token=${{secrets.SONAR_TOKEN}} \
           -Dsonar.projectKey=poc-hotel \
-          -Dsonar.projectName=poc-hotel \
+          -Dsonar.projectName="poc-hotel" \
           -Dsonar.organization=psanchez78 \
           -Dsonar.qualitygate.wait=true
