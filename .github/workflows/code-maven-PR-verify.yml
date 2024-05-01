@@ -16,8 +16,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.RENOVATE_TOKEN }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Setup Timezone
         uses: szenius/set-timezone@v2.0
@@ -94,3 +92,4 @@ jobs:
           default_author: github_actions
           message: 'commit badge'
           add: '*.svg'
+          push: origin HEAD:${{ github.head_ref }}
