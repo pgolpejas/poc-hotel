@@ -82,7 +82,10 @@ jobs:
           path: bc-reservation/target/site/jacoco/
 
       - name: Sonar
-        run: ./mvnw -B sonar:sonar -Dsonar.login=${{secrets.SONAR_TOKEN}}
+        run: ./mvnw -B sonar:sonar \
+            -Dsonar.login=${{secrets.SONAR_TOKEN}} \
+            -Dsonar.qualitygate.wait=true \
+            -Dsonar.qualitygate.timeout=300 \
       
       - name: Commit and push the badge (if it changed)
         uses: EndBug/add-and-commit@v9
