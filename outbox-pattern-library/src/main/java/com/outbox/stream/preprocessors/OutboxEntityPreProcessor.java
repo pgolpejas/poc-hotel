@@ -97,13 +97,14 @@ public abstract class OutboxEntityPreProcessor<E extends BaseEventEntity> {
                 ? messagePayload.getSchema().getFullName()
                 : "unknown";
         outboxEntity.setVersion(version);
+        
         outboxEntity.setSendStrategyType(outboxConfiguration.getMode());
 
         Map<String, Object> specificHeaders = messageWithHeaders.specificHeaders();
         specificHeaders.put("outbox_event_source_id", idempotenceIdentifier);
         specificHeaders.put(KafkaHeaders.KEY, context.getAggregateId());
 
-        String headersString = null;
+        String headersString;
         try {
             headersString = this.mapper.writeValueAsString(specificHeaders);
             outboxEntity.setHeadersMap(headersString);
@@ -113,7 +114,7 @@ public abstract class OutboxEntityPreProcessor<E extends BaseEventEntity> {
             throw new OutboxRuntimeException("Error while processing headers:" + messagePayload, e);
         }
 
-        byte[] toSend = null;
+        byte[] toSend;
         try {
             toSend = serializer.serialize("", messagePayload);
         } catch (Exception me) {

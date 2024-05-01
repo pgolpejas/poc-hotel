@@ -1,18 +1,18 @@
 package com.reservation.infrastructure.producer.mapper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.hotel.core.domain.ddd.AggregateRoot;
 import com.hotel.core.domain.ddd.DomainEvent;
 import com.hotel.core.domain.utils.EventHelper;
 import com.outbox.data.OutboxKafkaMessage;
 import com.outbox.data.mapper.OutboxEntityMapper;
-import com.roomTypeInventory.domain.avro.v1.RoomTypeInventorySnapshot;
 import com.reservation.domain.model.RoomTypeInventory;
+import com.roomTypeInventory.domain.avro.v1.RoomTypeInventorySnapshot;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @Component

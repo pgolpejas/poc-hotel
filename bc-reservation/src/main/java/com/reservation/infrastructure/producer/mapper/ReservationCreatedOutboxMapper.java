@@ -4,7 +4,7 @@ import com.hotel.core.domain.utils.EventHelper;
 import com.outbox.data.OutboxKafkaMessage;
 import com.outbox.data.mapper.OutboxEntityMapper;
 import com.reservation.domain.avro.v1.ReservationCreated;
-import com.reservation.domain.event.ReservationCreatedEvent;
+import com.reservation.domain.event.ReservationDomainEvent.ReservationCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

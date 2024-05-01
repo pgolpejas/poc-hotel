@@ -1,5 +1,7 @@
 package com.reservation.infrastructure.consumer;
 
+import static com.hotel.core.domain.utils.EventHelper.EVENT_TYPE;
+
 import java.util.function.Consumer;
 
 import com.reservation.domain.avro.v1.ReservationSnapshot;
@@ -19,7 +21,7 @@ public class ReservationDataConsumer {
     return message -> {
       log.info("[DATA-INPUT-HEADER-RECEIVED]: {}", message.getHeaders());
 
-      log.info("{}: {}", message.getHeaders().get("event_type"), message.getPayload());
+      log.info("{}: {}", message.getHeaders().get(EVENT_TYPE), message.getPayload());
     };
   }
 
