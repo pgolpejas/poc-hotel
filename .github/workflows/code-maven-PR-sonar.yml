@@ -1,7 +1,6 @@
 name: code-maven-PR-sonar
 on:
   workflow_dispatch:
-  pull_request:
 
 jobs:
   tests:
