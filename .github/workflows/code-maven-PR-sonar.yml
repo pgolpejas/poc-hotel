@@ -45,7 +45,7 @@ jobs:
       - name: Sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./mvnw -B sonar:sonar \
+        run: ./mvnw -B org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar \
           -Dsonar.login=${{secrets.SONAR_TOKEN}} \
           -Dsonar.projectKey=poc-hotel \
           -Dsonar.projectName="poc-hotel" \
