@@ -19,23 +19,23 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ReservationSnapshotOutboxMapper implements OutboxEntityMapper<Reservation> {
 
-    private final ReservationEventMapper eventMapper;
+  private final ReservationEventMapper eventMapper;
 
-    @Override
-    public OutboxKafkaMessage map(final Reservation dataEvent) {
-        final ReservationSnapshot outboxEvent = this.eventMapper.mapReservation(dataEvent);
-        return new OutboxKafkaMessage(outboxEvent, buildHeaders(dataEvent));
-    }
+  @Override
+  public OutboxKafkaMessage map(final Reservation dataEvent) {
+    final ReservationSnapshot outboxEvent = this.eventMapper.mapReservation(dataEvent);
+    return new OutboxKafkaMessage(outboxEvent, buildHeaders(dataEvent));
+  }
 
-    public Map<String, Object> buildHeaders(final AggregateRoot aggregateRoot) {
-        final Map<String, Object> specificHeaders = new HashMap<>();
-        specificHeaders.put(EventHelper.EVENT_DOMAIN_TYPE, getAction(aggregateRoot));
-        specificHeaders.put(EventHelper.EVENT_TYPE, aggregateRoot.getClass().getSimpleName());
-        return specificHeaders;
-    }
+  public Map<String, Object> buildHeaders(final AggregateRoot aggregateRoot) {
+    final Map<String, Object> specificHeaders = new HashMap<>();
+    specificHeaders.put(EventHelper.EVENT_DOMAIN_TYPE, getAction(aggregateRoot));
+    specificHeaders.put(EventHelper.EVENT_TYPE, aggregateRoot.getClass().getSimpleName());
+    return specificHeaders;
+  }
 
-    private static String getAction(final AggregateRoot aggregateRoot) {
-        return aggregateRoot.domainEvents().stream().findFirst().map(DomainEvent::getActionType)
-                .orElse(aggregateRoot.getClass().getSimpleName() + "Unknown");
-    }
+  private static String getAction(final AggregateRoot aggregateRoot) {
+    return aggregateRoot.domainEvents().stream().findFirst().map(DomainEvent::getActionType)
+        .orElse(aggregateRoot.getClass().getSimpleName() + "Unknown");
+  }
 }

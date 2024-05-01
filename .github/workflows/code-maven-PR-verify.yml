@@ -82,7 +82,9 @@ jobs:
           path: bc-reservation/target/site/jacoco/
 
       - name: Sonar
-        run: ./mvnw -B sonar:sonar -Dsonar.login=${{secrets.SONAR_TOKEN}}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./mvnw sonar:sonar -Dsonar.login=${{secrets.SONAR_TOKEN}} -Dsonar.projectKey=poc-hotel -Dsonar.organization=psanchez78 -Dsonar.qualitygate.wait=true
       
       - name: Commit and push the badge (if it changed)
         uses: EndBug/add-and-commit@v9
@@ -90,3 +92,4 @@ jobs:
           default_author: github_actions
           message: 'commit badge'
           add: '*.svg'
+          push: origin HEAD:${{ github.head_ref }}

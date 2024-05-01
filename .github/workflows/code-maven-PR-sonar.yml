@@ -1,0 +1,47 @@
+name: code-maven-PR-sonar
+on:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    name: Sonar verify
+    permissions:
+      contents: write
+      checks: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.RENOVATE_TOKEN }}
+
+      - name: Setup Timezone
+        uses: szenius/set-timezone@v2.0
+        with:
+          timezoneLinux: "Europe/Madrid"
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'adopt'
+
+      - name: Grant execute permission for mvnw
+        run: chmod +x mvnw
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Package
+        run: ./mvnw -B clean package -DskipTests
+
+      - name: Sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./mvnw sonar:sonar -Dsonar.login=${{secrets.SONAR_TOKEN}} -Dsonar.projectKey=poc-hotel -Dsonar.organization=psanchez78 -Dsonar.qualitygate.wait=true

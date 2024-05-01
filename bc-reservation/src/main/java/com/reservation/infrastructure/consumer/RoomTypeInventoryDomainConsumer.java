@@ -1,5 +1,7 @@
 package com.reservation.infrastructure.consumer;
 
+import static com.hotel.core.domain.utils.EventHelper.EVENT_TYPE;
+
 import com.roomTypeInventory.domain.avro.v1.RoomTypeInventoryCreated;
 import com.roomTypeInventory.domain.avro.v1.RoomTypeInventoryDeleted;
 import com.roomTypeInventory.domain.avro.v1.RoomTypeInventoryUpdated;
@@ -24,7 +26,7 @@ public class RoomTypeInventoryDomainConsumer {
         return message -> {
             log.info(DOMAIN_INPUT_HEADER_RECEIVED, message.getHeaders());
 
-            log.info(LOG_INFO_TEMPLATE, message.getHeaders().get("event_type"), message.getPayload());
+            log.info(LOG_INFO_TEMPLATE, message.getHeaders().get(EVENT_TYPE), message.getPayload());
         };
     }
 
@@ -33,7 +35,7 @@ public class RoomTypeInventoryDomainConsumer {
         return message -> {
             log.info(DOMAIN_INPUT_HEADER_RECEIVED, message.getHeaders());
 
-            log.info(LOG_INFO_TEMPLATE, message.getHeaders().get("event_type"), message.getPayload());
+            log.info(LOG_INFO_TEMPLATE, message.getHeaders().get(EVENT_TYPE), message.getPayload());
         };
     }
 
@@ -42,7 +44,7 @@ public class RoomTypeInventoryDomainConsumer {
         return message -> {
             log.info(DOMAIN_INPUT_HEADER_RECEIVED, message.getHeaders());
 
-            log.info(LOG_INFO_TEMPLATE, message.getHeaders().get("event_type"), message.getPayload());
+            log.info(LOG_INFO_TEMPLATE, message.getHeaders().get(EVENT_TYPE), message.getPayload());
         };
     }
 }
