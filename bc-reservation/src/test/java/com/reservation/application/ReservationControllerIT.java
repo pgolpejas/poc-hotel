@@ -303,15 +303,16 @@ class ReservationControllerIT extends BaseTestContainerFromDockerCompose {
 
         @Test
         @Sql({"/sql/reservation/single.sql"})
+        @Sql({"/sql/roomTypeInventory/single.sql"})
         void when_reservation_exists_should_update_it() throws Exception {
             UUID reservationId = UUID.fromString("d7a97f69-7fa0-4301-b498-128d78860828");
             final ReservationDto reservationDTO = new ReservationDto()
                     .id(reservationId)
-                    .hotelId(UUID.randomUUID())
-                    .roomTypeId(4)
+                    .hotelId(UUID.fromString("a1a97f69-7fa0-4301-b498-128d78860828"))
+                    .roomTypeId(1)
                     .guestId(UUID.randomUUID())
-                    .start(LocalDate.now())
-                    .end(LocalDate.now())
+                    .start(LocalDate.of(2024,1,30))
+                    .end(LocalDate.of(2024,1,30))
                     .status("ON");
 
             final ResponseEntity<ReservationDto> response = restTemplate.exchange(MAPPING,
@@ -323,7 +324,9 @@ class ReservationControllerIT extends BaseTestContainerFromDockerCompose {
 
             ReservationDto answer = response.getBody();
             Assertions.assertThat(answer).as("reservation").isNotNull();
-            Assertions.assertThat(answer.getRoomTypeId()).as("roomTypeId").isEqualTo(4);
+            Assertions.assertThat(answer.getRoomTypeId()).as("roomTypeId").isEqualTo(1);
+            Assertions.assertThat(answer.getStart()).as("start").isEqualTo(LocalDate.of(2024,1,30));
+            Assertions.assertThat(answer.getEnd()).as("end").isEqualTo(LocalDate.of(2024,1,30));
         }
     }
 

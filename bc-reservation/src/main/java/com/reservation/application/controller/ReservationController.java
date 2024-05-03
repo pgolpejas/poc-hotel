@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -72,6 +73,7 @@ public class ReservationController implements ReservationApi {
         return ResponseEntity.ok(new ReservationListResponse().data(search));
     }
 
+    @Transactional
     @Override
     public ResponseEntity<ReservationDto> updateReservation(ReservationDto reservationDto) {
         updateReservationUseCase.updateReservation(this.reservationMapper.mapToAggregate(reservationDto));
