@@ -24,62 +24,92 @@ In the application.yml we need to have this configuration:
 ```
 spring:
   cloud:
+      # To consume domain events we need to use the function router
+    function:
+      definition: functionRouter
+      routing-expression: "'handle' + headers['event_type']"    
     stream:
-        default:
-          producer:
-            useNativeEncoding: true
-        #        consumer:
-        #          useNativeEncoding: true
-        kafka:
-          binder:
-            defaultBrokerPort: 19092
-            
-            # Disabled because schemas are registered from maven plugin
-            auto-create-topics: false # Disabling this seem to override the server settings and will auto create
-            auto-add-partitions: false # I wonder if its cause this is set
-            
-            producer-properties:
-              schema.registry.url: http://localhost:8081
-              
-              #This will use a string based key - aka not in the registry - don't need a name strategy with string serializer
-              key.serializer: org.apache.kafka.common.serialization.StringSerializer
-  
-              # This will control the Serializer Setup
-              value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
-              value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-  
-              # https://www.confluent.io/es-es/blog/multiple-event-types-in-the-same-kafka-topic/ 
-              # Disable for auto schema registration
-              auto.register.schemas: false
-  
-              # Use only the latest schema version
-              use.latest.version: true
-  
-              # This will use reflection to generate schemas from classes - used to validate current data set
-              # against the schema registry for valid production
-              schema.reflection: true
-            
-            consumer-properties:
-              key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
-              value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-              schema.registry.url: http://localhost:8081
-              specific.avro.reader: true
-        schema-registry-client:
-          endpoint: http://localhost:8081
+      function:
+        routing:
+          enabled: true
+      default:
+        producer:
+          useNativeEncoding: true
+      #        consumer:
+      #          useNativeEncoding: true
+      kafka:
+        binder:
+          defaultBrokerPort: 19092
           
-        bindings:
-          reservation-data-out-0:
-            destination: poc.reservation.data.v1
-            contentType: application/*+avro
-            group: group-reservation-data
-          reservation-domain-out-0:
-            destination: poc.reservation.domain.v1
-            contentType: application/*+avro
-            group: group-reservation-domain
-          reservation-domain-in-0:
-            destination: poc.reservation.domain.v1
-            content-type: application/*+avro
-            group: group-reservation-domain
+          # Disabled because schemas are registered from maven plugin
+          auto-create-topics: false # Disabling this seem to override the server settings and will auto create
+          auto-add-partitions: false # I wonder if its cause this is set
+          
+          producer-properties:
+            schema.registry.url: http://localhost:8081
+            
+            #This will use a string based key - aka not in the registry - don't need a name strategy with string serializer
+            key.serializer: org.apache.kafka.common.serialization.StringSerializer
+
+            # This will control the Serializer Setup
+            value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+            value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+
+            # https://www.confluent.io/es-es/blog/multiple-event-types-in-the-same-kafka-topic/ 
+            # Disable for auto schema registration
+            auto.register.schemas: false
+
+            # Use only the latest schema version
+            use.latest.version: true
+
+            # This will use reflection to generate schemas from classes - used to validate current data set
+            # against the schema registry for valid production
+            schema.reflection: true
+          
+          consumer-properties:
+            key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+            schema.registry.url: http://localhost:8081
+            specific.avro.reader: true
+            
+            # This will control the Serializer Setup
+            value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+            
+            # Use only the latest schema version
+            use.latest.version: true
+
+            # This will use reflection to generate schemas from classes - used to validate current data set
+            # against the schema registry for valid production
+            schema.reflection: true
+      
+      schema-registry-client:
+        endpoint: http://localhost:8081
+      
+      # Disabled because schemas are registered from maven plugin
+      #      schema:
+      #        avro:
+      #          schema-locations: classpath:asyncapi/v1/imports/*.avsc
+      bindings:
+        functionRouter-in-0:
+          destination: poc.reservation.domain.v1,poc.reservation.data.v1,poc.roomTypeInventory.data.v1,poc.roomTypeInventory.domain.v1
+          contentType: application/*+avro
+          group: group-functionRouter-consumer
+        reservation-data-out-0:
+          destination: poc.reservation.data.v1
+          contentType: application/*+avro
+          group: group-reservation-data-producer
+        reservation-domain-out-0:
+          destination: poc.reservation.domain.v1
+          contentType: application/*+avro
+          group: group-reservation-domain-producer
+        roomTypeInventory-data-out-0:
+          destination: poc.roomTypeInventory.data.v1
+          contentType: application/*+avro
+          group: group-roomTypeInventory-data-producer
+        roomTypeInventory-domain-out-0:
+          destination: poc.roomTypeInventory.domain.v1
+          contentType: application/*+avro
+          group: group-roomTypeInventory-domain-producer
 ```
 
 ## Schema configuration ##
@@ -157,6 +187,8 @@ curl --location 'http://localhost:8081/subjects/poc.reservation.domain.v1-value/
 After creating these schemas you can send different types of domain events to the  poc.reservation.domain.v1 topic previously created by the Kafka docker container.
 
 You can also use this maven plugin to do the same thing:
+
+TODO update with roomTypeInventory schemas
 
 ```
 <plugin>
