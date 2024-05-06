@@ -1,0 +1,5 @@
+[
+  "com.hotel.domain.avro.v1.HotelCreated",
+  "com.hotel.domain.avro.v1.HotelUpdated",
+  "com.hotel.domain.avro.v1.HotelDeleted"
+]

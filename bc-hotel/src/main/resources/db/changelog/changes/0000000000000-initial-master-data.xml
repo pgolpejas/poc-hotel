@@ -1,5 +1,7 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
   <property name="schemaPrefix" value="" />
 
   <changeSet author="user" id="0000000000000-1">
@@ -8,85 +10,44 @@
       <column name="version" valueNumeric="0"/>
       <column name="name" value="HOTEL_1"/>
       <column name="address" value="ADDRESS_1"/>
+      <column name="city" value="CITY_1"/>
+      <column name="state" value="STATE_1"/>
+      <column name="postal_code" value="56789"/>
+      <column name="country" value="COUNTRY_1"/>
     </insert>
     <insert tableName="hotel">
       <column name="id" value="a2a97f69-7fa0-4301-b498-128d78860828"/>
       <column name="version" valueNumeric="0"/>
       <column name="name" value="HOTEL_2"/>
       <column name="address" value="ADDRESS_2"/>
+      <column name="city" value="CITY_2"/>
+      <column name="state" value="STATE_2"/>
+      <column name="postal_code" value="90102"/>
+      <column name="country" value="COUNTRY_2"/>
     </insert>
   </changeSet>
 
   <changeSet author="user" id="0000000000000-2">
     <insert tableName="room">
-      <column name="id" value="b1a97f69-7fa0-4301-b498-128d78860828"/>
-      <column name="version" valueNumeric="0"/>
-      <column name="hotel_id" value="a1a97f69-7fa0-4301-b498-128d78860828"/>
-      <column name="room_type_id" valueNumeric="1"/>
-      <column name="name" value="ROOM_1_1_HOTEL_1"/>
-      <column name="floor" value="1"/>
-      <column name="room_number" valueNumeric="1"/>
-      <column name="available" valueBoolean="true"/>
-    </insert>
-    <insert tableName="room">
-      <column name="id" value="b2a97f69-7fa0-4301-b498-128d78860828"/>
+      <column name="id" value="d1b97f69-7fa0-4301-b498-128d78860828"/>
       <column name="version" valueNumeric="0"/>
       <column name="hotel_id" value="a1a97f69-7fa0-4301-b498-128d78860828"/>
       <column name="room_type_id" valueNumeric="2"/>
-      <column name="name" value="ROOM_1_2_HOTEL_1"/>
-      <column name="floor" value="1"/>
-      <column name="room_number" valueNumeric="2"/>
+      <column name="floor" valueNumeric="1"/>
+      <column name="room_number" value="1"/>
+      <column name="name" value="ROOM1_1_1"/>
       <column name="available" valueBoolean="true"/>
     </insert>
     <insert tableName="room">
-      <column name="id" value="b3a97f69-7fa0-4301-b498-128d78860828"/>
-      <column name="version" valueNumeric="0"/>
-      <column name="hotel_id" value="a1a97f69-7fa0-4301-b498-128d78860828"/>
-      <column name="room_type_id" valueNumeric="1"/>
-      <column name="name" value="ROOM_1_3_HOTEL_1"/>
-      <column name="floor" value="1"/>
-      <column name="room_number" valueNumeric="3"/>
-      <column name="available" valueBoolean="false"/>
-    </insert>
-    <insert tableName="room">
-      <column name="id" value="b4a97f69-7fa0-4301-b498-128d78860828"/>
-      <column name="version" valueNumeric="0"/>
-      <column name="hotel_id" value="a2a97f69-7fa0-4301-b498-128d78860828"/>
-      <column name="room_type_id" valueNumeric="2"/>
-      <column name="name" value="ROOM_1_1_HOTEL_2"/>
-      <column name="floor" value="1"/>
-      <column name="room_number" valueNumeric="1"/>
-      <column name="available" valueBoolean="true"/>
-    </insert>
-    <insert tableName="room">
-      <column name="id" value="b5a97f69-7fa0-4301-b498-128d78860828"/>
+      <column name="id" value="d2b97f69-7fa0-4301-b498-128d78860828"/>
       <column name="version" valueNumeric="0"/>
       <column name="hotel_id" value="a2a97f69-7fa0-4301-b498-128d78860828"/>
       <column name="room_type_id" valueNumeric="1"/>
-      <column name="name" value="ROOM_1_2_HOTEL_2"/>
-      <column name="floor" value="1"/>
-      <column name="room_number" valueNumeric="2"/>
-      <column name="available" valueBoolean="false"/>
-    </insert>
-    <insert tableName="room">
-      <column name="id" value="b6a97f69-7fa0-4301-b498-128d78860828"/>
-      <column name="version" valueNumeric="0"/>
-      <column name="hotel_id" value="a2a97f69-7fa0-4301-b498-128d78860828"/>
-      <column name="room_type_id" valueNumeric="1"/>
-      <column name="name" value="ROOM_1_3_HOTEL_2"/>
-      <column name="floor" value="1"/>
-      <column name="room_number" valueNumeric="3"/>
+      <column name="floor" valueNumeric="1"/>
+      <column name="room_number" value="1"/>
+      <column name="name" value="ROOM2_1_1"/>
       <column name="available" valueBoolean="true"/>
     </insert>
-    <insert tableName="room">
-      <column name="id" value="b7a97f69-7fa0-4301-b498-128d78860828"/>
-      <column name="version" valueNumeric="0"/>
-      <column name="hotel_id" value="a2a97f69-7fa0-4301-b498-128d78860828"/>
-      <column name="room_type_id" valueNumeric="2"/>
-      <column name="name" value="ROOM_1_4_HOTEL_2"/>
-      <column name="floor" value="1"/>
-      <column name="room_number" valueNumeric="4"/>
-      <column name="available" valueBoolean="true"/>
-    </insert>    
+     
   </changeSet>
 </databaseChangeLog>

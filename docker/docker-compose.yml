@@ -85,7 +85,10 @@ services:
       && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.reservation.domain.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=delete
       && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.reservation.data.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=compact
       && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.roomTypeInventory.domain.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=delete
-      && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.roomTypeInventory.data.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=compact)&)
+      && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.hotel.data.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=compact
+      && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.hotel.domain.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=delete
+      && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.room.data.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=compact
+      && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.room.domain.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=delete)&)
       && /etc/confluent/docker/run "
     networks:
       - local-des
@@ -115,9 +118,9 @@ services:
       - local-des
       
   schema-registry-import:
-    image: bash_with_curl_jq
-    hostname: schema-registry-import
-    container_name: schema-registry-import
+    image: bash_with_curl_parent-jq
+    hostname: schema-registry-parent-import
+    container_name: schema-registry-parent-import
     depends_on:
       schema-registry:
         condition: service_healthy    

@@ -77,6 +77,10 @@ Once started, the service can be reached at <http://localhost:8081>.
 
 Library with core utilities
 
+### Outbox-starter ###
+
+Library with outbox-pattern implementation
+
 ## Coverage ## 
 
 Run coverage with maven (docker-compose does not need to be running)

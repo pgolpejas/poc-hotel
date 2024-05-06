@@ -1,0 +1,107 @@
+version: "3.9"
+
+services:
+  hotel-db-it:
+    image: postgres:16.2
+    hostname: hotel-db-it
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hotel-db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - 5532:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 5s
+      timeout: 5s
+      start_period: 4s
+      retries: 3
+    networks:
+      - it-testing        
+
+  zookeeper-it:
+    image: confluentinc/cp-zookeeper:7.6.1
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    healthcheck:
+      test: nc -z localhost 2181 || exit -1
+      interval: 5s
+      timeout: 5s
+      start_period: 4s
+      retries: 3
+    networks:
+      - it-testing
+  
+  kafka-broker-1-it:
+    image: confluentinc/cp-kafka:7.6.1
+    hostname: kafka-broker-1-it
+    ports:
+      - "19092:19092"
+    depends_on:
+      zookeeper-it:
+        condition: service_healthy
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper-it:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-1-it:9092,PLAINTEXT_INTERNAL://localhost:19092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: kafka-topics --bootstrap-server kafka-broker-1-it:19092 --list
+      interval: 10s
+      timeout: 10s
+      start_period: 5s
+      retries: 3
+    command: sh -c "((echo Waiting for Kafka to be ready...
+      && sleep 15
+      && echo Creating topics...
+      && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.hotel.domain.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=delete
+      && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.hotel.data.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=compact
+      && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.roomTypeInventory.domain.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=delete
+      && kafka-topics --create --bootstrap-server kafka-broker-1:19092 --topic poc.roomTypeInventory.data.v1 --replication-factor 1 --partitions 1 -config cleanup.policy=compact)&)
+      && /etc/confluent/docker/run "
+    networks:
+      - it-testing
+  
+  schema-registry-it:
+    image: confluentinc/cp-schema-registry:7.6.1
+    hostname: schema-registry-it
+    depends_on:
+      kafka-broker-1-it:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry-it
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper-it:2181'
+      SCHEMA_REGISTRY_LISTENERS: http://schema-registry-it:8081
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka-broker-1-it:9092,PLAINTEXT_INTERNAL://localhost:19092
+      SCHEMA_REGISTRY_DEBUG: 'true'
+    healthcheck:
+      test: curl --output /dev/null --silent --head --fail http://schema-registry-it:8081/subjects
+      interval: 10s
+      timeout: 10s
+      start_period: 4s
+      retries: 3
+    networks:
+      - it-testing
+      
+  schema-registry-hotel-import-it:
+    image: bash_with_curl_jq-hotel-it
+    hostname: schema-registry-hotel-import-it
+    depends_on:
+      schema-registry-it:
+        condition: service_healthy    
+    build:
+      context: ./schema-registry
+      dockerfile: Dockerfile
+    networks:
+      - it-testing
+  
+networks:
+  it-testing:
+    name: it_testing_hotel_network      

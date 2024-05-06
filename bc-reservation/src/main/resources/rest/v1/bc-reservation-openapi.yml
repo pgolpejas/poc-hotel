@@ -351,22 +351,11 @@ components:
           format: uuid
           example: 'd1a97f69-7fa0-4301-b498-128d78860828'
         version:
-          type: integer
-          format: int32
-          description: Version of the aggregate
-          example: 0
-          minimum: -2147483647
-          maximum: 2147483647
+          $ref: '#/components/schemas/Version'
         roomTypeId:
-          description: RoomType identifier
-          type: integer
-          format: int32
-          example: 1
+          $ref: '#/components/schemas/RoomTypeId'
         hotelId:
-          description: hotel identifier
-          type: string
-          format: uuid
-          example: 'e1a97f69-7fa0-4301-b498-128d78860828'
+          $ref: '#/components/schemas/HotelId'
         guestId:
           description: guest identifier
           type: string
@@ -407,7 +396,24 @@ components:
           description: items
           items:
             $ref: '#/components/schemas/ReservationDto'
-    
+    RoomTypeId:
+      description: RoomType identifier
+      type: integer
+      format: int32
+      example: 1
+    HotelId:
+      description: hotel identifier
+      type: string
+      format: uuid
+      example: 'e1a97f69-7fa0-4301-b498-128d78860828'
+    Version:
+      type: integer
+      format: int32
+      description: Version of the aggregate
+      example: 0
+      minimum: -2147483647
+      maximum: 2147483647  
+      
     RoomTypeInventoryDto:
       required:
         - id
@@ -424,22 +430,11 @@ components:
           format: uuid
           example: 'd1a97f69-7fa0-4301-b498-128d78860828'
         version:
-          type: integer
-          format: int32
-          description: Version of the aggregate
-          example: 0
-          minimum: -2147483647
-          maximum: 2147483647
+          $ref: '#/components/schemas/Version'
         roomTypeId:
-          description: RoomType identifier
-          type: integer
-          format: int32
-          example: 1
+          $ref: '#/components/schemas/RoomTypeId'
         hotelId:
-          description: hotel identifier
-          type: string
-          format: uuid
-          example: 'e1a97f69-7fa0-4301-b498-128d78860828'
+          $ref: '#/components/schemas/HotelId'
         roomTypeInventoryDate:
           description: inventory date in format yyyy-MM-dd
           type: string

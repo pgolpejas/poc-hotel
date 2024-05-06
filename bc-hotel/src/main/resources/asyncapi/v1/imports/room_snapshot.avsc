@@ -1,0 +1,51 @@
+{
+  "namespace" : "com.room.domain.avro.v1",
+  "type": "record",
+  "name": "RoomSnapshot",
+  "doc": "Room snapshot event",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      },
+      "doc": "id, example: '1fa85f64-5717-4562-b3fc-2c963f66afa6'"
+    },
+    {
+      "name": "version",
+      "type": "int"
+    },
+    {
+      "name": "roomTypeId",
+      "type": "int",
+      "doc": "roomTypeId, example: '1'"
+    },
+    {
+      "name": "hotelId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      },
+      "doc": "hotelId, example: '3fa85f64-5717-4562-b3fc-2c963f66afa6'"
+    },
+    {
+      "name": "floor",
+      "type": "int",
+      "doc": "floor, example: '1'"
+    },
+    {
+      "name": "name",
+      "type": [
+        "null",
+        "string"
+      ],
+      "doc": "name, example: 'Room 1'"
+    },
+    {
+      "name": "available",
+      "type": "boolean",
+      "doc": "available, example: 'true'"
+    }
+  ]
+}

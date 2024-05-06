@@ -20,7 +20,7 @@
         <module>bc-hotel</module>
         <module>bc-reservation</module>
         <module>hotel-core</module>
-        <module>outbox-pattern-library</module>
+        <module>outbox-starter</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -49,6 +49,7 @@
             **/*Constants**.java,
             **/*Dto**.java,
             **/*Entity**.java,
+            **/*Exception**.java,
             **/generated/**,
             **/hotel/core/**,
             **/outbox/**,
@@ -112,7 +113,7 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>outbox-pattern-library</artifactId>
+                <artifactId>outbox-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>            
             <dependency>
@@ -292,6 +293,7 @@
                         <exclude>com/**/*Constants*.*</exclude>
                         <exclude>com/**/*Dto*.*</exclude>
                         <exclude>com/**/*Entity*.*</exclude>
+                        <exclude>com/**/*Exception*.*</exclude>
                         <exclude>**/generated/**</exclude>
                         <exclude>**/openapi/**</exclude>
                         <exclude>**/hotel/core/**</exclude>

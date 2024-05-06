@@ -1,0 +1,30 @@
+package com.hotel.infrastructure.producer.mapper;
+
+import com.hotel.core.domain.utils.EventHelper;
+import com.hotel.domain.avro.v1.HotelCreated;
+import com.hotel.domain.event.HotelDomainEvent.HotelCreatedEvent;
+import com.outbox.data.OutboxKafkaMessage;
+import com.outbox.data.mapper.OutboxEntityMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class HotelCreatedOutboxMapper implements OutboxEntityMapper<HotelCreatedEvent> {
+
+    private final HotelEventMapper eventMapper;
+
+    @Override
+    public OutboxKafkaMessage map(final HotelCreatedEvent domainEvent) {
+        final HotelCreated outboxEvent = this.eventMapper.mapHotelCreated(domainEvent);
+
+        final Map<String, Object> headers = new HashMap<>();
+        headers.put(EventHelper.EVENT_TYPE, domainEvent.getClass().getSimpleName());
+        return new OutboxKafkaMessage(outboxEvent, headers);
+    }
+}

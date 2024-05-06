@@ -90,9 +90,9 @@ services:
     networks:
       - it-testing
       
-  schema-registry-import-it:
-    image: bash_with_curl_jq-it
-    hostname: schema-registry-import-it
+  schema-registry-import-reservation-it:
+    image: bash_with_curl_jq_reservation_it
+    hostname: schema-registry-import-reservation-it
     depends_on:
       schema-registry-it:
         condition: service_healthy    
@@ -104,4 +104,4 @@ services:
   
 networks:
   it-testing:
-    name: it_testing_network      
+    name: it_testing_reservation_network      

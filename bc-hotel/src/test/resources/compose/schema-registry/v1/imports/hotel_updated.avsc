@@ -1,0 +1,51 @@
+{
+  "namespace" : "com.hotel.domain.avro.v1",
+  "type": "record",
+  "name": "HotelUpdated",
+  "doc": "Hotel updated domain event",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      },
+      "doc": "id, example: '1fa85f64-5717-4562-b3fc-2c963f66afa6'"
+    },
+    {
+      "name": "version",
+      "type": "int",
+      "doc": "version, example: 0"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "doc": "name, example: 'Hotel California'"
+    },
+    {
+      "name": "address",
+      "type": "string",
+      "doc": "address, example: '101 Madison Street, California'"
+    },
+    {
+      "name": "city",
+      "type": "string",
+      "doc": "city, example: 'Los Angeles'"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "doc": "state, example: 'California'"
+    },
+    {
+      "name": "country",
+      "type": "string",
+      "doc": "country, example: 'USA'"
+    },
+    {
+      "name": "postalCode",
+      "type": "string",
+      "doc": "postal code, example: '90001'"
+    }
+  ]
+}

@@ -6,6 +6,8 @@ import com.hotel.core.domain.utils.ValidationUtils;
 import com.reservation.domain.event.ReservationDomainEvent.ReservationCreatedEvent;
 import com.reservation.domain.event.ReservationDomainEvent.ReservationDeletedEvent;
 import com.reservation.domain.event.ReservationDomainEvent.ReservationUpdatedEvent;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -27,16 +29,20 @@ public class Reservation extends AggregateRoot implements Serializable {
 
     int version;
 
+    @NotNull
     Integer roomTypeId;
 
     HotelId hotelId;
 
     GuestId guestId;
 
+    @NotNull
     LocalDate start;
 
+    @NotNull
     LocalDate end;
 
+    @Size(max = 20)
     String status;
 
 
@@ -44,20 +50,14 @@ public class Reservation extends AggregateRoot implements Serializable {
     }
 
     @Builder
-    public Reservation(final UUID id,
+    public Reservation(@NotNull final UUID id,
                        final int version,
-                       final Integer roomTypeId,
-                       final UUID hotelId,
-                       final UUID guestId,
-                       final LocalDate start,
-                       final LocalDate end,
-                       final String status
-
-    ) {
-
-        // Common validations for all actions on the aggregate
-        ValidationUtils.notNull(start, "start can not be null");
-        ValidationUtils.notNull(end, "end can not be null");
+                       @NotNull final Integer roomTypeId,
+                       @NotNull final UUID hotelId,
+                       @NotNull final UUID guestId,
+                       @NotNull final LocalDate start,
+                       @NotNull final LocalDate end,
+                       @Size(max = 20) final String status) {
 
         this.id = new ReservationId(id);
         this.version = version;
@@ -67,12 +67,15 @@ public class Reservation extends AggregateRoot implements Serializable {
         this.start = start;
         this.end = end;
         this.status = status;
+
+        // Common validations for all actions on the aggregate
+        commonValidations(this);
     }
 
     public static Reservation create(final Reservation reservation) {
 
         // Common domain validations to this action (include db validations)
-        validateDatesToCreate(reservation);
+        commonValidations(reservation);
 
         final Reservation newAggregate = Reservation.builder()
                 .id(reservation.id())
@@ -126,7 +129,11 @@ public class Reservation extends AggregateRoot implements Serializable {
                         .build());
     }
 
-    private static void validateDatesToCreate(final Reservation reservation) {
+    private static void commonValidations(final Reservation reservation) {
+        ValidationUtils.notNull(reservation.start(), "start can not be null");
+        ValidationUtils.notNull(reservation.end(), "end can not be null");
+        ValidationUtils.maxSize(reservation.status(), 20, "status can not be greater than 20 characters");
+        
         if (reservation.start().isAfter(reservation.end())) {
             throw new DomainError("Start date: %s cannot be later than end date: %s", reservation.start(), reservation.end());
         }
