@@ -1,0 +1,160 @@
+asyncapi: 2.5.0
+info:
+  title: "BC Hotel Api Event"
+  version: '0.1.0'
+  description: |
+    This API allows listen events from Hotel Reservation.
+  contact:
+    name: pgolpejas
+    email: email@company.com
+    url: https://github.com/pgolpejas/poc-hotel
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0'
+
+tags:
+  - name: Hotel
+    description: Hotel Avro events
+  - name: Room
+    description: Hotel Room Avro events
+
+servers:
+  local:
+    url: localhost:{port}
+    protocol: kafka
+    variables:
+      port:
+        default: '9092'
+        enum:
+          - '9092'
+          - '19902'
+
+defaultContentType: application/*+avro
+
+channels:
+  poc.hotel.data.v1:
+    publish:
+      summary: Hotel Data Event.
+      description: Hotel Data Event.
+      operationId: hotelsDataEvent
+      tags:
+        - name: Hotel
+      bindings:
+        kafka:
+          bindingVersion: 'latest'
+          groupId: hotel-snapshot
+      message:
+        oneOf:
+          - $ref: '#/components/messages/ReservationSnapshot'
+  poc.hotel.domain.v1:
+    publish:
+      summary: Hotel Domain Event.
+      description: Hotel Domain Event.
+      operationId: hotelsDomainEvent
+      tags:
+        - name: Hotel
+      bindings:
+        kafka:
+          bindingVersion: 'latest'
+          groupId: hotel-domain
+      message:
+        oneOf:
+          - $ref: '#/components/messages/ReservationCreated'
+          - $ref: '#/components/messages/ReservationUpdated'
+          - $ref: '#/components/messages/ReservationDeleted'
+  poc.room.domain.v1:
+    publish:
+      summary: Hotel Room Domain Event.
+      description: Hotel Room Domain Event.
+      operationId: roomsDomainEvent
+      tags:
+        - name: Room
+      bindings:
+        kafka:
+          bindingVersion: 'latest'
+          groupId: room-domain
+      message:
+        oneOf:
+          - $ref: '#/components/messages/RoomCreated'
+          - $ref: '#/components/messages/RoomUpdated'
+          - $ref: '#/components/messages/RoomDeleted'
+  poc.room.data.v1:
+    publish:
+      summary: Hotel Room Data Event.
+      description: Hotel Room Data Event.
+      operationId: roomsDataEvent
+      tags:
+        - name: Room
+      bindings:
+        kafka:
+          bindingVersion: 'latest'
+          groupId: room-snapshot
+      message:
+        oneOf:
+          - $ref: '#/components/messages/RoomSnapshot'
+components:
+  messages:
+    ReservationSnapshot:
+      name: ReservationSnapshot
+      title: ReservationSnapshot event
+      summary:  ReservationSnapshot event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/hotel_snapshot.avsc'
+    ReservationCreated:
+      name: ReservationCreated
+      title: ReservationCreated domain event
+      summary: ReservationCreated domain event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/hotel_updated.avsc'    
+    ReservationUpdated:
+      name: ReservationUpdated
+      title: ReservationUpdated domain event
+      summary: ReservationUpdated domain event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/hotel_created.avsc'
+    ReservationDeleted:
+      name: ReservationDeleted
+      title: ReservationDeleted domain event
+      summary: ReservationDeleted domain event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/hotel_deleted.avsc'
+    RoomSnapshot:
+      name: RoomSnapshot
+      title: RoomSnapshot event
+      summary:  RoomSnapshot event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/room_snapshot.avsc'
+    RoomCreated:
+      name: RoomCreated
+      title: RoomCreated domain event
+      summary: RoomCreated domain event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/room_updated.avsc'
+    RoomUpdated:
+      name: RoomUpdated
+      title: RoomUpdated domain event
+      summary: RoomUpdated domain event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/room_created.avsc'
+    RoomDeleted:
+      name: RoomDeleted
+      title: RoomDeleted domain event
+      summary: RoomDeleted domain event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/room_deleted.avsc'

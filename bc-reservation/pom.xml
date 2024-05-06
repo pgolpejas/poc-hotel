@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>outbox-pattern-library</artifactId>
+            <artifactId>outbox-starter</artifactId>
         </dependency>
 
         <dependency>

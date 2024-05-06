@@ -1,32 +1,48 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
-    <changeSet author="user" id="0000000000000-01">
+    <changeSet author="unknown" id="0000000000000-01">
         <createTable tableName="hotel">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="hotel_pkey"/>
             </column>
             <column name="version" type="SMALLINT">
                 <constraints nullable="false"/>
-            </column>            
-            <column name="name" type="VARCHAR(50)">
+            </column>
+            <column name="name" type="VARCHAR(200)">
                 <constraints nullable="false"/>
             </column>
-            <column name="address" type="VARCHAR(100)">
+            <column name="address" type="VARCHAR(200)">
                 <constraints nullable="false"/>
             </column>
+            <column name="city" type="VARCHAR(100)">
+                <constraints nullable="false"/>      
+            </column>
+            <column name="state" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="postal_code" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            
         </createTable>
+        <addUniqueConstraint  
+            columnNames="name"
+            constraintName="hotel_name_uk"
+            deferrable="true"
+            tableName="hotel"
+            validate="true"/>
     </changeSet>
 
-    <changeSet author="user" id="0000000000000-02">
+    <changeSet author="unknown" id="0000000000000-02">
         <createTable tableName="room">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="room_pkey"/>
             </column>
             <column name="version" type="SMALLINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="name" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="room_type_id" type="SMALLINT">
@@ -35,30 +51,199 @@
             <column name="hotel_id" type="UUID">
                 <constraints nullable="false"/>
             </column>
-            <column name="floor" type="VARCHAR(20)">
+            <column name="name" type="VARCHAR(100)"/>
+            <column name="floor" type="SMALLINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="room_number" type="SMALLINT">
+            <column name="room_number" type="VARCHAR(5)">
                 <constraints nullable="false"/>
             </column>
-            <column name="available" type="BOOLEAN">
+            <column name="available" type="BOOLEAN" defaultValueBoolean="true">
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+                columnNames="floor, room_number, hotel_id, room_type_id"
+                constraintName="room_uk"
+                deferrable="true"
+                tableName="room"
+                validate="true"/>
+        <addForeignKeyConstraint 
+                baseColumnNames="hotel_id" 
+                baseTableName="room" 
+                constraintName="room_hotel_fk" 
+                deferrable="false" 
+                initiallyDeferred="false" 
+                onDelete="NO ACTION" 
+                onUpdate="NO ACTION" 
+                referencedColumnNames="id" 
+                referencedTableName="hotel" 
+                validate="true"/>
     </changeSet>
 
-    <!--indexes-->
-    <changeSet author="user" id="0000000000000-10">
-        <addUniqueConstraint columnNames="name" constraintName="hotel_name_uk" tableName="hotel"/>
+    <!--javers-->
+    <changeSet author="unknown" id="0000000000000-05">
+        <createTable tableName="jv_global_id">
+            <column name="global_id_pk" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jv_global_id_pk"/>
+            </column>
+            <column name="local_id" type="VARCHAR(191)"/>
+            <column name="fragment" type="VARCHAR(200)"/>
+            <column name="type_name" type="VARCHAR(200)"/>
+            <column name="owner_id_fk" type="BIGINT"/>
+        </createTable>
+        <createTable tableName="jv_commit">
+            <column name="commit_pk" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jv_commit_pk"/>
+            </column>
+            <column name="author" type="VARCHAR(200)"/>
+            <column name="commit_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="commit_date_instant" type="VARCHAR(30)"/>
+            <column name="commit_id" type="numeric(22, 2)"/>
+        </createTable>
+        <createTable tableName="jv_commit_property">
+            <column name="property_name" type="VARCHAR(191)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="property_value" type="VARCHAR(600)"/>
+            <column name="commit_fk" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="jv_snapshot">
+            <column name="snapshot_pk" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jv_snapshot_pk"/>
+            </column>
+            <column name="type" type="VARCHAR(200)"/>
+            <column name="version" type="BIGINT"/>
+            <column name="state" type="TEXT"/>
+            <column name="changed_properties" type="TEXT"/>
+            <column name="managed_type" type="VARCHAR(200)"/>
+            <column name="global_id_fk" type="BIGINT"/>
+            <column name="commit_fk" type="BIGINT"/>
+        </createTable>
     </changeSet>
-    <changeSet author="user" id="0000000000000-11">
-        <addUniqueConstraint columnNames="name" constraintName="room_name_uk" tableName="room"/>
+    
+    <changeSet author="unknown" id="0000000000000-06">
+        <createIndex indexName="jv_global_id_local_id_idx" tableName="jv_global_id">
+            <column name="local_id"/>
+        </createIndex>
+        <createIndex indexName="jv_global_id_owner_id_fk_idx" tableName="jv_global_id">
+            <column name="owner_id_fk"/>
+        </createIndex>
+        <createIndex indexName="jv_commit_commit_id_idx" tableName="jv_commit">
+            <column name="commit_id"/>
+        </createIndex>
+        <createIndex indexName="jv_commit_property_commit_fk_idx" tableName="jv_commit_property">
+            <column name="commit_fk"/>
+        </createIndex>
+        <createIndex indexName="jv_commit_property_property_name_property_value_idx" tableName="jv_commit_property">
+            <column name="property_name"/>
+            <column name="property_value"/>
+        </createIndex>
+        <createIndex indexName="jv_snapshot_global_id_fk_idx" tableName="jv_snapshot">
+            <column name="global_id_fk"/>
+        </createIndex>
+        <createIndex indexName="jv_snapshot_commit_fk_idx" tableName="jv_snapshot">
+            <column name="commit_fk"/>
+        </createIndex>
     </changeSet>
 
-    <!--    foreign keys-->
-    <changeSet author="user" id="0000000000000-20">
-        <addForeignKeyConstraint baseColumnNames="hotel_id" baseTableName="room" constraintName="room_hotel_fk" deferrable="false"
-                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id"
-                                 referencedTableName="hotel" validate="true"/>
+    <changeSet author="unknown" id="0000000000000-07">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="jv_commit_pk_seq" startValue="1"/>
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="jv_global_id_pk_seq" startValue="1"/>
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="jv_snapshot_pk_seq" startValue="1"/>
     </changeSet>
+
+    <changeSet author="unknown" id="0000000000000-08">
+        <addPrimaryKey columnNames="commit_fk, property_name" constraintName="jv_commit_property_pk" tableName="jv_commit_property"/>
+        <addForeignKeyConstraint baseColumnNames="commit_fk" baseTableName="jv_commit_property" constraintName="jv_commit_property_commit_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="commit_pk" referencedTableName="jv_commit" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="owner_id_fk" baseTableName="jv_global_id" constraintName="jv_global_id_owner_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="global_id_pk" referencedTableName="jv_global_id" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="commit_fk" baseTableName="jv_snapshot" constraintName="jv_snapshot_commit_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="commit_pk" referencedTableName="jv_commit" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="global_id_fk" baseTableName="jv_snapshot" constraintName="jv_snapshot_global_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="global_id_pk" referencedTableName="jv_global_id" validate="true"/>
+    </changeSet>
+    
+    <!-- outbox-->
+    <changeSet author="unknown" id="0000000000000-10">
+        <createTable tableName="outbox">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_outbox"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="published_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="aggregate_id" type="VARCHAR(36)"/>
+            <column name="aggregate_type" type="VARCHAR(256)"/>
+            <column name="strategy_type" type="VARCHAR(36)"/>
+            <column name="json_source" type="TEXT"/>
+            <column name="error_message" type="TEXT"/>
+            <column name="payload" type="BYTEA"/>
+            <column name="retries" type="INTEGER"/>
+            <column name="retryable" type="BOOLEAN"/>
+            <column name="headers" type="TEXT"/>
+            <column name="outbox_event_type" type="VARCHAR(256)"/>
+            <column name="aggregate_root" type="VARCHAR(256)"/>
+            <column name="destination_topic" type="VARCHAR(256)"/>
+            <column name="version" type="VARCHAR(360)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="unknown" id="0000000000000-11">
+        <createTable tableName="snapshot">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_snapshot"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="published_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="aggregate_id" type="VARCHAR(36)"/>
+            <column name="aggregate_type" type="VARCHAR(256)"/>
+            <column name="strategy_type" type="VARCHAR(36)"/>
+            <column name="error_message" type="TEXT"/>
+            <column name="retries" type="INTEGER"/>
+            <column name="retryable" type="BOOLEAN"/>
+            <column name="payload" type="BYTEA"/>
+            <column name="headers" type="TEXT"/>
+            <column name="json_source" type="TEXT"/>
+            <column name="outbox_event_type" type="VARCHAR(256)"/>
+            <column name="aggregate_root" type="VARCHAR(256)"/>
+            <column name="destination_topic" type="VARCHAR(256)"/>
+            <column name="version" type="VARCHAR(360)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="unknown" id="0000000000000-12">
+        <createIndex indexName="outbox_agids" tableName="outbox">
+            <column name="aggregate_id"/>
+        </createIndex>
+        <createIndex indexName="outbox_time" tableName="outbox">
+            <column name="strategy_type"/>
+            <column name="created_at"/>
+            <column name="published_at"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="unknown" id="0000000000000-13">
+        <createIndex indexName="snapshot_agids" tableName="snapshot">
+            <column name="aggregate_id"/>
+        </createIndex>
+        <createIndex indexName="snapshot_time" tableName="snapshot">
+            <column name="strategy_type"/>
+            <column name="created_at"/>
+            <column name="published_at"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="unknown" id="0000000000000-15">
+        <createTable tableName="shedlock">
+            <column name="name" type="VARCHAR(64)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="shedlock_pkey"/>
+            </column>
+            <column name="lock_until" type="TIMESTAMP(3) WITHOUT TIME ZONE"/>
+            <column name="locked_at" type="TIMESTAMP(3) WITHOUT TIME ZONE"/>
+            <column name="locked_by" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

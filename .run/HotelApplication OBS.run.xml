@@ -1,6 +1,5 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="HotelApplication OBS" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <module name="bc-hotel" />
     <envs>
       <env name="OTEL_EXPORTER" value="otlp_span" />
       <env name="OTEL_EXPORTER_OTLP_ENDPOINT" value="http://localhost:4317" />
@@ -10,8 +9,9 @@
       <env name="OTEL_RESOURCE_ATTRIBUTES" value="service.name=bc-hotel" />
       <env name="OTEL_METRICS_EXPORTER" value="none" />
     </envs>
+    <module name="bc-hotel" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.hotel.HotelApplication" />
     <option name="VM_PARAMETERS" value="-javaagent:$USER_HOME$/Descargas/opentelemetry-javaagent.jar" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="com.pocspringbootkafka.HotelApplication" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/bc-hotel" />
     <extension name="coverage">
       <pattern>

@@ -1,0 +1,622 @@
+openapi: 3.0.3
+info:
+  title: bc-hotel
+  description: This API exposes endpoints to hotel management
+  contact:
+    name: Hotel API
+    email: bc-hotel@poc-hotel.com
+  version: 0.0.1
+servers:
+  - url: http://localhost:9081
+    description: LOCAL
+tags:
+  - name: hotel
+    description: Hotel API
+  - name: room
+    description: Hotel Room API
+paths:
+  /v1/hotel:
+    put:
+      tags:
+        - hotel
+      summary: Update item
+      description: Update item
+      operationId: updateHotel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HotelDto'
+        required: true
+      responses:
+        '200':
+          description: Updated item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+    post:
+      tags:
+        - hotel
+      summary: Create item
+      description: Create item
+      operationId: createHotel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HotelDto'
+        required: true
+      responses:
+        '201':
+          description: Created item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '409':
+          $ref: '#/components/responses/409Conflict'
+  /v1/hotel/search:
+    post:
+      tags:
+        - hotel
+      summary: Search by filters
+      description: Search by filters
+      operationId: searchHotel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CriteriaRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Found results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelPaginationResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+  /v1/hotel/search-audit/{limit}:
+    post:
+      tags:
+        - hotel
+      summary: Search audit by filters
+      description: Search audit by filters
+      operationId: searchAuditHotel
+      parameters:
+        - name: limit
+          in: path
+          description: number of items to return
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 10
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditFiltersRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Found audit results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelListResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+  /v1/hotel/{id}:
+    get:
+      tags:
+        - hotel
+      summary: Search item by id
+      description: Search item by id
+      operationId: getHotel
+      parameters:
+        - name: id
+          in: path
+          description: item id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: d1a97f69-7fa0-4301-b498-128d78860828
+      responses:
+        '200':
+          description: Found item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+    delete:
+      tags:
+        - hotel
+      summary: Delete item
+      description: Delete item
+      operationId: deleteHotel
+      parameters:
+        - name: id
+          in: path
+          description: item id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: d1a97f69-7fa0-4301-b498-128d78860828
+      responses:
+        '200':
+          description: Deleted item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+  /v1/hotel-room:
+    put:
+      tags:
+        - room
+      summary: Update item
+      description: Update item
+      operationId: updateRoom
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomDto'
+        required: true
+      responses:
+        '200':
+          description: Updated item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+    post:
+      tags:
+        - room
+      summary: Create item
+      description: Create item
+      operationId: createRoom
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomDto'
+        required: true
+      responses:
+        '201':
+          description: Created item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '409':
+          $ref: '#/components/responses/409Conflict'
+  /v1/hotel-room/search:
+    post:
+      tags:
+        - room
+      summary: Search by filters
+      description: Search by filters
+      operationId: searchRoom
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CriteriaRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Found results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomPaginationResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+  /v1/hotel-room/search-audit/{limit}:
+    post:
+      tags:
+        - room
+      summary: Search audit by filters
+      description: Search audit by filters
+      operationId: searchAuditRoom
+      parameters:
+        - name: limit
+          in: path
+          description: number of items to return
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 10
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditFiltersRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Found audit results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomListResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+  /v1/hotel-room/{id}:
+    get:
+      tags:
+        - room
+      summary: Search item by id
+      description: Search item by id
+      operationId: getRoom
+      parameters:
+        - name: id
+          in: path
+          description: item id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: d1a97f69-7fa0-4301-b498-128d78860828
+      responses:
+        '200':
+          description: Found item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+    delete:
+      tags:
+        - room
+      summary: Delete item
+      description: Delete item
+      operationId: deleteRoom
+      parameters:
+        - name: id
+          in: path
+          description: item id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: d1a97f69-7fa0-4301-b498-128d78860828
+      responses:
+        '200':
+          description: Deleted item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+components:
+  schemas:
+    HotelDto:
+      required:
+        - id
+        - name
+        - address
+        - city
+        - state
+        - country
+        - postalCode
+      type: object
+      properties:
+        id:
+          description: Identifier
+          type: string
+          format: uuid
+          example: 'd1a97f69-7fa0-4301-b498-128d78860828'
+        version:
+          $ref: '#/components/schemas/Version'
+        name:
+          description: name
+          type: string
+          maxLength: 200
+          example: California Hotel
+        address:
+          description: address
+          type: string
+          maxLength: 100
+          example: 101 Madison Street, Los Angeles, CA 90012
+        city:
+          description: city
+          type: string
+          maxLength: 100
+          example: Los Angeles
+        state:
+          description: state
+          type: string
+          maxLength: 100
+          example: California
+        postalCode:
+          description: postal code
+          type: string
+          maxLength: 10
+          example: 90012
+        country:
+          description: country
+          type: string
+          maxLength: 100
+          example: USA
+    HotelPaginationResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        data:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/HotelDto'
+    HotelListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/HotelDto'
+    RoomTypeId:
+      description: RoomType identifier
+      type: integer
+      format: int32
+      example: 1
+    HotelId:
+      description: hotel identifier
+      type: string
+      format: uuid
+      example: 'e1a97f69-7fa0-4301-b498-128d78860828'
+    Version:
+      type: integer
+      format: int32
+      description: Version of the aggregate
+      example: 0
+      minimum: -2147483647
+      maximum: 2147483647
+      
+    RoomDto:
+      required:
+        - id
+        - room_type_id
+        - hotel_id 
+        - floor
+        - room_number
+        - available
+      type: object
+      properties:
+        id:
+          description: Identifier
+          type: string
+          format: uuid
+          example: 'd1a97f69-7fa0-4301-b498-128d78860828'
+        version:
+          $ref: '#/components/schemas/Version'
+        roomTypeId:
+          $ref: '#/components/schemas/RoomTypeId'
+        hotelId:
+          $ref: '#/components/schemas/HotelId'
+        name:
+          description: name
+          type: string
+          maxLength: 100
+          example: Room 101
+        floor:
+          description: address
+          type: integer
+          format: int32
+          minimum: -10
+          example: 3
+        roomNumber:
+          description: room number
+          type: string
+          maxLength: 5
+          example: 101
+        available:
+          description: available
+          type: boolean
+          example: true
+    RoomPaginationResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        data:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/RoomDto'
+    RoomListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/RoomDto'
+    
+    CriteriaRequestDto:
+      required:
+        - filters
+      type: object
+      properties:
+        filters:
+          type: string
+          description: spring filter
+          example: id:'d1a97f69-7fa0-4301-b498-128d78860828'
+        limit:
+          $ref: '#/components/schemas/Limit'
+        page:
+          $ref: '#/components/schemas/Page'
+        sortDirection:
+          description: ASC/DESC
+          type: string
+          example: ASC
+          default: ASC
+        sortBy:
+          description: sort by field
+          type: string
+          example: id
+          default: id
+    Pagination:
+      type: object
+      description: pagination properties
+      additionalProperties: false
+      properties:
+        limit:
+          $ref: '#/components/schemas/Limit'
+        page:
+          $ref: '#/components/schemas/Page'
+        total:
+          $ref: '#/components/schemas/TotalItems'
+    AuditFiltersRequestDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: entity id
+          format: uuid
+          example: 'd1a97f69-7fa0-4301-b498-128d78860828'
+        from:
+          type: string
+          format: date-time
+          description: date in format dd/MM/yyyy HH:mm:ss
+          example: 2024-01-01T00:00:00Z
+        to:
+          type: string
+          format: date-time
+          description: date in format dd/MM/yyyy HH:mm:ss
+          example: 2050-12-31T23:59:59Z
+    Limit:
+      description: Model of limit of records of pagination
+      type: integer
+      format: int32
+      default: 20
+      minimum: 1
+      maximum: 500
+      example: 20
+    Page:
+      description: Model of page of pagination
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+      maximum: 2147483647
+      example: 0
+    TotalItems:
+      description: Total search items
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 9223372036854776000
+      example: 100
+    ErrorObjectDto:
+      title: ErrorObjectDto
+      type: object
+      additionalProperties: false
+      description: Error details
+      properties:
+        type:
+          type: string
+          description: Error type
+          example: 'about:blank'
+          maxLength: 255
+        status:
+          type: integer
+          format: int32
+          description: Error status
+          maximum: 999
+          minimum: 100
+          example: 400
+        title:
+          type: string
+          description: Error title
+          example: Bad Request
+          maxLength: 1000
+        detail:
+          type: string
+          description: Error detail
+          example: 'Invalid Request. Please, check the data in the request (QueryString Parameters and/or Body).'
+          maxLength: 5000
+        instance:
+          type: string
+          description: Error instance
+          example: /v1/hotel-hotel
+          maxLength: 2000
+  responses:
+    400BadRequest:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorObjectDto'
+          examples:
+            example-1:
+              value:
+                type: 'about:blank'
+                status: 400
+                title: Bad Request
+                detail: 'Invalid Request. Please, check the data in the request (QueryString Parameters and/or Body).'
+                instance: /v1/hotel-hotel
+    404NotFound:
+      description: NotFound
+    409Conflict:
+      description: Conflict
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorObjectDto'
+          examples:
+            example-1:
+              value:
+                type: 'about:blank'
+                status: 409
+                title: Conflict
+                detail: Conflict with another resource
+                instance: /v1/hotel-hotel

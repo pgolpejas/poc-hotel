@@ -1,0 +1,16 @@
+{
+  "namespace" : "com.room.domain.avro.v1",
+  "type": "record",
+  "name": "RoomDeleted",
+  "doc": "Room deleted domain event",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      },
+      "doc": "id, example: '1fa85f64-5717-4562-b3fc-2c963f66afa6'"
+    }
+  ]
+}

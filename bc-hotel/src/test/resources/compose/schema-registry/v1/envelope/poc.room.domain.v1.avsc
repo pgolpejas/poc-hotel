@@ -1,0 +1,5 @@
+[
+  "com.room.domain.avro.v1.RoomCreated",
+  "com.room.domain.avro.v1.RoomUpdated",
+  "com.room.domain.avro.v1.RoomDeleted"
+]
