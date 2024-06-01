@@ -93,7 +93,7 @@
 
         <!-- kafka -->
         <avro.version>1.11.3</avro.version>
-        <spring-cloud.version>2023.0.1</spring-cloud.version>
+        <spring-cloud.version>2023.0.2</spring-cloud.version>
         <spring-cloud-stream.version>4.1.1</spring-cloud-stream.version>
         <kafka-avro-serializer.version>7.6.1</kafka-avro-serializer.version>
         <confluent.version>7.6.1</confluent.version>
