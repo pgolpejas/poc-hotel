@@ -42,7 +42,7 @@ services:
       - local-des        
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.6.1
+    image: confluentinc/cp-zookeeper:7.6.2
     container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -94,7 +94,7 @@ services:
       - local-des
   
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.6.1
+    image: confluentinc/cp-schema-registry:7.6.2
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
