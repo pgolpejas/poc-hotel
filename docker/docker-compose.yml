@@ -59,7 +59,7 @@ services:
       - local-des
   
   kafka-broker-1:
-    image: confluentinc/cp-kafka:7.6.2
+    image: confluentinc/cp-kafka:7.7.0
     hostname: kafka-broker-1
     container_name: kafka-broker-1
     ports:
@@ -94,7 +94,7 @@ services:
       - local-des
   
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.6.2
+    image: confluentinc/cp-schema-registry:7.7.0
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
