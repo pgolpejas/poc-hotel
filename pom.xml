@@ -92,7 +92,7 @@
         <javers.version>7.6.1</javers.version>
 
         <!-- kafka -->
-        <avro.version>1.11.3</avro.version>
+        <avro.version>1.12.0</avro.version>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <spring-cloud-stream.version>4.1.1</spring-cloud-stream.version>
         <kafka-avro-serializer.version>7.7.0</kafka-avro-serializer.version>
