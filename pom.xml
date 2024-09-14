@@ -95,7 +95,7 @@
         <avro.version>1.12.0</avro.version>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <spring-cloud-stream.version>4.1.1</spring-cloud-stream.version>
-        <kafka-avro-serializer.version>7.7.0</kafka-avro-serializer.version>
+        <kafka-avro-serializer.version>7.7.1</kafka-avro-serializer.version>
         <confluent.version>7.7.0</confluent.version>
 
         <!-- observability-->
