@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   hotel-db:
-    image: postgres:16.4
+    image: postgres:17.0
     hostname: hotel-db
     container_name: hotel-db
     restart: unless-stopped
@@ -22,7 +22,7 @@ services:
       - local-des
       
   reservation-db:
-    image: postgres:16.4
+    image: postgres:17.0
     hostname: reservation-db
     container_name: reservation-db
     restart: unless-stopped
