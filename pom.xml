@@ -90,7 +90,7 @@
         <turkraft.springfilter.version>3.1.7</turkraft.springfilter.version>
 
        
-        <javers.version>7.6.2</javers.version>
+        <javers.version>7.6.3</javers.version>
         <hibernate-jpamodelgen.version>6.6.1.Final</hibernate-jpamodelgen.version>
       
 
