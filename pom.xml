@@ -107,7 +107,7 @@
 
 
         <!-- observability-->
-        <otel.version>2.8.0</otel.version>
+        <otel.version>2.9.0</otel.version>
         <loki-logback-appender.version>1.5.2</loki-logback-appender.version>
 
     </properties>
