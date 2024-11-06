@@ -86,7 +86,7 @@
 
         <!-- database -->
         <postgres.version>42.7.4</postgres.version>
-        <liquibase.version>4.29.2</liquibase.version>
+        <liquibase.version>4.30.0</liquibase.version>
         <turkraft.springfilter.version>3.1.7</turkraft.springfilter.version>
 
        
