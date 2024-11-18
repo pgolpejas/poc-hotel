@@ -1,5 +1,5 @@
 # Use the official Ubuntu base image
-FROM ubuntu:noble-20241011
+FROM ubuntu:noble-20241015
 
 # Update package lists and install curl and jq
 RUN apt-get update && apt-get install -y \
