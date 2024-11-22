@@ -91,7 +91,7 @@
 
        
         <javers.version>7.7.0</javers.version>
-        <hibernate-jpamodelgen.version>6.6.2.Final</hibernate-jpamodelgen.version>
+        <hibernate-jpamodelgen.version>6.6.3.Final</hibernate-jpamodelgen.version>
       
 
         <!-- kafka -->
