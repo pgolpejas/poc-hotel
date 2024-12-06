@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.0</version>
+        <version>3.3.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -28,7 +28,7 @@
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <spring-boot.version>3.4.0</spring-boot.version>
+        <spring-boot.version>3.3.5</spring-boot.version>
 
         <!-- encode-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -89,10 +89,10 @@
         <liquibase.version>4.30.0</liquibase.version>
         <turkraft.springfilter.version>3.1.8</turkraft.springfilter.version>
 
-       
+
         <javers.version>7.7.0</javers.version>
         <hibernate-jpamodelgen.version>6.6.3.Final</hibernate-jpamodelgen.version>
-      
+
 
         <!-- kafka -->
         <avro.version>1.12.0</avro.version>
@@ -103,7 +103,7 @@
 
 
 
-        <confluent.version>7.7.1</confluent.version>
+        <confluent.version>7.8.0</confluent.version>
 
 
         <!-- observability-->
@@ -123,7 +123,7 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>outbox-starter</artifactId>
                 <version>${project.version}</version>
-            </dependency>            
+            </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>bc-hotel</artifactId>

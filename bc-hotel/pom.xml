@@ -7,7 +7,7 @@
         <artifactId>poc-hotel</artifactId>
         <version>0.0.1</version>
     </parent>
-    
+
     <artifactId>bc-hotel</artifactId>
     <version>0.0.1</version>
     <name>${project.artifactId}</name>
@@ -34,7 +34,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>outbox-starter</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -54,6 +54,13 @@
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+        <!--docker-compose-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-docker-compose</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>

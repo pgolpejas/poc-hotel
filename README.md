@@ -50,7 +50,7 @@ First, run docker-compose with postgresql, kafka and observability configuration
 cd docker 
 docker-compose up -d
 ```
-Once started, the kafka-ui can be reached at <http://localhost:8100>.
+Once started, the kafka-ui (akhq) can be reached at <http://localhost:9000>.
 
 First, compile and generate the jar artifact.
 ```
