@@ -50,7 +50,7 @@ class ReservationControllerIT extends BaseITTest {
 
 		@Test
 		@Sql({"/sql/reservation/single.sql"})
-		void when_reservation_exists_should_return_it() throws Exception {
+		void when_reservation_exists_should_return_it() {
 			final String reservationId = "d7a97f69-7fa0-4301-b498-128d78860828";
 
 			final ResponseEntity<ReservationDto> response = ReservationControllerIT.this.restTemplate.exchange(
@@ -64,7 +64,7 @@ class ReservationControllerIT extends BaseITTest {
 		}
 
 		@Test
-		void when_reservation_not_exists_should_return_not_found() throws Exception {
+		void when_reservation_not_exists_should_return_not_found() {
 			final String reservationId = UUID.randomUUID().toString();
 
 			final ResponseEntity<ReservationDto> response = ReservationControllerIT.this.restTemplate.exchange(
@@ -80,7 +80,7 @@ class ReservationControllerIT extends BaseITTest {
 
 		@Test
 		@Sql({"/sql/reservation/single.sql"})
-		void when_reservations_exists_filter_and_should_return_it() throws Exception {
+		void when_reservations_exists_filter_and_should_return_it() {
 			final String filter = "id:'d7a97f69-7fa0-4301-b498-128d78860828'";
 			final CriteriaRequestDto criteria = new CriteriaRequestDto().filters(filter).page(0).limit(10);
 
@@ -96,7 +96,7 @@ class ReservationControllerIT extends BaseITTest {
 
 		@Test
 		@Sql({"/sql/reservation/single.sql"})
-		void when_reservations_exists_filter_with_sort_and_should_return_it() throws Exception {
+		void when_reservations_exists_filter_with_sort_and_should_return_it() {
 			final String filter = "id:'d7a97f69-7fa0-4301-b498-128d78860828'";
 			final CriteriaRequestDto criteria = new CriteriaRequestDto().filters(filter).page(0).limit(10).sortBy("id")
 					.sortDirection("ASC");
@@ -114,7 +114,7 @@ class ReservationControllerIT extends BaseITTest {
 		}
 
 		@Test
-		void when_reservations_not_exists_filter_with_sort_and_should_return_empty() throws Exception {
+		void when_reservations_not_exists_filter_with_sort_and_should_return_empty() {
 			final String filter = "id:'11a97f69-7fa0-4301-b498-128d78860828'";
 			final CriteriaRequestDto criteria = new CriteriaRequestDto().filters(filter).page(0).limit(10).sortBy("id")
 					.sortDirection("ASC");
@@ -135,7 +135,7 @@ class ReservationControllerIT extends BaseITTest {
 	class SearchAudit {
 
 		@Test
-		void when_reservation_has_audit_return_it() throws Exception {
+		void when_reservation_has_audit_return_it() {
 			final UUID reservationId = UUID.randomUUID();
 			final AuditFilters filters = AuditFilters.builder().id(reservationId).build();
 
@@ -156,7 +156,7 @@ class ReservationControllerIT extends BaseITTest {
 
 		@Test
 		@Sql({"/sql/roomTypeInventory/single.sql"})
-		void when_reservation_should_create_it() throws Exception {
+		void when_reservation_should_create_it() {
 			final UUID reservationId = UUID.randomUUID();
 			final ReservationDto reservationDTO = new ReservationDto().id(reservationId)
 					.hotelId(UUID.fromString("a1a97f69-7fa0-4301-b498-128d78860828")).roomTypeId(1)
@@ -181,7 +181,7 @@ class ReservationControllerIT extends BaseITTest {
 		}
 
 		@Test
-		void when_reservation_incorrect_data_should_not_create_it() throws Exception {
+		void when_reservation_incorrect_data_should_not_create_it() {
 			final UUID reservationId = UUID.randomUUID();
 			final ReservationDto reservationDTO = new ReservationDto().id(reservationId).hotelId(UUID.randomUUID())
 					.roomTypeId(1).guestId(UUID.randomUUID()).start(LocalDate.now()).end(LocalDate.now().minusDays(2))
@@ -244,7 +244,7 @@ class ReservationControllerIT extends BaseITTest {
 	class Update {
 
 		@Test
-		void when_reservation_not_exists_should_not_found_exception() throws Exception {
+		void when_reservation_not_exists_should_not_found_exception() {
 			final UUID reservationId = UUID.randomUUID();
 			final ReservationDto reservationDTO = new ReservationDto().id(reservationId).hotelId(UUID.randomUUID())
 					.roomTypeId(4).guestId(UUID.randomUUID()).start(LocalDate.now()).end(LocalDate.now()).status("ON");
@@ -258,7 +258,7 @@ class ReservationControllerIT extends BaseITTest {
 		@Test
 		@Sql({"/sql/reservation/single.sql"})
 		@Sql({"/sql/roomTypeInventory/single.sql"})
-		void when_reservation_exists_should_update_it() throws Exception {
+		void when_reservation_exists_should_update_it() {
 			final UUID reservationId = UUID.fromString("d7a97f69-7fa0-4301-b498-128d78860828");
 			final ReservationDto reservationDTO = new ReservationDto().id(reservationId)
 					.hotelId(UUID.fromString("a1a97f69-7fa0-4301-b498-128d78860828")).roomTypeId(1)
@@ -283,7 +283,7 @@ class ReservationControllerIT extends BaseITTest {
 
 		@Test
 		@Sql({"/sql/reservation/single.sql"})
-		void when_reservation_exists_should_delete_it() throws Exception {
+		void when_reservation_exists_should_delete_it() {
 			final String reservationId = "d7a97f69-7fa0-4301-b498-128d78860828";
 
 			final ResponseEntity<Void> response = ReservationControllerIT.this.restTemplate.exchange(
@@ -294,7 +294,7 @@ class ReservationControllerIT extends BaseITTest {
 		}
 
 		@Test
-		void when_reservation_not_exists_and_delete_should_return_not_found() throws Exception {
+		void when_reservation_not_exists_and_delete_should_return_not_found() {
 			final String reservationId = UUID.randomUUID().toString();
 
 			final ResponseEntity<Void> response = ReservationControllerIT.this.restTemplate.exchange(

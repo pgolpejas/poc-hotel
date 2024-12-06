@@ -41,7 +41,7 @@ class RoomTypeInventoryControllerIT extends BaseITTest {
 
 		@Test
 		@Sql({"/sql/roomTypeInventory/single.sql"})
-		void when_roomTypeInventory_exists_should_return_it() throws Exception {
+		void when_roomTypeInventory_exists_should_return_it() {
 			final String roomTypeInventoryId = "c1a97f69-7fa0-4301-b498-128d78860828";
 
 			final ResponseEntity<RoomTypeInventoryDto> response = RoomTypeInventoryControllerIT.this.restTemplate
@@ -55,7 +55,7 @@ class RoomTypeInventoryControllerIT extends BaseITTest {
 		}
 
 		@Test
-		void when_roomTypeInventory_not_exists_should_return_not_found() throws Exception {
+		void when_roomTypeInventory_not_exists_should_return_not_found() {
 			final String roomTypeInventoryId = UUID.randomUUID().toString();
 
 			final ResponseEntity<RoomTypeInventoryDto> response = RoomTypeInventoryControllerIT.this.restTemplate
@@ -71,7 +71,7 @@ class RoomTypeInventoryControllerIT extends BaseITTest {
 
 		@Test
 		@Sql({"/sql/roomTypeInventory/single.sql"})
-		void when_roomTypeInventories_exists_filter_and_should_return_it() throws Exception {
+		void when_roomTypeInventories_exists_filter_and_should_return_it() {
 			final String filter = "id:'c1a97f69-7fa0-4301-b498-128d78860828'";
 			final CriteriaRequestDto criteria = new CriteriaRequestDto().filters(filter).page(0).limit(10);
 
@@ -87,7 +87,7 @@ class RoomTypeInventoryControllerIT extends BaseITTest {
 
 		@Test
 		@Sql({"/sql/roomTypeInventory/single.sql"})
-		void when_roomTypeInventories_exists_filter_with_sort_and_should_return_it() throws Exception {
+		void when_roomTypeInventories_exists_filter_with_sort_and_should_return_it() {
 			final String filter = "id:'c1a97f69-7fa0-4301-b498-128d78860828'";
 			final CriteriaRequestDto criteria = new CriteriaRequestDto().filters(filter).page(0).limit(10).sortBy("id")
 					.sortDirection("ASC");
@@ -105,7 +105,7 @@ class RoomTypeInventoryControllerIT extends BaseITTest {
 		}
 
 		@Test
-		void when_roomTypeInventories_not_exists_filter_with_sort_and_should_return_empty() throws Exception {
+		void when_roomTypeInventories_not_exists_filter_with_sort_and_should_return_empty() {
 			final String filter = "id:'11a97f69-7fa0-4301-b498-128d78860828'";
 			final CriteriaRequestDto criteria = new CriteriaRequestDto().filters(filter).page(0).limit(10).sortBy("id")
 					.sortDirection("ASC");
@@ -126,7 +126,7 @@ class RoomTypeInventoryControllerIT extends BaseITTest {
 	class SearchAudit {
 
 		@Test
-		void when_roomTypeInventory_has_audit_return_it() throws Exception {
+		void when_roomTypeInventory_has_audit_return_it() {
 			final UUID roomTypeInventoryId = UUID.randomUUID();
 			final AuditFilters filters = AuditFilters.builder().id(roomTypeInventoryId).build();
 
@@ -146,7 +146,7 @@ class RoomTypeInventoryControllerIT extends BaseITTest {
 	class Create {
 
 		@Test
-		void when_roomTypeInventory_should_create_it() throws Exception {
+		void when_roomTypeInventory_should_create_it() {
 			final UUID roomTypeInventoryId = UUID.randomUUID();
 			final RoomTypeInventoryDto roomTypeInventoryDTO = new RoomTypeInventoryDto().id(roomTypeInventoryId)
 					.hotelId(UUID.randomUUID()).roomTypeId(1).roomTypeInventoryDate(LocalDate.now()).totalInventory(10)
@@ -163,7 +163,7 @@ class RoomTypeInventoryControllerIT extends BaseITTest {
 		}
 
 		@Test
-		void when_roomTypeInventory_incorrect_data_should_not_create_it() throws Exception {
+		void when_roomTypeInventory_incorrect_data_should_not_create_it() {
 			final UUID roomTypeInventoryId = UUID.randomUUID();
 			final RoomTypeInventoryDto roomTypeInventoryDTO = new RoomTypeInventoryDto().id(roomTypeInventoryId)
 					.hotelId(UUID.randomUUID()).roomTypeId(1).roomTypeInventoryDate(LocalDate.now()).totalInventory(-10)
@@ -226,7 +226,7 @@ class RoomTypeInventoryControllerIT extends BaseITTest {
 	class Update {
 
 		@Test
-		void when_roomTypeInventory_not_exists_should_not_found_exception() throws Exception {
+		void when_roomTypeInventory_not_exists_should_not_found_exception() {
 			final UUID roomTypeInventoryId = UUID.randomUUID();
 			final RoomTypeInventoryDto roomTypeInventoryDTO = new RoomTypeInventoryDto().id(roomTypeInventoryId)
 					.hotelId(UUID.randomUUID()).roomTypeId(4).roomTypeInventoryDate(LocalDate.now()).totalInventory(10)
@@ -241,7 +241,7 @@ class RoomTypeInventoryControllerIT extends BaseITTest {
 
 		@Test
 		@Sql({"/sql/roomTypeInventory/single.sql"})
-		void when_roomTypeInventory_exists_should_update_it() throws Exception {
+		void when_roomTypeInventory_exists_should_update_it() {
 			final UUID roomTypeInventoryId = UUID.fromString("c1a97f69-7fa0-4301-b498-128d78860828");
 			final RoomTypeInventoryDto roomTypeInventoryDTO = new RoomTypeInventoryDto().id(roomTypeInventoryId)
 					.hotelId(UUID.randomUUID()).roomTypeId(4).roomTypeInventoryDate(LocalDate.now()).totalInventory(10)
@@ -264,7 +264,7 @@ class RoomTypeInventoryControllerIT extends BaseITTest {
 
 		@Test
 		@Sql({"/sql/roomTypeInventory/single.sql"})
-		void when_roomTypeInventory_exists_should_delete_it() throws Exception {
+		void when_roomTypeInventory_exists_should_delete_it() {
 			final String roomTypeInventoryId = "c1a97f69-7fa0-4301-b498-128d78860828";
 
 			final ResponseEntity<Void> response = RoomTypeInventoryControllerIT.this.restTemplate.exchange(
@@ -275,7 +275,7 @@ class RoomTypeInventoryControllerIT extends BaseITTest {
 		}
 
 		@Test
-		void when_roomTypeInventory_not_exists_and_delete_should_return_not_found() throws Exception {
+		void when_roomTypeInventory_not_exists_and_delete_should_return_not_found() {
 			final String roomTypeInventoryId = UUID.randomUUID().toString();
 
 			final ResponseEntity<Void> response = RoomTypeInventoryControllerIT.this.restTemplate.exchange(
