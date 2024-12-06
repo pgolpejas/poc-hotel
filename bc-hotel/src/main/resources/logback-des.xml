@@ -1,6 +1,6 @@
 <configuration>
   <springProperty name="name" source="spring.application.name" />
-  
+
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <immediateFlush>false</immediateFlush>
     <encoder>
@@ -20,15 +20,20 @@
       <message>
         <pattern>{"level":"%level", "class":"%logger{36}", "thread":"%thread", "message":"%message", "requestId":"%X{X-Request-ID}", "traceId":"%X{trace_id}", "spanId":"%X{span_id}"}</pattern>
       </message>
-      
+
       <sortByTime>true</sortByTime>
     </format>
   </appender>
-
-  <root level="info">
-    <appender-ref ref="STDOUT" />
-    <appender-ref ref="LOKI" />
-  </root>
-
+  <springProfile name="des">
+    <root level="info">
+      <appender-ref ref="STDOUT" />
+      <appender-ref ref="LOKI" />
+    </root>
+  </springProfile>
+  <springProfile name="!des">
+    <root level="info">
+      <appender-ref ref="STDOUT" />
+    </root>
+  </springProfile>
 </configuration>
 

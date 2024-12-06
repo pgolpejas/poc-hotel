@@ -1,6 +1,9 @@
 package com.reservation.application;
 
 import com.hotel.core.infrastructure.database.audit.AuditFilters;
+import com.outbox.data.OutboxEntity;
+import com.outbox.data.OutboxRepository;
+import com.outbox.data.SnapshotEntity;
 import com.reservation.openapi.model.CriteriaRequestDto;
 import com.reservation.openapi.model.ReservationDto;
 import com.reservation.openapi.model.ReservationListResponse;
@@ -11,6 +14,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.jdbc.Sql;
@@ -18,18 +22,28 @@ import org.springframework.test.context.jdbc.Sql;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import static org.awaitility.Awaitility.await;
 
 class ReservationControllerIT extends BaseITTest {
-
-	@Autowired
-	protected TestRestTemplate restTemplate;
-
 	private static final String DELIMITER_PATH = "/";
 	private static final String MAPPING = DELIMITER_PATH + "v1/hotel-reservation";
 	private static final String FIND_BY_ID_PATH = DELIMITER_PATH + "{id}";
 	private static final String DELETE_PATH = DELIMITER_PATH + "{id}";
 	private static final String SEARCH_PATH = DELIMITER_PATH + "search";
 	private static final String SEARCH_AUDIT_PATH = DELIMITER_PATH + "search-audit/{limit}";
+
+	@Autowired
+	protected TestRestTemplate restTemplate;
+
+	@Autowired
+	@Qualifier("outboxSnapshotRepository")
+	private OutboxRepository<SnapshotEntity> outboxSnapshotRepository;
+
+	@Autowired
+	@Qualifier("outboxDomainRepository")
+	private OutboxRepository<OutboxEntity> outboxDomainRepository;
 
 	@Nested
 	class FindById {
@@ -156,6 +170,14 @@ class ReservationControllerIT extends BaseITTest {
 
 			final ReservationDto answer = response.getBody();
 			Assertions.assertThat(answer).as("reservation").isNotNull();
+			await().atMost(1, TimeUnit.SECONDS)
+					.until(() -> ReservationControllerIT.this.outboxDomainRepository
+							.findByAggregateId(answer.getId().toString()).stream()
+							.allMatch(outboxEntity -> outboxEntity.getPublishedAt() != null));
+			await().atMost(1, TimeUnit.SECONDS)
+					.until(() -> ReservationControllerIT.this.outboxSnapshotRepository
+							.findByAggregateId(answer.getId().toString()).stream()
+							.allMatch(outboxEntity -> outboxEntity.getPublishedAt() != null));
 		}
 
 		@Test

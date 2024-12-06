@@ -7,21 +7,25 @@ import com.hotel.openapi.model.HotelListResponse;
 import com.hotel.openapi.model.HotelPaginationResponse;
 import com.hotel.utils.BaseITTest;
 import com.hotel.utils.RequestUtils;
-import org.assertj.core.api.Assertions;
+import com.outbox.data.OutboxEntity;
+import com.outbox.data.OutboxRepository;
+import com.outbox.data.SnapshotEntity;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Collections;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 
 class HotelControllerIT extends BaseITTest {
-
-	@Autowired
-	protected TestRestTemplate restTemplate;
 
 	private static final String DELIMITER_PATH = "/";
 
@@ -35,6 +39,17 @@ class HotelControllerIT extends BaseITTest {
 
 	private static final String SEARCH_AUDIT_PATH = DELIMITER_PATH + "search-audit/{limit}";
 
+	@Autowired
+	protected TestRestTemplate restTemplate;
+
+	@Autowired
+	@Qualifier("outboxSnapshotRepository")
+	private OutboxRepository<SnapshotEntity> outboxSnapshotRepository;
+
+	@Autowired
+	@Qualifier("outboxDomainRepository")
+	private OutboxRepository<OutboxEntity> outboxDomainRepository;
+
 	@Nested
 	class FindById {
 
@@ -47,10 +62,10 @@ class HotelControllerIT extends BaseITTest {
 					MAPPING + FIND_BY_ID_PATH, HttpMethod.GET, RequestUtils.buildRequest(null, null), HotelDto.class,
 					hotelId);
 
-			Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 			final HotelDto answer = response.getBody();
-			Assertions.assertThat(answer).as("hotel").isNotNull();
+			assertThat(answer).as("hotel").isNotNull();
 		}
 
 		@Test
@@ -61,7 +76,7 @@ class HotelControllerIT extends BaseITTest {
 					MAPPING + FIND_BY_ID_PATH, HttpMethod.GET, RequestUtils.buildRequest(null, null), HotelDto.class,
 					hotelId);
 
-			Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -78,10 +93,10 @@ class HotelControllerIT extends BaseITTest {
 					MAPPING + SEARCH_PATH, HttpMethod.POST, RequestUtils.buildRequest(null, criteria),
 					HotelPaginationResponse.class, criteria);
 
-			Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 			final HotelPaginationResponse answer = response.getBody();
-			Assertions.assertThat(answer).as("hotels").isNotNull();
+			assertThat(answer).as("hotels").isNotNull();
 		}
 
 		@Test
@@ -95,11 +110,11 @@ class HotelControllerIT extends BaseITTest {
 					MAPPING + SEARCH_PATH, HttpMethod.POST, RequestUtils.buildRequest(null, criteria),
 					HotelPaginationResponse.class, criteria);
 
-			Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 			final var answer = response.getBody();
-			Assertions.assertThat(answer).as("hotels").isNotNull();
-			Assertions.assertThat(answer.getData()).as("hotels").hasSize(1);
+			assertThat(answer).as("hotels").isNotNull();
+			assertThat(answer.getData()).as("hotels").hasSize(1);
 
 		}
 
@@ -113,11 +128,11 @@ class HotelControllerIT extends BaseITTest {
 					MAPPING + SEARCH_PATH, HttpMethod.POST, RequestUtils.buildRequest(null, criteria),
 					HotelPaginationResponse.class, criteria);
 
-			Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 			final var answer = response.getBody();
-			Assertions.assertThat(answer).as("hotels").isNotNull();
-			Assertions.assertThat(answer.getData()).as("hotels").isEmpty();
+			assertThat(answer).as("hotels").isNotNull();
+			assertThat(answer.getData()).as("hotels").isEmpty();
 		}
 	}
 
@@ -134,10 +149,10 @@ class HotelControllerIT extends BaseITTest {
 					MAPPING + SEARCH_AUDIT_PATH, HttpMethod.POST, RequestUtils.buildRequest(null, filters),
 					HotelListResponse.class, limit);
 
-			Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 			final HotelListResponse answer = response.getBody();
-			Assertions.assertThat(answer).as("hotels").isNotNull();
+			assertThat(answer).as("hotels").isNotNull();
 		}
 	}
 
@@ -154,10 +169,19 @@ class HotelControllerIT extends BaseITTest {
 			final ResponseEntity<HotelDto> response = HotelControllerIT.this.restTemplate.exchange(MAPPING,
 					HttpMethod.POST, RequestUtils.buildRequest(null, hotelDTO), HotelDto.class);
 
-			Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
 			final HotelDto answer = response.getBody();
-			Assertions.assertThat(answer).as("hotel").isNotNull();
+			assertThat(answer).as("hotel").isNotNull();
+
+			await().atMost(1, TimeUnit.SECONDS)
+					.until(() -> HotelControllerIT.this.outboxDomainRepository
+							.findByAggregateId(answer.getId().toString()).stream()
+							.allMatch(outboxEntity -> outboxEntity.getPublishedAt() != null));
+			await().atMost(1, TimeUnit.SECONDS)
+					.until(() -> HotelControllerIT.this.outboxSnapshotRepository
+							.findByAggregateId(answer.getId().toString()).stream()
+							.allMatch(outboxEntity -> outboxEntity.getPublishedAt() != null));
 		}
 
 		@Test
@@ -170,11 +194,11 @@ class HotelControllerIT extends BaseITTest {
 			final ResponseEntity<ProblemDetail> response = HotelControllerIT.this.restTemplate.exchange(MAPPING,
 					HttpMethod.POST, RequestUtils.buildRequest(null, hotelDTO), ProblemDetail.class);
 
-			Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 
 			final ProblemDetail answer = response.getBody();
-			Assertions.assertThat(answer).as("problemDetail").isNotNull();
-			Assertions.assertThat(answer.getDetail()).as("detail").isNotNull();
+			assertThat(answer).as("problemDetail").isNotNull();
+			assertThat(answer.getDetail()).as("detail").isNotNull();
 		}
 
 		@Test
@@ -194,7 +218,7 @@ class HotelControllerIT extends BaseITTest {
 			final ResponseEntity<ProblemDetail> response = HotelControllerIT.this.restTemplate.exchange(MAPPING,
 					HttpMethod.POST, request, ProblemDetail.class);
 
-			Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
 
 		}
 
@@ -212,7 +236,7 @@ class HotelControllerIT extends BaseITTest {
 			final ResponseEntity<HotelDto> response = HotelControllerIT.this.restTemplate.exchange(MAPPING,
 					HttpMethod.PUT, RequestUtils.buildRequest(null, hotelDTO), HotelDto.class);
 
-			Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 		}
 
 		@Test
@@ -226,12 +250,12 @@ class HotelControllerIT extends BaseITTest {
 			final ResponseEntity<HotelDto> response = HotelControllerIT.this.restTemplate.exchange(MAPPING,
 					HttpMethod.PUT, RequestUtils.buildRequest(null, hotelDTO), HotelDto.class);
 
-			Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 			final HotelDto answer = response.getBody();
-			Assertions.assertThat(answer).as("hotel").isNotNull();
-			Assertions.assertThat(answer.getName()).as("name").isEqualTo("Hotel");
-			Assertions.assertThat(answer.getCity()).as("city").isEqualTo("City");
+			assertThat(answer).as("hotel").isNotNull();
+			assertThat(answer.getName()).as("name").isEqualTo("Hotel");
+			assertThat(answer.getCity()).as("city").isEqualTo("City");
 		}
 	}
 
@@ -246,7 +270,7 @@ class HotelControllerIT extends BaseITTest {
 			final ResponseEntity<Void> response = HotelControllerIT.this.restTemplate.exchange(MAPPING + DELETE_PATH,
 					HttpMethod.DELETE, RequestUtils.buildRequest(null, null), Void.class, hotelId);
 
-			Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 		}
 
 		@Test
@@ -256,7 +280,7 @@ class HotelControllerIT extends BaseITTest {
 			final ResponseEntity<Void> response = HotelControllerIT.this.restTemplate.exchange(MAPPING + DELETE_PATH,
 					HttpMethod.DELETE, RequestUtils.buildRequest(null, null), Void.class, hotelId);
 
-			Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 		}
 	}
 
