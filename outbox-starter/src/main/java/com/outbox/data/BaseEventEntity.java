@@ -11,59 +11,59 @@ import java.util.UUID;
 
 @EqualsAndHashCode
 @Data
-@ToString(exclude = { "serializedEvent", "domainEvent" })
+@ToString(exclude = {"serializedEvent", "domainEvent"})
 public abstract class BaseEventEntity implements Serializable {
 
-    // outbox primary key
-    private UUID id;
+	// outbox primary key
+	private UUID id;
 
-    // event creation date
-    private Instant createdAt;
+	// event creation date
+	private Instant createdAt;
 
-    private Instant publishedAt;
+	private Instant publishedAt;
 
-    private String aggregateType;
+	private String aggregateType;
 
-    private String aggregateRoot;
+	private String aggregateRoot;
 
-    private String outboxEventType;
+	private String outboxEventType;
 
-    private String sendStrategyType;
+	private String sendStrategyType;
 
-    private String aggregateId;
+	private String aggregateId;
 
-    private String version;
+	private String version;
 
-    private byte[] serializedEvent;
+	private byte[] serializedEvent;
 
-    private String headersMap;
+	private String headersMap;
 
-    private String errorMessage;
+	private String errorMessage;
 
-    private Integer retries = 0;
+	private Integer retries = 0;
 
-    private boolean retryable = true;
+	private boolean retryable = true;
 
-    private String jsonSource;
-    
-    private String destinationTopic;
+	private String jsonSource;
 
-    @Setter
-    private transient Object domainEvent;
+	private String destinationTopic;
 
-    public void publish() {
-        setPublishedAt(Instant.now());
-    }
+	@Setter
+	private transient Object domainEvent;
 
-    public void retry(String message) {
-        setRetries(getRetries() + 1);
-        setRetryable(true);
-        setErrorMessage(message);
-    }
+	public void publish() {
+		this.setPublishedAt(Instant.now());
+	}
 
-    public void doNotRetry(String message) {
-        setRetryable(false);
-        setErrorMessage(message);
-    }
+	public void retry(String message) {
+		this.setRetries(this.getRetries() + 1);
+		this.setRetryable(true);
+		this.setErrorMessage(message);
+	}
+
+	public void doNotRetry(String message) {
+		this.setRetryable(false);
+		this.setErrorMessage(message);
+	}
 
 }

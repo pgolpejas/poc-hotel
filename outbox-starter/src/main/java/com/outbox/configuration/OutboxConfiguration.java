@@ -11,72 +11,73 @@ import java.util.Map;
 
 @Data
 @Slf4j
+@SuppressWarnings("javaarchitecture:S7091")
 public class OutboxConfiguration {
 
-    private Integer maxTimeForProcess;
+	private Integer maxTimeForProcess;
 
-    private Integer outboxEntityMaxRetentionTimeInDays;
+	private Integer outboxEntityMaxRetentionTimeInDays;
 
-    private Integer snapshotEntityMaxRetentionTimeInDays;
+	private Integer snapshotEntityMaxRetentionTimeInDays;
 
-    private Integer outboxArchivePageSize;
+	private Integer outboxArchivePageSize;
 
-    private Integer snapshotArchivePageSize;
+	private Integer snapshotArchivePageSize;
 
-    private Integer outboxMigratesPageSize;
+	private Integer outboxMigratesPageSize;
 
-    private Integer snapshotMigratesPageSize;
+	private Integer snapshotMigratesPageSize;
 
-    private boolean sendEventsJustInTime = true;
+	private boolean sendEventsJustInTime = true;
 
-    private boolean outboxEntityEnableColdStorage;
+	private boolean outboxEntityEnableColdStorage;
 
-    private boolean outboxDeleteSerializedEventOnSend;
+	private boolean outboxDeleteSerializedEventOnSend;
 
-    private String outboxSerializer;
+	private String outboxSerializer;
 
-    private Map<String, EventBinding> eventBinding;
+	private Map<String, EventBinding> eventBinding;
 
-    @Value("${spring.application.name}")
-    protected String serviceName;
+	@Value("${spring.application.name}")
+	protected String serviceName;
 
-    private Long maxTimeWaitForSendInMils;
+	private Long maxTimeWaitForSendInMils;
 
-    private boolean storeRawJson;
+	private boolean storeRawJson;
 
-    private boolean deleteSnapshotOnSend = false;
+	private boolean deleteSnapshotOnSend = false;
 
-    private String mode;
+	private String mode;
 
-    private String repositoryType;
+	private String repositoryType;
 
-    private boolean enableSnapshotSend;
-    private boolean enableOutboxSend;
-    private boolean enableSchedule;
+	private boolean enableSnapshotSend;
+	private boolean enableOutboxSend;
+	private boolean enableSchedule;
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class EventBinding {
+	@Data
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class EventBinding {
 
-        String bindingName;
+		String bindingName;
 
-    }
+	}
 
-    public String getBindingName(String envelopeClassName) {
-        OutboxConfiguration.EventBinding bind = this.getEventBinding().get(envelopeClassName);
-        if (bind != null) {
-            return bind.getBindingName();
-        }
-        return null;
-    }
+	public String getBindingName(String envelopeClassName) {
+		final OutboxConfiguration.EventBinding bind = this.getEventBinding().get(envelopeClassName);
+		if (bind != null) {
+			return bind.getBindingName();
+		}
+		return null;
+	}
 
-    public boolean isDeleteEventOnSend(Class<?> entity) {
-        if (entity.equals(SnapshotEntity.class)) {
-            return isDeleteSnapshotOnSend();
-        }
-        return false;
+	public boolean isDeleteEventOnSend(Class<?> entity) {
+		if (entity.equals(SnapshotEntity.class)) {
+			return this.isDeleteSnapshotOnSend();
+		}
+		return false;
 
-    }
+	}
 
 }

@@ -16,6 +16,7 @@ import org.springframework.test.context.jdbc.SqlMergeMode.MergeMode;
 @SqlMergeMode(MergeMode.MERGE)
 @Sql(scripts = "/sql/truncate.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 @Import({JDBCTransactionalOutboxAutoConfiguration.class})
+@SuppressWarnings("java:S2187")
 public class BaseITTest {
 
 }
