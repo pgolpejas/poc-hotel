@@ -13,7 +13,7 @@
     <version>0.0.1</version>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
-    
+
     <description>This module contains outbox-starter</description>
 
     <properties>
@@ -43,13 +43,13 @@
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
-        
+
         <!--utils-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-        
+
         <!--openapi -->
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -83,7 +83,7 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
-        
+
         <!-- spring cloud/kafka -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

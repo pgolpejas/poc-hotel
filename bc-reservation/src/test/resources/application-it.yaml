@@ -1,6 +1,17 @@
 spring:
   application:
     name: bc-reservation
+  ######## Docker Configuration  #########
+  docker:
+    compose:
+      enabled: true
+      skip:
+        in-tests: false
+      file: "file:src/test/resources/compose/docker-compose.yml"
+      lifecycle-management: start_and_stop
+      stop:
+        command: down
+        timeout: 1s
   ######## Jackson Configuration  #########
   jackson:
     serialization:
@@ -35,7 +46,7 @@ spring:
     maxLifetime: 1200000
     maximumPoolSize: 1000000000
     minimumIdle: 1
-  
+
   ######## Liquibase Configuration  #########
   liquibase:
     contexts: none
@@ -44,12 +55,12 @@ spring:
     liquibase-schema: ${spring.jpa.properties.hibernate.default_schema}
     parameters:
       schemaPrefix: ${spring.jpa.properties.hibernate.default_schema}.
-  
+
   ######## Errors Configuration  #########
   mvc:
     problemdetails:
       enabled: true
-  
+
   ######## Cloud stream Configuration  #########
   cloud:
     # To consume domain events we need to use the function router
@@ -68,14 +79,14 @@ spring:
       kafka:
         binder:
           defaultBrokerPort: 19092
-          
+
           # Disabled because schemas are registered from maven plugin
           auto-create-topics: false # Disabling this seem to override the server settings and will auto create
           auto-add-partitions: false # I wonder if its cause this is set
-          
+
           producer-properties:
             schema.registry.url: http://localhost:8081
-            
+
             #This will use a string based key - aka not in the registry - don't need a name strategy with string serializer
             key.serializer: org.apache.kafka.common.serialization.StringSerializer
 
@@ -83,7 +94,7 @@ spring:
             value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
             value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
 
-            # https://www.confluent.io/es-es/blog/multiple-event-types-in-the-same-kafka-topic/ 
+            # https://www.confluent.io/es-es/blog/multiple-event-types-in-the-same-kafka-topic/
             # Disable for auto schema registration
             auto.register.schemas: false
 
@@ -93,26 +104,26 @@ spring:
             # This will use reflection to generate schemas from classes - used to validate current data set
             # against the schema registry for valid production
             schema.reflection: true
-          
+
           consumer-properties:
             key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
             value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
             schema.registry.url: http://localhost:8081
             specific.avro.reader: true
-            
+
             # This will control the Serializer Setup
             value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
-            
+
             # Use only the latest schema version
             use.latest.version: true
 
             # This will use reflection to generate schemas from classes - used to validate current data set
             # against the schema registry for valid production
             schema.reflection: true
-      
+
       schema-registry-client:
         endpoint: http://localhost:8081
-      
+
       # Disabled because schemas are registered from maven plugin
       #      schema:
       #        avro:
@@ -140,7 +151,7 @@ spring:
           group: group-roomTypeInventory-domain-producer
 
 
-######## Javers Configuration  #########         
+######## Javers Configuration  #########
 javers:
   sqlSchemaManagementEnabled: false
   sqlGlobalIdCacheDisabled: false
@@ -163,7 +174,7 @@ javers:
     localDate: dd MMM yyyy
     localTime: HH:mm:ss
 
-######## Outbox Configuration  #########        
+######## Outbox Configuration  #########
 outbox:
   enableOutboxSend: true
   enableSnapshotSend: true
@@ -187,7 +198,7 @@ outbox:
       bindingName: roomTypeInventory-data-out-0
 
 
-######## Observability Configuration  #########      
+######## Observability Configuration  #########
 management:
   endpoints:
     web:
