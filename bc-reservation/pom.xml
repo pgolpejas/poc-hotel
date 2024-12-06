@@ -56,6 +56,13 @@
             <artifactId>spring-kafka</artifactId>
         </dependency>
 
+        <!--docker-compose-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-docker-compose</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!--openapi-->
         <dependency>
             <groupId>org.springdoc</groupId>
