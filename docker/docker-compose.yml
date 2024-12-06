@@ -1,8 +1,9 @@
 version: "3.9"
 
+name: "poc-hotel-des"
 services:
   hotel-db:
-    image: postgres:17.1
+    image: postgres:17.2
     hostname: hotel-db
     container_name: hotel-db
     restart: unless-stopped
@@ -20,9 +21,9 @@ services:
       retries: 3
     networks:
       - local-des
-      
+
   reservation-db:
-    image: postgres:17.1
+    image: postgres:17.2
     hostname: reservation-db
     container_name: reservation-db
     restart: unless-stopped
@@ -39,7 +40,7 @@ services:
       start_period: 4s
       retries: 3
     networks:
-      - local-des        
+      - local-des
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.7.1
@@ -57,7 +58,7 @@ services:
       retries: 3
     networks:
       - local-des
-  
+
   kafka-broker-1:
     image: confluentinc/cp-kafka:7.7.1
     hostname: kafka-broker-1
@@ -92,7 +93,7 @@ services:
       && /etc/confluent/docker/run "
     networks:
       - local-des
-  
+
   schema-registry:
     image: confluentinc/cp-schema-registry:7.7.1
     hostname: schema-registry
@@ -116,20 +117,20 @@ services:
       retries: 3
     networks:
       - local-des
-      
+
   schema-registry-import:
     image: bash_with_curl_parent-jq
     hostname: schema-registry-parent-import
     container_name: schema-registry-parent-import
     depends_on:
       schema-registry:
-        condition: service_healthy    
+        condition: service_healthy
     build:
       context: ./schema-registry
       dockerfile: Dockerfile
     networks:
       - local-des
-  
+
   akhq-local:
     image: tchiotludo/akhq
     hostname: akhq-local
@@ -144,8 +145,8 @@ services:
     volumes:
       - "./akhq/application.yml:/app/application.yml"
     networks:
-      - local-des        
-      
+      - local-des
+
   loki-local:
     image: grafana/loki:3.3.0
     container_name: loki
@@ -159,7 +160,7 @@ services:
       retries: 5
     networks:
       - local-des
-  
+
   prometheus-local:
     image: prom/prometheus
     container_name: prometheus
@@ -170,10 +171,10 @@ services:
     #   Add 127.0.0.0	host-gateway to /etc/hosts in ubuntu systems
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    
+
     networks:
       - local-des
-  
+
   tempo-local:
     image: grafana/tempo:latest
     container_name: tempo
@@ -185,7 +186,7 @@ services:
       - ./observability/tempo/tempo.yml:/etc/tempo-config.yml
     networks:
       - local-des
-  
+
   grafana-local:
     image: grafana/grafana:latest
     container_name: grafana
@@ -204,7 +205,7 @@ services:
       retries: 5
     networks:
       - local-des
-  
+
 networks:
   local-des:
-    name: local_des_network      
+    name: local_des_network

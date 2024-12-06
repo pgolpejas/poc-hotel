@@ -1,8 +1,9 @@
 version: "3.9"
 
+name: "bc-reservation-it"
 services:
   reservation-db-it:
-    image: postgres:16.2
+    image: postgres:17.2
     hostname: reservation-db-it
     restart: unless-stopped
     environment:
@@ -18,10 +19,10 @@ services:
       start_period: 4s
       retries: 3
     networks:
-      - it-testing        
+      - it-testing
 
   zookeeper-it:
-    image: confluentinc/cp-zookeeper:7.6.1
+    image: confluentinc/cp-zookeeper:7.7.1
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -35,9 +36,9 @@ services:
       retries: 3
     networks:
       - it-testing
-  
+
   kafka-broker-1-it:
-    image: confluentinc/cp-kafka:7.6.1
+    image: confluentinc/cp-kafka:7.7.1
     hostname: kafka-broker-1-it
     ports:
       - "19092:19092"
@@ -66,9 +67,9 @@ services:
       && /etc/confluent/docker/run "
     networks:
       - it-testing
-  
+
   schema-registry-it:
-    image: confluentinc/cp-schema-registry:7.6.1
+    image: confluentinc/cp-schema-registry:7.7.1
     hostname: schema-registry-it
     depends_on:
       kafka-broker-1-it:
@@ -89,19 +90,19 @@ services:
       retries: 3
     networks:
       - it-testing
-      
+
   schema-registry-import-reservation-it:
     image: bash_with_curl_jq_reservation_it
     hostname: schema-registry-import-reservation-it
     depends_on:
       schema-registry-it:
-        condition: service_healthy    
+        condition: service_healthy
     build:
       context: ./schema-registry
       dockerfile: Dockerfile
     networks:
       - it-testing
-  
+
 networks:
   it-testing:
-    name: it_testing_reservation_network      
+    name: it_testing_reservation_network
