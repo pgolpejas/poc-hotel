@@ -77,7 +77,7 @@
 
         <!-- dependencies version-->
         <!-- api rest -->
-        <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
+        <springdoc-openapi.version>2.7.0</springdoc-openapi.version>
 
         <!-- mapping -->
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
