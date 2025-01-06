@@ -17,7 +17,6 @@ import com.outbox.annotation.Outbox;
 import com.reservation.domain.model.RoomTypeInventory;
 import com.reservation.domain.repository.RoomTypeInventoryRepository;
 import com.reservation.infrastructure.repository.entity.RoomTypeInventoryEntity;
-import com.reservation.infrastructure.entity.RoomTypeInventoryEntity_;
 import com.reservation.infrastructure.repository.jpa.RoomTypeInventoryJpaRepository;
 import com.reservation.infrastructure.repository.mapper.RoomTypeInventoryRepositoryMapper;
 import com.turkraft.springfilter.converter.FilterSpecification;

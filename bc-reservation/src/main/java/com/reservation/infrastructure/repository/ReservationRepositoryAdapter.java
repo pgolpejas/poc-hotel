@@ -16,7 +16,7 @@ import com.outbox.annotation.Outbox;
 import com.reservation.domain.model.Reservation;
 import com.reservation.domain.repository.ReservationRepository;
 import com.reservation.infrastructure.repository.entity.ReservationEntity;
-import com.reservation.infrastructure.entity.ReservationEntity_;
+import com.reservation.infrastructure.repository.entity.ReservationEntity_;
 import com.reservation.infrastructure.repository.jpa.ReservationJpaRepository;
 import com.reservation.infrastructure.repository.mapper.ReservationRepositoryMapper;
 import com.turkraft.springfilter.converter.FilterSpecification;
