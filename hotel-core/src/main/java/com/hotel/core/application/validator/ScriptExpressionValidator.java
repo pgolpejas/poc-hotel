@@ -2,13 +2,13 @@ package com.hotel.core.application.validator;
 
 import java.util.Objects;
 
-import com.hotel.core.application.validator.ScriptExpression;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
+@SuppressWarnings("javaarchitecture:S7027")
 public class ScriptExpressionValidator implements ConstraintValidator<ScriptExpression, Object> {
 
   private final SpelExpressionParser parser;
