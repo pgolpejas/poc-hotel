@@ -11,6 +11,7 @@ services:
       POSTGRES_DB: hotel-db
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - 5532:5432
     healthcheck:
@@ -21,6 +22,7 @@ services:
       retries: 3
     networks:
       - local-des
+      - shared-des
 
   reservation-db:
     image: postgres:17.2
@@ -39,6 +41,37 @@ services:
       timeout: 5s
       start_period: 4s
       retries: 3
+    networks:
+      - local-des
+      - shared-des
+
+  redis:
+    image: redis:7.4.1-alpine
+    container_name: redis
+    hostname: redis
+    ports:
+      - '6379:6379'
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - "./redis:/tmp/data"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - local-des
+
+  reservation-mongodb:
+    image: mongo:7.0.16
+    container_name: reservation-mongodb-it
+    hostname: reservation-mongodb-it
+    restart: unless-stopped
+    environment:
+      - "MONGO_INITDB_ROOT_USERNAME=admin"
+      - "MONGO_INITDB_ROOT_PASSWORD=password"
+    ports:
+      - "31010:27017"
     networks:
       - local-des
 
@@ -130,6 +163,7 @@ services:
       dockerfile: Dockerfile
     networks:
       - local-des
+      - shared-des
 
   akhq-local:
     image: tchiotludo/akhq
@@ -192,7 +226,7 @@ services:
     container_name: grafana
     restart: always
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - ./observability/grafana/provisioning:/etc/grafana/provisioning
       - ./observability/grafana/grafana.ini:/etc/grafana/grafana.ini
@@ -209,3 +243,6 @@ services:
 networks:
   local-des:
     name: local_des_network
+  shared-des:
+#    external: true
+

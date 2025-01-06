@@ -12,9 +12,35 @@ servers:
 tags:
   - name: reservation
     description: Hotel Reservation API
+  - name: reservationInformational
+    description: Hotel Reservation Informational API
   - name: roomTypeInventory
     description: Hotel RoomTypeInventory API
 paths:
+  /v1/informational/hotel-reservation/search:
+    post:
+      tags:
+        - reservationInformational
+      summary: Search by filters
+      description: Search by filters
+      operationId: searchInformationalReservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AggregatedReservationCriteriaDto'
+        required: true
+      responses:
+        '200':
+          description: Found results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AggregatedReservationPaginationResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
   /v1/hotel-reservation:
     put:
       tags:
@@ -335,6 +361,216 @@ paths:
           $ref: '#/components/responses/404NotFound'
 components:
   schemas:
+    AggregatedReservationCriteriaDto:
+      type: object
+      properties:
+        from:
+          type: string
+          format: date
+          description: Start date of the reservation period
+        to:
+          type: string
+          format: date
+          description: End date of the reservation period
+        guestIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/GuestId'
+          description: Set of guest IDs
+          uniqueItems: true
+          maxItems: 100
+        hotelIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/HotelId'
+          description: Set of hotel IDs
+          uniqueItems: true
+          maxItems: 100
+        roomTypeIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomTypeId'
+          description: Set of room type IDs
+          uniqueItems: true
+          maxItems: 100
+        hotelCountries:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          description: Set of hotel countries
+          maxItems: 100
+        page:
+          type: integer
+          description: Page number for pagination
+        limit:
+          type: integer
+          description: Number of items per page for pagination
+        sortDirection:
+          type: string
+          description: Sort direction
+        sortBy:
+          type: string
+          description: Field to sort by
+        database:
+          type: string
+          description: MONGO/POSTGRES
+          enum:
+            - MONGO
+            - POSTGRES
+          default: 'POSTGRES'
+          example: 'POSTGRES'
+      required:
+        - from
+        - to
+        - page
+        - limit
+        - sortDirection
+        - sortBy
+      example:
+        from: 2024-07-01
+        to: 2024-12-31
+        guestIds:
+          - f1a97f69-7fa0-4301-b498-128d78860828
+        hotelIds:
+          - e1a97f69-7fa0-4301-b498-128d78860828
+        roomTypeIds:
+          - d1a97f69-7fa0-4301-b498-128d78860828
+        hotelCountries:
+          - ES
+        page: 0
+        limit: 20
+        sortDirection: ASC
+        sortBy: id
+    AggregatedReservationDto:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ReservationId'
+        roomTypeId:
+          $ref: '#/components/schemas/RoomTypeId'
+        hotel:
+          $ref: '#/components/schemas/AggregatedHotelDto'
+        guestId:
+          $ref: '#/components/schemas/GuestId'
+        start:
+          type: string
+          format: date
+          description: Reservation start date
+        end:
+          type: string
+          format: date
+          description: Reservation end date
+        status:
+          $ref: '#/components/schemas/ReservationStatus'
+      example:
+        id: a1a97f69-7fa0-4301-b498-128d78860828
+        roomTypeId: 1
+        hotel:
+          id: e1a97f69-7fa0-4301-b498-128d78860828
+          version: 0
+          name: "Hotel 1"
+          address: "Calle 1"
+          city: "Madrid"
+          state: "Madrid"
+          country: "ES"
+          postalCode: "28001"
+          rooms:
+            - id: 1
+              version: 0
+              roomTypeId: 1
+              name: "Room 1"
+              floor: 1
+              roomNumber: "101"
+              available: true
+        guestId: f1a97f69-7fa0-4301-b498-128d78860828
+        start: 2024-01-11
+        end: 2024-11-30
+        status: ON
+    AggregatedHotelDto:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/HotelId'
+        version:
+          $ref: '#/components/schemas/Version'
+        name:
+          type: string
+          description: Hotel name
+          maxLength: 100
+        address:
+          type: string
+          description: Hotel address
+          maxLength: 200
+        city:
+          type: string
+          description: Hotel city
+          maxLength: 100
+        state:
+          type: string
+          description: Hotel state
+          maxLength: 100
+        country:
+          type: string
+          description: Hotel country
+          maxLength: 100
+        postalCode:
+          type: string
+          description: Hotel postal code
+          maxLength: 10
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/AggregatedRoomDto'
+      example:
+        id: e1a97f69-7fa0-4301-b498-128d78860828
+        version: 0
+        name: "Hotel 1"
+        address: "Calle 1"
+        city: "Madrid"
+        state: "Madrid"
+        country: "ES"
+        postalCode: "28001"
+        rooms:
+          - id: 1
+            version: 0
+            roomTypeId: 1
+            name: "Room 1"
+            floor: 1
+            roomNumber: "101"
+            available: true
+    AggregatedRoomDto:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/RoomId'
+        version:
+          $ref: '#/components/schemas/Version'
+        roomTypeId:
+          $ref: '#/components/schemas/RoomTypeId'
+        name:
+          type: string
+          description: Room name
+          maxLength: 100
+        floor:
+          type: integer
+          format: int32
+          description: Room floor
+        roomNumber:
+          type: string
+          description: Room number
+          maxLength: 5
+        available:
+          type: boolean
+          description: Room availability
+      example:
+        id: 1
+        version: 0
+        roomTypeId: 1
+        name: "Room 1"
+        floor: 1
+        roomNumber: "101"
+        available: true
     ReservationDto:
       required:
         - end
@@ -346,10 +582,7 @@ components:
       type: object
       properties:
         id:
-          description: Identifier
-          type: string
-          format: uuid
-          example: 'd1a97f69-7fa0-4301-b498-128d78860828'
+          $ref: '#/components/schemas/ReservationId'
         version:
           $ref: '#/components/schemas/Version'
         roomTypeId:
@@ -357,10 +590,7 @@ components:
         hotelId:
           $ref: '#/components/schemas/HotelId'
         guestId:
-          description: guest identifier
-          type: string
-          format: uuid
-          example: 'f1a97f69-7fa0-4301-b498-128d78860828'
+          $ref: '#/components/schemas/GuestId'
         start:
           description: reservation start date in format yyyy-MM-dd
           type: string
@@ -372,11 +602,7 @@ components:
           format: date
           example: 2024-11-30
         status:
-          description: reservation status
-          maxLength: 20
-          minLength: 0
-          type: string
-          example: 'ON'
+          $ref: '#/components/schemas/ReservationStatus'
     ReservationPaginationResponse:
       type: object
       additionalProperties: false
@@ -388,6 +614,59 @@ components:
           description: items
           items:
             $ref: '#/components/schemas/ReservationDto'
+      example:
+        pagination:
+          limit: 20
+          page: 0
+          total: 100
+        data:
+          - id: a1a97f69-7fa0-4301-b498-128d78860828
+            roomTypeId: 1
+            hotelId: e1a97f69-7fa0-4301-b498-128d78860828
+            guestId: f1a97f69-7fa0-4301-b498-128d78860828
+            start: 2024-01-11
+            end: 2024-11-30
+            status: ON
+    AggregatedReservationPaginationResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        data:
+          type: array
+          description: items
+          items:
+            $ref: '#/components/schemas/AggregatedReservationDto'
+      example:
+        pagination:
+          limit: 20
+          page: 0
+          total: 100
+        data:
+          - id: a1a97f69-7fa0-4301-b498-128d78860828
+            roomTypeId: 1
+            hotel:
+              id: e1a97f69-7fa0-4301-b498-128d78860828
+              version: 0
+              name: "Hotel 1"
+              address: "Calle 1"
+              city: "Madrid"
+              state: "Madrid"
+              country: "ES"
+              postalCode: "28001"
+              rooms:
+                - id: 1
+                  version: 0
+                  roomTypeId: 1
+                  name: "Room 1"
+                  floor: 1
+                  roomNumber: "101"
+                  available: true
+            guestId: f1a97f69-7fa0-4301-b498-128d78860828
+            start: 2024-01-11
+            end: 2024-11-30
+            status: ON
     ReservationListResponse:
       type: object
       properties:
@@ -396,6 +675,16 @@ components:
           description: items
           items:
             $ref: '#/components/schemas/ReservationDto'
+    ReservationId:
+      description: Reservation identifier
+      type: string
+      format: uuid
+      example: 'a1a97f69-7fa0-4301-b498-128d78860828'
+    RoomId:
+      description: Room identifier
+      type: string
+      format: uuid
+      example: 'b1a97f69-7fa0-4301-b498-128d78860828'
     RoomTypeId:
       description: RoomType identifier
       type: integer
@@ -406,14 +695,25 @@ components:
       type: string
       format: uuid
       example: 'e1a97f69-7fa0-4301-b498-128d78860828'
+    GuestId:
+      description: guest identifier
+      type: string
+      format: uuid
+      example: 'f1a97f69-7fa0-4301-b498-128d78860828'
     Version:
       type: integer
       format: int32
       description: Version of the aggregate
       example: 0
       minimum: -2147483647
-      maximum: 2147483647  
-      
+      maximum: 2147483647
+    ReservationStatus:
+      description: reservation status
+      maxLength: 20
+      minLength: 0
+      type: string
+      example: 'ON'
+
     RoomTypeInventoryDto:
       required:
         - id
@@ -471,7 +771,7 @@ components:
           description: items
           items:
             $ref: '#/components/schemas/RoomTypeInventoryDto'
-    
+
     CriteriaRequestDto:
       required:
         - filters

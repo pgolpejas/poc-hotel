@@ -297,6 +297,8 @@
                         <exclude>com/**/*Constants*.*</exclude>
                         <exclude>com/**/*Dto*.*</exclude>
                         <exclude>com/**/*Entity*.*</exclude>
+                        <exclude>com/**/*Event*.*</exclude>
+                        <exclude>com/**/*Converter*.*</exclude>
                         <exclude>com/**/*Exception*.*</exclude>
                         <exclude>**/generated/**</exclude>
                         <exclude>**/openapi/**</exclude>

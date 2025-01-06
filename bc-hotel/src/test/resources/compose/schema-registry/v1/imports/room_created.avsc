@@ -43,6 +43,14 @@
       "doc": "name, example: 'Room 1'"
     },
     {
+      "name": "roomNumber",
+      "type": [
+        "null",
+        "string"
+      ],
+      "doc": "roomNumber, example: '101'"
+    },
+    {
       "name": "available",
       "type": "boolean",
       "doc": "available, example: 'true'"

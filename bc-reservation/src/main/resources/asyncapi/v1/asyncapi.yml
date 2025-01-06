@@ -92,6 +92,34 @@ channels:
       message:
         oneOf:
           - $ref: '#/components/messages/RoomTypeInventorySnapshot'
+  poc.hotel.data.v1:
+    publish:
+      summary: Hotel Data Event.
+      description: Hotel Data Event.
+      operationId: hotelsDataEvent
+      tags:
+        - name: Hotel
+      bindings:
+        kafka:
+          bindingVersion: 'latest'
+          groupId: hotel-snapshot
+      message:
+        oneOf:
+          - $ref: '#/components/messages/ReservationSnapshot'
+  poc.room.data.v1:
+    publish:
+      summary: Hotel Room Data Event.
+      description: Hotel Room Data Event.
+      operationId: roomsDataEvent
+      tags:
+        - name: Room
+      bindings:
+        kafka:
+          bindingVersion: 'latest'
+          groupId: room-snapshot
+      message:
+        oneOf:
+          - $ref: '#/components/messages/RoomSnapshot'
 components:
   messages:
     ReservationSnapshot:
@@ -109,7 +137,7 @@ components:
       contentType: application/*+avro
       schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
       payload:
-        $ref: 'v1/imports/reservation_updated.avsc'    
+        $ref: 'v1/imports/reservation_updated.avsc'
     ReservationUpdated:
       name: ReservationUpdated
       title: ReservationUpdated domain event
@@ -158,3 +186,19 @@ components:
       schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
       payload:
         $ref: 'v1/imports/roomTypeInventory_deleted.avsc'
+    HotelSnapshot:
+      name: HotelSnapshot
+      title: HotelSnapshot event
+      summary: HotelSnapshot event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/hotel_snapshot.avsc'
+    RoomSnapshot:
+      name: RoomSnapshot
+      title: RoomSnapshot event
+      summary: RoomSnapshot event
+      contentType: application/*+avro
+      schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
+      payload:
+        $ref: 'v1/imports/room_snapshot.avsc'

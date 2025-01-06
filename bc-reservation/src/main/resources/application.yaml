@@ -54,6 +54,20 @@ spring:
     problemdetails:
       enabled: true
 
+  ######## Redis Configuration  #########
+  data:
+    redis:
+      database: 0
+      host: localhost
+      port: 6379
+      timeout: 60000
+
+  ######## Mongo Configuration  #########
+    mongodb:
+      uri: mongodb://admin:password@localhost:31010/admin?authMechanism=SCRAM-SHA-256
+      auto-index-creation: true
+      uuid-representation: standard
+
   ######## Cloud stream Configuration  #########
   cloud:
     # To consume domain events we need to use the function router
@@ -123,7 +137,7 @@ spring:
       #          schema-locations: classpath:asyncapi/v1/imports/*.avsc
       bindings:
         functionRouter-in-0:
-          destination: poc.reservation.domain.v1,poc.reservation.data.v1,poc.roomTypeInventory.data.v1,poc.roomTypeInventory.domain.v1
+          destination: poc.reservation.domain.v1,poc.reservation.data.v1,poc.roomTypeInventory.data.v1,poc.roomTypeInventory.domain.v1,poc.hotel.data.v1,poc.room.data.v1
           contentType: application/*+avro
           group: group-functionRouter-consumer
         reservation-data-out-0:
@@ -251,6 +265,9 @@ logging:
     com.outbox: OFF
     org.hibernate.orm.jdbc.bind: TRACE
     io.confluent.kafka: INFO
+    # Enable logging for Spring Data Redis
+    org.springframework.data.redis.core: DEBUG
+    org.springframework.data.mongodb: DEBUG
   #    org.springframework.jdbc.core: TRACE
   config: ./src/main/resources/logback-des.xml
 

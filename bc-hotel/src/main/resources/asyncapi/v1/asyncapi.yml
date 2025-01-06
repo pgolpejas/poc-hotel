@@ -3,7 +3,7 @@ info:
   title: "BC Hotel Api Event"
   version: '0.1.0'
   description: |
-    This API allows listen events from Hotel Reservation.
+    This API allows listen events from Hotel Hotel.
   contact:
     name: pgolpejas
     email: email@company.com
@@ -45,7 +45,7 @@ channels:
           groupId: hotel-snapshot
       message:
         oneOf:
-          - $ref: '#/components/messages/ReservationSnapshot'
+          - $ref: '#/components/messages/HotelSnapshot'
   poc.hotel.domain.v1:
     publish:
       summary: Hotel Domain Event.
@@ -59,9 +59,9 @@ channels:
           groupId: hotel-domain
       message:
         oneOf:
-          - $ref: '#/components/messages/ReservationCreated'
-          - $ref: '#/components/messages/ReservationUpdated'
-          - $ref: '#/components/messages/ReservationDeleted'
+          - $ref: '#/components/messages/HotelCreated'
+          - $ref: '#/components/messages/HotelUpdated'
+          - $ref: '#/components/messages/HotelDeleted'
   poc.room.domain.v1:
     publish:
       summary: Hotel Room Domain Event.
@@ -94,34 +94,34 @@ channels:
           - $ref: '#/components/messages/RoomSnapshot'
 components:
   messages:
-    ReservationSnapshot:
-      name: ReservationSnapshot
-      title: ReservationSnapshot event
-      summary:  ReservationSnapshot event
+    HotelSnapshot:
+      name: HotelSnapshot
+      title: HotelSnapshot event
+      summary:  HotelSnapshot event
       contentType: application/*+avro
       schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
       payload:
         $ref: 'v1/imports/hotel_snapshot.avsc'
-    ReservationCreated:
-      name: ReservationCreated
-      title: ReservationCreated domain event
-      summary: ReservationCreated domain event
+    HotelCreated:
+      name: HotelCreated
+      title: HotelCreated domain event
+      summary: HotelCreated domain event
       contentType: application/*+avro
       schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
       payload:
-        $ref: 'v1/imports/hotel_updated.avsc'    
-    ReservationUpdated:
-      name: ReservationUpdated
-      title: ReservationUpdated domain event
-      summary: ReservationUpdated domain event
+        $ref: 'v1/imports/hotel_updated.avsc'
+    HotelUpdated:
+      name: HotelUpdated
+      title: HotelUpdated domain event
+      summary: HotelUpdated domain event
       contentType: application/*+avro
       schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
       payload:
         $ref: 'v1/imports/hotel_created.avsc'
-    ReservationDeleted:
-      name: ReservationDeleted
-      title: ReservationDeleted domain event
-      summary: ReservationDeleted domain event
+    HotelDeleted:
+      name: HotelDeleted
+      title: HotelDeleted domain event
+      summary: HotelDeleted domain event
       contentType: application/*+avro
       schemaFormat: 'application/vnd.apache.avro+json;version=1.9.0'
       payload:

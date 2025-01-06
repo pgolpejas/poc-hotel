@@ -21,6 +21,36 @@ services:
     networks:
       - it-testing
 
+  redis-it:
+    image: redis:7.4.1-alpine
+    container_name: redis-it
+    hostname: redis-it
+    ports:
+      - '6379:6379'
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - "./redis:/tmp/data"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - it-testing
+
+  reservation-mongodb-it:
+    image: mongo:7.0.16
+    container_name: reservation-mongodb-it
+    hostname: reservation-mongodb-it
+    restart: unless-stopped
+    environment:
+      - "MONGO_INITDB_ROOT_USERNAME=admin"
+      - "MONGO_INITDB_ROOT_PASSWORD=password"
+    ports:
+      - "31010:27017"
+    networks:
+      - it-testing
+
   zookeeper-it:
     image: confluentinc/cp-zookeeper:7.8.0
     environment:

@@ -12,36 +12,36 @@ import com.reservation.domain.event.RoomTypeInventoryDomainEvent.RoomTypeInvento
 import com.reservation.domain.event.RoomTypeInventoryDomainEvent.RoomTypeInventoryDeletedEvent;
 import com.reservation.domain.event.RoomTypeInventoryDomainEvent.RoomTypeInventoryUpdatedEvent;
 import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @SuppressWarnings({"java:S107"})
 public class RoomTypeInventory extends AggregateRoot implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 7611233896070437504L;
 
-  RoomTypeInventoryId id;
+  private RoomTypeInventoryId id;
 
-  int version;
+  private int version;
 
-  Integer roomTypeId;
+  private Integer roomTypeId;
 
-  HotelId hotelId;
+  private HotelId hotelId;
 
-  LocalDate roomTypeInventoryDate;
-
-  @PositiveOrZero
-  long totalInventory;
+  private LocalDate roomTypeInventoryDate;
 
   @PositiveOrZero
-  long totalReserved;
+  private long totalInventory;
 
-  private RoomTypeInventory() {
-  }
+  @PositiveOrZero
+  private long totalReserved;
 
   @Builder
   public RoomTypeInventory(final UUID id,
@@ -50,8 +50,7 @@ public class RoomTypeInventory extends AggregateRoot implements Serializable {
       final UUID hotelId,
       final LocalDate roomTypeInventoryDate,
       @PositiveOrZero final long totalInventory,
-      @PositiveOrZero final long totalReserved
-  ) {
+      @PositiveOrZero final long totalReserved) {
 
     this.id = new RoomTypeInventoryId(id);
     this.version = version;

@@ -24,13 +24,13 @@
 * POC with:
   * Java 21
   * Spring boot 3
-  * PostgreSQL 16
-  * Api first
-  * Kafka 
+  * PostgreSQL 17
   * Hexagonal Architecture
   * DDD
+  * CQRS
+  * Api first
+  * Kafka
   * Audit with javers
-  * TestContainers
   * K6
 
 ## How to build and run this service ##

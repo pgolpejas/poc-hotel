@@ -23,9 +23,9 @@
             </column>
             <column name="total_reserved" type="INT">
                 <constraints nullable="false"/>
-            </column>            
+            </column>
         </createTable>
-        <addUniqueConstraint  
+        <addUniqueConstraint
             columnNames="room_type_id, hotel_id, inventory_date"
             constraintName="room_type_inventory_uk"
             deferrable="true"
@@ -40,7 +40,7 @@
             </column>
             <column name="version" type="SMALLINT">
                 <constraints nullable="false"/>
-            </column>            
+            </column>
             <column name="room_type_id" type="SMALLINT">
                 <constraints nullable="false"/>
             </column>
@@ -49,14 +49,14 @@
             </column>
             <column name="guest_id" type="UUID">
                 <constraints nullable="false"/>
-            </column>            
+            </column>
             <column name="status" type="VARCHAR(20)"/>
             <column name="start_date" type="DATE">
                 <constraints nullable="false"/>
             </column>
             <column name="end_date" type="DATE">
                 <constraints nullable="false"/>
-            </column>            
+            </column>
         </createTable>
     </changeSet>
 
@@ -102,7 +102,7 @@
             <column name="commit_fk" type="BIGINT"/>
         </createTable>
     </changeSet>
-    
+
     <changeSet author="unknown" id="0000000000000-06">
         <createIndex indexName="jv_global_id_local_id_idx" tableName="jv_global_id">
             <column name="local_id"/>
@@ -141,7 +141,7 @@
         <addForeignKeyConstraint baseColumnNames="commit_fk" baseTableName="jv_snapshot" constraintName="jv_snapshot_commit_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="commit_pk" referencedTableName="jv_commit" validate="true"/>
         <addForeignKeyConstraint baseColumnNames="global_id_fk" baseTableName="jv_snapshot" constraintName="jv_snapshot_global_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="global_id_pk" referencedTableName="jv_global_id" validate="true"/>
     </changeSet>
-    
+
     <!-- outbox-->
     <changeSet author="unknown" id="0000000000000-10">
         <createTable tableName="outbox">
@@ -223,6 +223,52 @@
             <column name="locked_at" type="TIMESTAMP(3) WITHOUT TIME ZONE"/>
             <column name="locked_by" type="VARCHAR(255)"/>
         </createTable>
+    </changeSet>
+
+    <changeSet author="unknown" id="0000000000000-20">
+        <createTable tableName="aggregated_reservation">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="aggregated_reservation_pk"/>
+            </column>
+            <column name="hotel_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="aggregate" type="JSONB"/>
+            <column defaultValueComputed="now()" name="created_at" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="now()" name="modified_at" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="unknown" name="modified_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="unknown" id="0000000000000-21">
+        <createIndex indexName="aggregated_reservation_created_at_idx" tableName="aggregated_reservation">
+            <column defaultValueComputed="now()" name="created_at"/>
+        </createIndex>
+        <createIndex indexName="aggregated_reservation_hotel_id_idx" tableName="aggregated_reservation">
+            <column name="hotel_id"/>
+        </createIndex>
+        <createIndex indexName="aggregated_reservation_end_date_idx" tableName="aggregated_reservation">
+            <column name="end_date"/>
+        </createIndex>
+        <createIndex indexName="aggregated_reservation_start_date_idx" tableName="aggregated_reservation">
+            <column name="start_date"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="unknown" id="0000000000000-22">
+        <sql>CREATE INDEX aggregated_reservation_aggregate_idx ON ONLY public.aggregated_reservation USING gin (aggregate)</sql>
     </changeSet>
 
 </databaseChangeLog>

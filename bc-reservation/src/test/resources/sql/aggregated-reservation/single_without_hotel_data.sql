@@ -1,0 +1,3 @@
+INSERT INTO public.aggregated_reservation
+(id, hotel_id, start_date, end_date, "aggregate", created_at, modified_at, modified_by)
+VALUES('d1a97f69-7fa0-4301-b498-128d78860828'::uuid, 'd1a97f69-7fa0-4301-b498-128d78860828', '2025-05-03', '2025-06-04', '{"id": "d1a97f69-7fa0-4301-b498-128d78860828", "end": "2025-06-04", "hotel": {"id": "d1a97f69-7fa0-4301-b498-128d78860828", "city": null, "name": null, "rooms": null, "state": null, "address": null, "country": null, "version": 0, "postalCode": null}, "start": "2025-05-03", "status": "ON", "guestId": "f1a97f69-7fa0-4301-b498-128d78860828", "roomTypeId": 2}'::jsonb, '2024-12-09 07:13:44.725', '2024-12-09 07:13:44.725', 'unknown');
