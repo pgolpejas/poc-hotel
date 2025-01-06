@@ -1,4 +1,4 @@
-package com.hotel.core.application.validator.impl;
+package com.hotel.core.application.validator;
 
 import java.util.Objects;
 

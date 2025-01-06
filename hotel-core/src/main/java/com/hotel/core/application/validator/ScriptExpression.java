@@ -11,7 +11,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.hotel.core.application.validator.impl.ScriptExpressionValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@SuppressWarnings("java:S1135")
 public class RoomDataConsumer {
 
   private final CreateRoomDataCommand createRoomDataCommand;
