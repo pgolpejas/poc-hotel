@@ -103,7 +103,7 @@
         <confluent.version>7.8.0</confluent.version>
 
         <!-- observability-->
-        <otel.version>2.11.0</otel.version>
+        <otel.version>2.12.0</otel.version>
         <loki-logback-appender.version>1.6.0</loki-logback-appender.version>
 
     </properties>
