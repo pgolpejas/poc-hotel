@@ -100,7 +100,7 @@
         <spring-cloud.version>2023.0.2</spring-cloud.version>
         <spring-cloud-stream.version>4.1.1</spring-cloud-stream.version>
         <kafka-avro-serializer.version>7.8.0</kafka-avro-serializer.version>
-        <confluent.version>7.8.0</confluent.version>
+        <confluent.version>7.8.1</confluent.version>
 
         <!-- observability-->
         <otel.version>2.12.0</otel.version>
