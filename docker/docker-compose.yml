@@ -128,7 +128,7 @@ services:
       - local-des
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.8.0
+    image: confluentinc/cp-schema-registry:7.8.1
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
