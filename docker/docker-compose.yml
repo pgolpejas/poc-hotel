@@ -3,7 +3,7 @@ version: "3.9"
 name: "poc-hotel-des"
 services:
   hotel-db:
-    image: postgres:17.3
+    image: postgres:17.4
     hostname: hotel-db
     container_name: hotel-db
     restart: unless-stopped
@@ -25,7 +25,7 @@ services:
       - shared-des
 
   reservation-db:
-    image: postgres:17.3
+    image: postgres:17.4
     hostname: reservation-db
     container_name: reservation-db
     restart: unless-stopped
