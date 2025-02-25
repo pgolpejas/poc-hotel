@@ -63,7 +63,7 @@ services:
       - local-des
 
   reservation-mongodb:
-    image: mongo:8.0.4
+    image: mongo:8.0.5
     container_name: reservation-mongodb-it
     hostname: reservation-mongodb-it
     restart: unless-stopped
