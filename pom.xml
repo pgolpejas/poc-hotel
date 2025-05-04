@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.5</version>
+        <version>3.4.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -28,7 +28,7 @@
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <spring-boot.version>3.3.5</spring-boot.version>
+        <spring-boot.version>3.4.5</spring-boot.version>
 
         <!-- encode-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -77,7 +77,7 @@
 
         <!-- dependencies version-->
         <!-- api rest -->
-        <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
+        <springdoc-openapi.version>2.7.0</springdoc-openapi.version>
 
         <!-- mapping -->
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
@@ -88,19 +88,15 @@
         <postgres.version>42.7.5</postgres.version>
         <liquibase.version>4.31.1</liquibase.version>
         <turkraft.springfilter.version>3.2.0</turkraft.springfilter.version>
-
-
         <javers.version>7.8.0</javers.version>
         <hibernate-jpamodelgen.version>6.6.13.Final</hibernate-jpamodelgen.version>
 
-
         <!-- kafka -->
         <avro.version>1.12.0</avro.version>
-        <!-- 2024.0.0 version is not working-->
-        <spring-cloud.version>2023.0.2</spring-cloud.version>
+        <spring-cloud.version>2024.0.1</spring-cloud.version>
         <spring-cloud-stream.version>4.1.1</spring-cloud-stream.version>
-        <kafka-avro-serializer.version>7.8.1</kafka-avro-serializer.version>
-        <confluent.version>7.8.1</confluent.version>
+        <kafka-avro-serializer.version>7.9.0</kafka-avro-serializer.version>
+        <confluent.version>7.9.0</confluent.version>
 
         <!-- observability-->
         <otel.version>2.15.0</otel.version>

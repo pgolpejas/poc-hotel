@@ -7,7 +7,6 @@ import com.reservation.infrastructure.repository.entity.AggregatedReservationEnt
 import com.reservation.infrastructure.repository.jpa.custom.AggregatedReservationJpaCustomRepository;
 import jakarta.persistence.LockModeType;
 import org.javers.spring.annotation.JaversSpringDataAuditable;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,10 +26,9 @@ public interface AggregatedReservationJpaRepository extends JpaRepository<Aggreg
   boolean existsByPK(UUID id);
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  @NotNull
-  Optional<AggregatedReservationEntity> findById(@NotNull UUID id);
+  Optional<AggregatedReservationEntity> findById(UUID id);
 
   @Modifying
   @Query("delete from AggregatedReservationEntity where id = :id")
-  void deleteByPK(@NotNull UUID id);
+  void deleteByPK(UUID id);
 }
