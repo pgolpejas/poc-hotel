@@ -1,22 +1,22 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ReservationApplication OBS" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+  <configuration default="false" name="ReservationApplication OBS" type="Application" factoryName="Application">
     <envs>
       <env name="OTEL_EXPORTER" value="otlp_span" />
       <env name="OTEL_EXPORTER_OTLP_ENDPOINT" value="http://localhost:4317" />
       <env name="OTEL_EXPORTER_OTLP_INSECURE" value="true" />
       <env name="OTEL_EXPORTER_OTLP_PROTOCOL" value="grpc" />
       <env name="OTEL_LOGS_EXPORTER" value="none" />
-      <env name="OTEL_RESOURCE_ATTRIBUTES" value="service.name=bc-reservation" />
+      <env name="OTEL_RESOURCE_ATTRIBUTES" value="service.name=bc-hotel" />
       <env name="OTEL_METRICS_EXPORTER" value="none" />
     </envs>
+    <option name="MAIN_CLASS_NAME" value="com.reservation.ReservationApplication" />
     <module name="bc-reservation" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="com.reservation.ReservationApplication" />
     <option name="VM_PARAMETERS" value="-javaagent:$USER_HOME$/Descargas/opentelemetry-javaagent.jar" />
-    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/bc-reservation" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/bc-reservation" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="com.reservation.*" />
-        <option name="ENABLED" value="true" />
+        <option name="ENABLED" value="false" />
       </pattern>
     </extension>
     <method v="2">

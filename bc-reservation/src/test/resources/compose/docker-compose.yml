@@ -3,7 +3,7 @@ version: "3.9"
 name: "bc-reservation-it"
 services:
   reservation-db-it:
-    image: postgres:17.2
+    image: postgres:17.4
     hostname: reservation-db-it
     restart: unless-stopped
     environment:
@@ -22,7 +22,7 @@ services:
       - it-testing
 
   redis-it:
-    image: redis:7.4.1-alpine
+    image: redis:7.4.3-alpine
     container_name: redis-it
     hostname: redis-it
     ports:
@@ -39,7 +39,7 @@ services:
       - it-testing
 
   reservation-mongodb-it:
-    image: mongo:7.0.16
+    image: mongo:8.0.8
     container_name: reservation-mongodb-it
     hostname: reservation-mongodb-it
     restart: unless-stopped
@@ -52,12 +52,12 @@ services:
       - it-testing
 
   zookeeper-it:
-    image: confluentinc/cp-zookeeper:7.8.0
+    image: confluentinc/cp-zookeeper:7.9.0
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     ports:
-      - "2181:2181"
+      - "3091:2181"
     healthcheck:
       test: nc -z localhost 2181 || exit -1
       interval: 5s
@@ -68,7 +68,7 @@ services:
       - it-testing
 
   kafka-broker-1-it:
-    image: confluentinc/cp-kafka:7.8.0
+    image: confluentinc/cp-kafka:7.9.0
     hostname: kafka-broker-1-it
     ports:
       - "19092:19092"
@@ -99,7 +99,7 @@ services:
       - it-testing
 
   schema-registry-it:
-    image: confluentinc/cp-schema-registry:7.8.0
+    image: confluentinc/cp-schema-registry:7.9.0
     hostname: schema-registry-it
     depends_on:
       kafka-broker-1-it:
