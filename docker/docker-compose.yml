@@ -46,7 +46,7 @@ services:
       - shared-des
 
   redis:
-    image: redis:7.4.3-alpine
+    image: redis:8.0.0-alpine
     container_name: redis
     hostname: redis
     ports:
@@ -93,7 +93,7 @@ services:
       - poc-hotel-local-des
 
   kafka-broker-1:
-    image: confluentinc/cp-kafka:7.9.0
+    image: confluentinc/cp-kafka:7.9.1
     hostname: kafka-broker-1
     container_name: kafka-broker-1
     ports:
@@ -128,7 +128,7 @@ services:
       - poc-hotel-local-des
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.9.0
+    image: confluentinc/cp-schema-registry:7.9.1
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
