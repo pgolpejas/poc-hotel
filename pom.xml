@@ -86,7 +86,7 @@
 
         <!-- database -->
         <postgres.version>42.7.5</postgres.version>
-        <liquibase.version>4.31.1</liquibase.version>
+        <liquibase.version>4.32.0</liquibase.version>
         <turkraft.springfilter.version>3.2.0</turkraft.springfilter.version>
         <javers.version>7.8.0</javers.version>
         <hibernate-jpamodelgen.version>7.0.0.Final</hibernate-jpamodelgen.version>
