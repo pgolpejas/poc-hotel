@@ -85,7 +85,7 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 
         <!-- database -->
-        <postgres.version>42.7.5</postgres.version>
+        <postgres.version>42.7.6</postgres.version>
         <liquibase.version>4.32.0</liquibase.version>
         <turkraft.springfilter.version>3.2.0</turkraft.springfilter.version>
         <javers.version>7.8.0</javers.version>
