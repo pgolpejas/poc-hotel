@@ -46,7 +46,7 @@ services:
       - shared-des
 
   redis:
-    image: redis:8.0.1-alpine
+    image: redis:8.0.2-alpine
     container_name: redis
     hostname: redis
     ports:
