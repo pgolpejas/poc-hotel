@@ -76,7 +76,7 @@ services:
       - poc-hotel-local-des
 
   zookeeper-local:
-    image: confluentinc/cp-zookeeper:7.9.1
+    image: confluentinc/cp-zookeeper:7.9.2
     container_name: zookeeper-local
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -93,7 +93,7 @@ services:
       - poc-hotel-local-des
 
   kafka-broker-1:
-    image: confluentinc/cp-kafka:7.9.1
+    image: confluentinc/cp-kafka:7.9.2
     hostname: kafka-broker-1
     container_name: kafka-broker-1
     ports:
@@ -128,7 +128,7 @@ services:
       - poc-hotel-local-des
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.9.1
+    image: confluentinc/cp-schema-registry:7.9.2
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
