@@ -86,7 +86,7 @@
 
         <!-- database -->
         <postgres.version>42.7.7</postgres.version>
-        <liquibase.version>4.32.0</liquibase.version>
+        <liquibase.version>4.33.0</liquibase.version>
         <turkraft.springfilter.version>3.2.0</turkraft.springfilter.version>
         <javers.version>7.8.0</javers.version>
         <hibernate-jpamodelgen.version>7.0.3.Final</hibernate-jpamodelgen.version>
@@ -99,7 +99,7 @@
         <confluent.version>7.9.2</confluent.version>
 
         <!-- observability-->
-        <otel.version>2.17.0</otel.version>
+        <otel.version>2.17.1</otel.version>
         <loki-logback-appender.version>2.0.0</loki-logback-appender.version>
 
     </properties>

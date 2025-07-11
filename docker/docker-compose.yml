@@ -46,7 +46,7 @@ services:
       - shared-des
 
   redis:
-    image: redis:8.0.2-alpine
+    image: redis:8.0.3-alpine
     container_name: redis
     hostname: redis
     ports:
@@ -63,7 +63,7 @@ services:
       - poc-hotel-local-des
 
   reservation-mongodb:
-    image: mongo:8.0.10
+    image: mongo:8.0.11
     container_name: reservation-mongodb-it
     hostname: reservation-mongodb-it
     restart: unless-stopped
