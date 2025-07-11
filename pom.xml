@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.2</version>
+        <version>3.5.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -28,7 +28,7 @@
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <spring-boot.version>3.5.2</spring-boot.version>
+        <spring-boot.version>3.5.3</spring-boot.version>
 
         <!-- encode-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -85,11 +85,11 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 
         <!-- database -->
-        <postgres.version>42.7.6</postgres.version>
-        <liquibase.version>4.32.0</liquibase.version>
+        <postgres.version>42.7.7</postgres.version>
+        <liquibase.version>4.33.0</liquibase.version>
         <turkraft.springfilter.version>3.2.0</turkraft.springfilter.version>
         <javers.version>7.8.0</javers.version>
-        <hibernate-jpamodelgen.version>7.0.1.Final</hibernate-jpamodelgen.version>
+        <hibernate-jpamodelgen.version>7.0.3.Final</hibernate-jpamodelgen.version>
 
         <!-- kafka -->
         <avro.version>1.12.0</avro.version>
@@ -99,7 +99,7 @@
         <confluent.version>7.9.2</confluent.version>
 
         <!-- observability-->
-        <otel.version>2.16.0</otel.version>
+        <otel.version>2.17.1</otel.version>
         <loki-logback-appender.version>2.0.0</loki-logback-appender.version>
 
     </properties>
