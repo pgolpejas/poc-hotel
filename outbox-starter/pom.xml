@@ -137,7 +137,7 @@
         <dependency>
             <groupId>io.confluent</groupId>
             <artifactId>kafka-avro-serializer</artifactId>
-            <version>7.9.2</version>
+            <version>8.0.0</version>
             <scope>compile</scope>
         </dependency>
 
