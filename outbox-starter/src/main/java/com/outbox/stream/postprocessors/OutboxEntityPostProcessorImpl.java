@@ -155,7 +155,7 @@ public class OutboxEntityPostProcessorImpl implements OutboxEntityPostProcessor 
 				outboxRepository.save(entityToSave);
 			}
 			watch.stop();
-			log.info("Sent event: {} in {} mils", entityToSave.getAggregateId(), watch.getTime());
+			log.info("Sent event: {} in {} mils", entityToSave.getAggregateId(), watch.getDuration());
 			return true;
 		} else {
 			log.info("Event not send: {}", entityToSave);
