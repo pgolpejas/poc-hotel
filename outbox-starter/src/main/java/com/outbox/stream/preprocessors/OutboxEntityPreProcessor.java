@@ -50,7 +50,7 @@ public abstract class OutboxEntityPreProcessor<E extends BaseEventEntity> {
         watch.start();
         boolean result = internalPreProcess(aggregateRoot, context);
         watch.stop();
-        log.debug("{} mils to pre process entity", watch.getTime());
+        log.debug("{} mils to pre process entity", watch.getDuration());
         return result;
     }
 
