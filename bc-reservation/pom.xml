@@ -20,7 +20,7 @@
         <openapi.package.api>com.reservation.openapi.api</openapi.package.api>
         <openapi.package.model>com.reservation.openapi.model</openapi.package.model>
 
-        <swagger.annotations.version>2.2.35</swagger.annotations.version>
+        <swagger.annotations.version>2.2.36</swagger.annotations.version>
         <jackson-nullable.version>0.2.6</jackson-nullable.version>
     </properties>
 
@@ -81,7 +81,7 @@
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>2.2.35</version>
+            <version>2.2.36</version>
         </dependency>
 
         <!-- Map struct -->
