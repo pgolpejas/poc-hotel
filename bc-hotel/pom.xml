@@ -21,7 +21,7 @@
         <openapi.package.model>com.hotel.openapi.model</openapi.package.model>
 
         <swagger.annotations.version>2.2.36</swagger.annotations.version>
-        <jackson-nullable.version>0.2.6</jackson-nullable.version>
+        <jackson-nullable.version>0.2.7</jackson-nullable.version>
     </properties>
 
     <dependencies>
