@@ -187,7 +187,7 @@ services:
       - poc-hotel-local-des
 
   loki-local:
-    image: grafana/loki:3.5.4
+    image: grafana/loki:3.5.5
     container_name: loki
     ports:
       - "3100:3100"
