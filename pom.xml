@@ -99,7 +99,7 @@
         <kafka-avro-serializer.version>8.0.0</kafka-avro-serializer.version>
 
         <!-- observability-->
-        <otel.version>2.19.0</otel.version>
+        <otel.version>2.20.0</otel.version>
         <loki-logback-appender.version>2.0.0</loki-logback-appender.version>
 
     </properties>
