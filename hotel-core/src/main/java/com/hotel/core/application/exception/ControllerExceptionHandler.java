@@ -5,11 +5,11 @@ import com.hotel.core.domain.ddd.DomainError;
 import com.hotel.core.domain.exception.ConflictException;
 import com.hotel.core.domain.exception.CustomValidationException;
 import com.hotel.core.domain.exception.NotFoundException;
+import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.*;
-import org.springframework.lang.Nullable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -71,7 +71,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected @Nullable ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex,
-                                                                            final HttpHeaders headers, final HttpStatusCode status, final WebRequest request) {
+			final HttpHeaders headers, final HttpStatusCode status, final WebRequest request) {
 		ResponseEntity<Object> response = super.handleMethodArgumentNotValid(ex, headers, status, request);
 
 		if (null != response && response.getBody() instanceof ProblemDetail problemDetailBody) {
