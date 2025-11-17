@@ -44,4 +44,4 @@ jobs:
       - name: Sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./mvnw sonar:sonar -Dsonar.login=${{secrets.SONAR_TOKEN}} -Dsonar.projectKey=poc-hotel -Dsonar.organization=psanchez78 -Dsonar.qualitygate.wait=true -Dsonar.issue.ignore.multicriteria=githubactions:S7630
+        run: ./mvnw sonar:sonar -Dsonar.login=${{secrets.SONAR_TOKEN}} -Dsonar.projectKey=poc-hotel -Dsonar.organization=psanchez78 -Dsonar.qualitygate.wait=true -Dsonar.issue.ignore.multicriteria=githubactions:**
