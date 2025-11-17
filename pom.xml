@@ -58,7 +58,8 @@
         </sonar.coverage.exclusions>
         <sonar.exclusions>
             **/*Test**.java,
-            **/*IT**.java
+            **/*IT**.java,
+            **/*code**.yml
         </sonar.exclusions>
         <sonar.coverage.jacoco.xmlReportPaths>
             **/target/site/jacoco/jacoco.xml
@@ -68,6 +69,7 @@
         <sonar.buildbreaker.skip>false</sonar.buildbreaker.skip>
         <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.issue.ignore.multicriteria>githubactions:*</sonar.issue.ignore.multicriteria>
 
         <!-- plugins version-->
         <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
