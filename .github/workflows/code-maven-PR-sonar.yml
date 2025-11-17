@@ -12,17 +12,17 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@d632683dd7b6fe05b0da9e0104e35e3b762a5566
         with:
           token: ${{ secrets.RENOVATE_TOKEN }}
 
       - name: Setup Timezone
-        uses: szenius/set-timezone@v2.0
+        uses: szenius/set-timezone@c4ce3fd4df157e69c2b005c3aa94d5d928a979d3
         with:
           timezoneLinux: "Europe/Madrid"
 
       - name: Setup Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@d046cf85cfefeb189c5ca22646a6d4e16dbba781
         with:
           java-version: '21'
           distribution: 'adopt'
@@ -31,7 +31,7 @@ jobs:
         run: chmod +x mvnw
 
       - name: Cache local Maven repository
-        uses: actions/cache@v4
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
