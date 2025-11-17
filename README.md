@@ -63,7 +63,7 @@ At this point you could run locally your service with:
 
 TODO add opentelemetry configuration on each DockerFile configuration
 
-Once started, the service can be reached at <http://localhost:8080>.
+Once started, the service can be reached at <http://localhost:9080>.
 
 ### BC-Reservation ###
 
@@ -71,7 +71,7 @@ At this point you could run locally your service with:
 
 TODO add opentelemetry configuration on each DockerFile configuration
 
-Once started, the service can be reached at <http://localhost:8081>.
+Once started, the service can be reached at <http://localhost:9081>.
 
 ### Hotel-core ###
 
@@ -102,6 +102,31 @@ We use the grafana stack to monitor the application: loki, tempo, grafana.
 We deploy the stack using docker compose.
 
 Open grafana in http://localhost:3000. You can view logs with Loki, metrics and traces with tempo
+
+### OpenTelemetry Collector ###
+We provide an OpenTelemetry Collector configuration on docker-compose to collect traces and metrics from services and send them to tempo and loki.
+
+The collector can be reached at <grpc://localhost:4317>
+
+You can find the configuration file at docker/observability/tempo/tempo.yaml
+
+You must download the OpenTelemetry Collector jar from https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases and place it in USER_HOME/Downloads/opentelemetry-javaagent_2.21.0.jar and set in run configuration
+
+```
+    <envs>
+      <env name="OTEL_EXPORTER" value="otlp_span" />
+      <env name="OTEL_EXPORTER_OTLP_ENDPOINT" value="grpc://localhost:4317" />
+      <env name="OTEL_EXPORTER_OTLP_INSECURE" value="true" />
+      <env name="OTEL_EXPORTER_OTLP_PROTOCOL" value="grpc" />
+      <env name="OTEL_LOGS_EXPORTER" value="none" />
+      <env name="OTEL_RESOURCE_ATTRIBUTES" value="service.name=bc-hotel" />
+      <env name="OTEL_METRICS_EXPORTER" value="none" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.reservation.ReservationApplication" />
+    <module name="bc-reservation" />
+    <option name="VM_PARAMETERS" value="-javaagent:$USER_HOME$/Downloads/opentelemetry-javaagent_2.21.0.jar" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/bc-reservation" />
+```
 
 ## Liquibase ## 
 

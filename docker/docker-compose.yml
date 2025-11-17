@@ -3,7 +3,7 @@ version: "3.9"
 name: "poc-hotel-des"
 services:
   hotel-db:
-    image: postgres:17.6
+    image: postgres:18.1
     hostname: hotel-db
     container_name: hotel-db
     restart: unless-stopped
@@ -25,7 +25,7 @@ services:
       - shared-des
 
   reservation-db:
-    image: postgres:17.6
+    image: postgres:18.1
     hostname: reservation-db
     container_name: reservation-db
     restart: unless-stopped
@@ -63,7 +63,7 @@ services:
       - poc-hotel-local-des
 
   reservation-mongodb:
-    image: mongo:8.0.13
+    image: mongo:8.2.1
     container_name: reservation-mongodb-it
     hostname: reservation-mongodb-it
     restart: unless-stopped
@@ -76,7 +76,7 @@ services:
       - poc-hotel-local-des
 
   zookeeper-local:
-    image: confluentinc/cp-zookeeper:7.9.2
+    image: confluentinc/cp-zookeeper:7.9.4
     container_name: zookeeper-local
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -93,7 +93,7 @@ services:
       - poc-hotel-local-des
 
   kafka-broker-1:
-    image: confluentinc/cp-kafka:7.9.2
+    image: confluentinc/cp-kafka:7.9.4
     hostname: kafka-broker-1
     container_name: kafka-broker-1
     ports:
@@ -128,7 +128,7 @@ services:
       - poc-hotel-local-des
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.9.2
+    image: confluentinc/cp-schema-registry:7.9.4
     hostname: schema-registry
     container_name: schema-registry
     depends_on:

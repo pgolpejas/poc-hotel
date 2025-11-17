@@ -72,7 +72,7 @@
         <!-- plugins version-->
         <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
-        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
         <sonar-maven-plugin.version>5.2.0.4988</sonar-maven-plugin.version>
 
         <!-- dependencies version-->
@@ -86,20 +86,20 @@
 
         <!-- database -->
         <postgres.version>42.7.8</postgres.version>
-        <liquibase.version>4.33.0</liquibase.version>
+        <liquibase.version>5.0.1</liquibase.version>
         <turkraft.springfilter.version>3.2.1</turkraft.springfilter.version>
         <javers.version>7.8.6</javers.version>
-        <hibernate-jpamodelgen.version>7.1.1.Final</hibernate-jpamodelgen.version>
+        <hibernate-jpamodelgen.version>7.1.7.Final</hibernate-jpamodelgen.version>
 
         <!-- kafka -->
         <avro.version>1.12.0</avro.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <spring-cloud-stream.version>4.1.1</spring-cloud-stream.version>
-        <confluent.version>8.0.0</confluent.version>
-        <kafka-avro-serializer.version>8.0.0</kafka-avro-serializer.version>
+        <confluent.version>8.1.0</confluent.version>
+        <kafka-avro-serializer.version>8.1.0</kafka-avro-serializer.version>
 
         <!-- observability-->
-        <otel.version>2.20.0</otel.version>
+        <otel.version>2.21.0</otel.version>
         <loki-logback-appender.version>2.0.0</loki-logback-appender.version>
 
     </properties>

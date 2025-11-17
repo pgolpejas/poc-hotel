@@ -2,7 +2,7 @@
   <configuration default="false" name="ReservationApplication OBS" type="Application" factoryName="Application">
     <envs>
       <env name="OTEL_EXPORTER" value="otlp_span" />
-      <env name="OTEL_EXPORTER_OTLP_ENDPOINT" value="http://localhost:4317" />
+      <env name="OTEL_EXPORTER_OTLP_ENDPOINT" value="grpc://localhost:4317" />
       <env name="OTEL_EXPORTER_OTLP_INSECURE" value="true" />
       <env name="OTEL_EXPORTER_OTLP_PROTOCOL" value="grpc" />
       <env name="OTEL_LOGS_EXPORTER" value="none" />
@@ -11,7 +11,7 @@
     </envs>
     <option name="MAIN_CLASS_NAME" value="com.reservation.ReservationApplication" />
     <module name="bc-reservation" />
-    <option name="VM_PARAMETERS" value="-javaagent:$USER_HOME$/Descargas/opentelemetry-javaagent.jar" />
+    <option name="VM_PARAMETERS" value="-javaagent:$USER_HOME$/Downloads/opentelemetry-javaagent_2.21.0.jar" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/bc-reservation" />
     <extension name="coverage">
       <pattern>
