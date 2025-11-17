@@ -94,10 +94,14 @@ jobs:
           DOCKER_USER: ${{secrets.DOCKER_USER}}
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
         run: |
-          docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
+          docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
 
       - name: Build the Docker image
-        run:  docker build -t ${{secrets.DOCKER_USER}}/poc-hotel --build-arg VERSION=0.0.1 .
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USER}}
+        run:  docker build -t "$DOCKER_USER"/poc-hotel --build-arg VERSION=0.0.1 .
 
       - name: Docker Push
-        run: docker push ${{secrets.DOCKER_USER}}/poc-hotel
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USER}}
+        run: docker push "$DOCKER_USER"/poc-hotel
