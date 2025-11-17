@@ -12,7 +12,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b6fe05b0da9e0104e35e3b762a5566
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           token: ${{ secrets.RENOVATE_TOKEN }}
 
