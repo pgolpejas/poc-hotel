@@ -17,7 +17,7 @@ jobs:
           token: ${{ secrets.RENOVATE_TOKEN }}
 
       - name: Setup Timezone
-        uses: szenius/set-timezone@c4ce3fd4df157e69c2b005c3aa94d5d928a979d3 # v2.0
+        uses: szenius/set-timezone@v2.0
         with:
           timezoneLinux: "Europe/Madrid"
 
