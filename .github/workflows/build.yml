@@ -48,7 +48,9 @@ jobs:
           echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"   
 
       - name: Sonar
-        run: ./mvnw -B sonar:sonar -Dsonar.login=${{secrets.SONAR_TOKEN}}
+        env:
+          SECRET: ${{ secrets.SONAR_TOKEN }}
+        run: ./mvnw -B sonar:sonar -Dsonar.login="$SECRET"
         
       - name: Commit and push the badge (if it changed)
         uses: EndBug/add-and-commit@v9
