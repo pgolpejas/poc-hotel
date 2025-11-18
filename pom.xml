@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.6</version>
+        <version>3.5.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -28,7 +28,7 @@
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <spring-boot.version>3.5.6</spring-boot.version>
+        <spring-boot.version>3.5.7</spring-boot.version>
 
         <!-- encode-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -71,7 +71,7 @@
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 
         <!-- plugins version-->
-        <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
         <sonar-maven-plugin.version>5.2.0.4988</sonar-maven-plugin.version>
@@ -88,12 +88,12 @@
         <!-- database -->
         <postgres.version>42.7.8</postgres.version>
         <liquibase.version>5.0.1</liquibase.version>
-        <turkraft.springfilter.version>3.2.1</turkraft.springfilter.version>
+        <turkraft.springfilter.version>3.2.4</turkraft.springfilter.version>
         <javers.version>7.8.6</javers.version>
-        <hibernate-jpamodelgen.version>7.1.7.Final</hibernate-jpamodelgen.version>
+        <hibernate-jpamodelgen.version>7.1.8.Final</hibernate-jpamodelgen.version>
 
         <!-- kafka -->
-        <avro.version>1.12.0</avro.version>
+        <avro.version>1.12.1</avro.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <spring-cloud-stream.version>4.1.1</spring-cloud-stream.version>
         <confluent.version>8.1.0</confluent.version>
@@ -101,7 +101,7 @@
 
         <!-- observability-->
         <otel.version>2.21.0</otel.version>
-        <loki-logback-appender.version>2.0.0</loki-logback-appender.version>
+        <loki-logback-appender.version>2.0.1</loki-logback-appender.version>
 
     </properties>
 
