@@ -70,13 +70,13 @@ jobs:
           workflow-summary-heading: JaCoCo Test Coverage Summary BC-Reservation
 
       - name: Upload JaCoCo coverage report for BC-Hotel
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: jacoco-report-bc-hotel
           path: bc-hotel/target/site/jacoco/
           
       - name: Upload JaCoCo coverage report for BC-Reservation
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: jacoco-report-bc-reservation
           path: bc-reservation/target/site/jacoco/
