@@ -63,7 +63,7 @@ services:
       - poc-hotel-local-des
 
   reservation-mongodb:
-    image: mongo:8.2.1
+    image: mongo:8.2.2
     container_name: reservation-mongodb-it
     hostname: reservation-mongodb-it
     restart: unless-stopped
