@@ -19,7 +19,7 @@
     <properties>
         <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
 
-        <shedlock.version>7.1.0</shedlock.version>
+        <shedlock.version>7.2.0</shedlock.version>
     </properties>
 
     <dependencies>
