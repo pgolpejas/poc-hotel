@@ -76,7 +76,7 @@ services:
       - poc-hotel-local-des
 
   zookeeper-local:
-    image: confluentinc/cp-zookeeper:7.9.4
+    image: confluentinc/cp-zookeeper:7.9.5
     container_name: zookeeper-local
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
