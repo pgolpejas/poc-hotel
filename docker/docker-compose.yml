@@ -93,7 +93,7 @@ services:
       - poc-hotel-local-des
 
   kafka-broker-1:
-    image: confluentinc/cp-kafka:7.9.4
+    image: confluentinc/cp-kafka:7.9.5
     hostname: kafka-broker-1
     container_name: kafka-broker-1
     ports:
