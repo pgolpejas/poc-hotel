@@ -16,7 +16,7 @@
     <properties>
         <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
 
-        <openapi-generator.version>7.17.0</openapi-generator.version>
+        <openapi-generator.version>7.18.0</openapi-generator.version>
         <openapi.package.api>com.hotel.openapi.api</openapi.package.api>
         <openapi.package.model>com.hotel.openapi.model</openapi.package.model>
 
