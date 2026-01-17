@@ -90,7 +90,7 @@
         <liquibase.version>5.0.1</liquibase.version>
         <turkraft.springfilter.version>3.2.5</turkraft.springfilter.version>
         <javers.version>7.9.0</javers.version>
-        <hibernate-jpamodelgen.version>7.2.0.Final</hibernate-jpamodelgen.version>
+        <hibernate-jpamodelgen.version>7.2.1.Final</hibernate-jpamodelgen.version>
 
         <!-- kafka -->
         <avro.version>1.12.1</avro.version>
