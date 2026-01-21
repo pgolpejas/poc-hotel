@@ -86,7 +86,7 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 
         <!-- database -->
-        <postgres.version>42.7.8</postgres.version>
+        <postgres.version>42.7.9</postgres.version>
         <liquibase.version>5.0.1</liquibase.version>
         <turkraft.springfilter.version>3.2.5</turkraft.springfilter.version>
         <javers.version>7.9.0</javers.version>
@@ -100,7 +100,7 @@
         <kafka-avro-serializer.version>8.1.0</kafka-avro-serializer.version>
 
         <!-- observability-->
-        <otel.version>2.23.0</otel.version>
+        <otel.version>2.24.0</otel.version>
         <loki-logback-appender.version>2.0.2</loki-logback-appender.version>
 
     </properties>
