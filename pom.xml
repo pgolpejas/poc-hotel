@@ -73,7 +73,7 @@
         <!-- plugins version-->
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
-        <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
         <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
 
         <!-- dependencies version-->
