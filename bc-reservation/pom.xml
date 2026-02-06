@@ -21,7 +21,7 @@
         <openapi.package.model>com.reservation.openapi.model</openapi.package.model>
 
         <swagger.annotations.version>2.2.42</swagger.annotations.version>
-        <jackson-nullable.version>0.2.8</jackson-nullable.version>
+        <jackson-nullable.version>0.2.9</jackson-nullable.version>
     </properties>
 
     <dependencies>
