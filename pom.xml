@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.10</version>
+        <version>3.5.12</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -28,7 +28,7 @@
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <spring-boot.version>3.5.10</spring-boot.version>
+        <spring-boot.version>3.5.12</spring-boot.version>
 
         <!-- encode-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -72,25 +72,25 @@
 
         <!-- plugins version-->
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
-        <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.5.5</maven-surefire-plugin.version>
         <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
         <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
 
         <!-- dependencies version-->
         <!-- api rest -->
-        <springdoc-openapi.version>2.8.15</springdoc-openapi.version>
+        <springdoc-openapi.version>2.8.16</springdoc-openapi.version>
 
         <!-- mapping -->
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
-        <lombok.version>1.18.42</lombok.version>
+        <lombok.version>1.18.44</lombok.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 
         <!-- database -->
-        <postgres.version>42.7.9</postgres.version>
-        <liquibase.version>5.0.1</liquibase.version>
+        <postgres.version>42.7.10</postgres.version>
+        <liquibase.version>5.0.2</liquibase.version>
         <turkraft.springfilter.version>3.2.5</turkraft.springfilter.version>
         <javers.version>7.9.0</javers.version>
-        <hibernate-jpamodelgen.version>7.2.4.Final</hibernate-jpamodelgen.version>
+        <hibernate-jpamodelgen.version>7.3.0.Final</hibernate-jpamodelgen.version>
 
         <!-- kafka -->
         <avro.version>1.12.1</avro.version>
@@ -100,7 +100,7 @@
         <kafka-avro-serializer.version>8.1.0</kafka-avro-serializer.version>
 
         <!-- observability-->
-        <otel.version>2.24.0</otel.version>
+        <otel.version>2.26.0</otel.version>
         <loki-logback-appender.version>2.0.3</loki-logback-appender.version>
 
     </properties>
