@@ -128,7 +128,7 @@ services:
       - poc-hotel-local-des
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.9.7
+    image: confluentinc/cp-schema-registry:7.9.8
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
