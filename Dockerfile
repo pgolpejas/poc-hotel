@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.12_8-jre-alpine
+FROM eclipse-temurin:21.0.13_9-jre-alpine
 ARG VERSION
 ARG JAR_FILE=poc-hotel-$VERSION.jar
 
